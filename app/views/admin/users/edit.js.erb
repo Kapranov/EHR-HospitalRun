@@ -1,0 +1,58 @@
+$('#modal-admin-add-user').html('<%= escape_javascript(render 'form') %>');
+
+repositionModal($('#modal-admin-add-user'), false);
+initPickers('#modal-admin-add-user');
+initSelect2('#modal-admin-add-user');
+
+$('#modal-admin-add-user').modal('show');
+
+var practiceMailingAdressesFillController = new PracticeMailingAdressesFillController();
+practiceMailingAdressesFillController.initialize(
+  '#modal-admin-add-user #practice_street', '#modal-admin-add-user #practice_suit', '#modal-admin-add-user #practice_city', '#modal-admin-add-user #practice_state', '#modal-admin-add-user #practice_zip',
+  '#modal-admin-add-user #mailing_street', '#modal-admin-add-user #mailing_suit', '#modal-admin-add-user #mailing_city', '#modal-admin-add-user #mailing_state', '#modal-admin-add-user #mailing_zip',
+  '#modal-admin-add-user #same_as_practice'
+);
+
+var zipcodePracticeController = new ZipcodeController();
+zipcodePracticeController.initialize(
+  '#modal-admin-add-user #practice_street', '#modal-admin-add-user #practice_city', '#modal-admin-add-user #practice_state', '#modal-admin-add-user #practice_zip',
+  true, 
+  '#modal-admin-add-user #mailing_street', '#modal-admin-add-user #mailing_city', '#modal-admin-add-user #mailing_state', '#modal-admin-add-user #mailing_zip',
+  '#modal-admin-add-user #same_as_practice'
+);
+
+var GenerateRandomPasswordController = function() {
+  var button, input, checkbox, container;
+  this.initialize = function(_button, _input, _checkbox, _container) {
+    button = $(_button);
+    input = $(_input);
+    checkbox = $(_checkbox);
+    container = $(_container);
+    initAll();
+  }
+
+  function initAll() {
+    button.click(function(e) {
+      e.preventDefault();
+      var pass = Math.random().toString(36).slice(-6);
+      input.val(pass);
+      if(!container.hasClass('in'))
+        container.toggleClass('in');
+    });
+
+    checkbox.change(function() {
+      if($(this).is(':checked'))
+        input.attr('type', 'text');
+      else
+        input.attr('type', 'password')
+    });
+  }
+}
+
+var generateRandomController = new GenerateRandomPasswordController();
+generateRandomController.initialize(
+  '#modal-admin-add-user #generate-random-password-btn',
+  '#modal-admin-add-user #random-password',
+  '#modal-admin-add-user #show-random-password-checkbox',
+  '#modal-admin-add-user .generate-random .generate-random-container'
+);

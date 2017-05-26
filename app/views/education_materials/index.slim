@@ -1,0 +1,73 @@
+- content_for :title
+  | EHR1 | Electronic Health Records - Settings (Patient Education Materials)
+- content_for :back_link do
+  = link_to 'Settings', education_materials_path, class: 'active'
+.col-lg-10
+  #settings-education-materials-container.right-block
+    .row-container
+      .bordered-container
+        .category-header
+          p.title Patient Education Materials
+          - if policy(EducationMaterial).configure?
+            = link_to new_education_material_path, class: 'btn-small btn-modal', data: { target: '#modal-education-material' }, remote: true
+              i.fa.fa-plus
+        .settings-education-materials-content
+          - if @education_materials.any?
+            .row.row-education-materials
+              .col-lg-12
+                .panel-group.panel-group-education-materials#education-materials-container
+                  - @education_materials.each_with_index do |material, index|
+                    .panel.panel-education-material aria-expanded="#{index == 0 ? true : false}"
+                      .panel-heading
+                        .row
+                          .col-lg-8.col-lg-8.col-sm-8
+                            .panel-heading-link
+                              a.pull-left data-toggle="collapse" data-parent="#education-materials-container" aria-expanded="#{index == 0 ? true : false}" href="#education-material-#{index}"
+                                .icon.icon-xs.icon-circle.icon-ic-collapse.pull-left
+                                p.title.pull-left
+                                  = material.name
+                              = link_to '', edit_education_material_path(material), class: 'icon icon-xs icon-circle icon-ic-edit pull-left btn-modal', data: { target: '#modal-education-material' }, remote: true
+                          .col-lg-4.col-md-4.col-sm-4
+                            .btn-group.collapse.disabled
+                              a.btn.btn-default href="#" data-active="true" On
+                              a.btn.btn-default.active href="#" data-active="false" Off
+                      .panel-collapse.collapse class="#{index == 0 ? 'in' : ''}" id="education-material-#{index}"
+                        .panel-body
+                          .row
+                            .col-lg-2
+                              .form-group
+                                p.title CODE:
+                            .col-lg-10
+                              .form-group
+                                p
+                                  = "#{material.code_id} (#{material.code_system})"
+                          - if material.note.present?
+                            .row
+                              .col-lg-2
+                                .form-group
+                                  p.title Resource Notes:
+                              .col-lg-10
+                                .form-group
+                                  p
+                                    = material.note
+                          - if material.all_attachments.any?
+                            .row
+                              .col-lg-2
+                                .form-group
+                                  p.title Attachments:
+                              .col-lg-10
+                                .form-group
+                                  ul
+                                    - material.all_attachments.each do |attachment|
+                                      li
+                                        p
+                                          span - 
+                                          = link_to attachment.basename, attachment.file_name.url, target: '_blank', class: 'name'
+          - else
+            .row
+              .col-lg-12
+                p.title.title-empty No Education Materials Found
+javascript:
+  $('#item-settings-education-materials').parent().addClass('active');
+#modal-education-material.modal.modal-provider.animated.fadeIn
+#modal-education-attachment.modal.modal-provider.animated.fadeIn

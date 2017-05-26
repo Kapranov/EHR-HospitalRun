@@ -1,0 +1,328 @@
+@import 'ui/main';
+
+#secure-questions-wrapper-index,
+#secure-questions-wrapper-check {
+  .content {
+    .row {
+      p:not(.title) {
+        font-family: 'SF UI Text Regular';
+        font-size: 18px;
+      }
+      &:nth-child(1),
+      &:nth-child(2) {
+        p,
+        p span {
+          font-family: 'SF UI Text Medium';
+        }
+      }
+      &:nth-child(1) {
+        .form-group {
+          margin-bottom: 30px;
+        }
+        p {
+          float: left;
+          margin-right: 7px;
+          span {
+            font-size: 24px;
+          }
+        }
+        hr {
+          margin: 0;
+          padding-top: 15px;
+          border-bottom: 1px solid #979797;
+        }
+      }
+      &:nth-child(2) {
+        .form-group {
+          margin-bottom: 25px;
+        }
+        p {
+          font-size: 18px;
+        }
+      }
+    }
+    .title {
+      padding: 13px 0 12px 0;
+      font-size: 15px;
+      font-family: 'SF UI Text Bold';
+      text-transform: uppercase;
+    }
+    p, span, .form-control {
+      color: $graytextdark;
+    }
+    p {
+      margin: 0;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-control {
+      padding: 0 12px;
+      font-size: 15px;
+    }
+    .checkbox-custom label {
+      .checkbox-icon-container {
+        vertical-align: top;
+      }
+      .checkbox-label {
+        position: relative;
+        padding-left: 6px;
+        top: 1px;
+        font-size: 16px;
+        font-weight: normal;
+        font-family: 'SF UI Text Regular';
+        text-transform: none;
+        color: $graytext;
+      }
+    }
+    a {
+      color: $green;
+      &:hover,
+      &:focus,
+      &:active {
+        color: $green;
+        text-decoration: underline !important;
+      }
+    }
+  }
+  .footer {
+    padding: 25px 0 50px 0;
+    .controls {
+      text-align: right;
+      margin: -15px -7px;
+      .btn {
+        display: inline-block;
+        margin: 15px 7px;
+        &:not(.btn-default) {
+          font-family: 'SF UI Text Bold';
+          color: $green;
+          transition: opacity 0.2s;
+          &:hover,
+          &:focus,
+          &:active {
+            color: $green;
+            opacity: 0.75;
+          }
+        }
+      }
+    }
+  }
+}
+
+#secure-questions-wrapper-index {
+  .row {
+    &:nth-child(3) {
+      .form-group {
+        margin-bottom: 50px;
+      }
+      ul {
+        margin-left: 20px;
+        list-style-type: none;
+        li {
+          padding-left: 40px;
+          &:not(:first-child) {
+            margin-top: 20px;
+          }
+          &:before {
+            content: "·";
+            position: absolute;
+            margin-left: -40px;
+            font-size: 70px;
+            vertical-align: middle;
+            line-height: 21px;
+          }
+        }
+      }
+    }
+    &:nth-child(4),
+    &:nth-child(5),
+    &:nth-child(6) {
+      div[class*='col-']:first-child .form-group {
+        margin-bottom: 0;
+      }
+    }
+    .checkbox-custom label {
+      height: 30px;
+    }
+  }
+}
+
+#secure-questions-wrapper-check {
+  .row {
+    &:nth-child(4) {
+      .form-group {
+        margin-bottom: 16px;
+      }
+      p:not(.title) {
+        font-size: 15px;
+        padding: 8px 0 8px 0;
+      }
+    }
+    &:nth-child(5) {
+      .form-group {
+        margin-bottom: 30px;
+      }
+      a {
+        font-size: 15px;
+        position: relative;
+        top: 10px;
+      }
+    }
+  }
+}
+
+#modal-secure-questions-message {
+  .modal-dialog,
+  .modal-dialog .modal-content {
+    max-width: 645px;
+  }
+  .modal-dialog {
+    &.modal-alert {
+      .modal-content {
+        border-color: $red;
+        .modal-body {
+          .form-group {
+            margin-bottom: 20px;
+          }
+          .row {
+              a:not(.btn) {
+              font-size: 10px;
+              color: $green;
+              text-decoration: underline !important;
+            }
+            &:last-child {
+              margin-bottom: -35px;
+            }
+          }
+        }
+      }
+      .modal-header {
+        background-color: $red;
+      }
+    }
+    .modal-content {
+      .modal-header {
+        .title {
+          text-align: center;
+          text-transform: uppercase;
+        }
+      }
+      .modal-body {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        text-align: center;
+        .content {
+          padding: 20px 20px 40px 20px;
+        }
+        .slimScrollDiv .content {
+          padding-right: 30px;
+        }
+        .btn {
+          text-transform: uppercase;
+        }
+        .row:first-child .form-group {
+          margin-bottom: 40px;
+        }
+        .row:last-child {
+          margin-bottom: -25px;
+        }
+      }
+    }
+  }
+}
+
+#modal-secure-questions-edit {
+  .modal-dialog,
+  .modal-dialog .modal-content {
+    max-width: 516px;
+  }
+  .modal-content {
+    border: 0;
+    .modal-header {
+      background-color: #E0E0E0;
+      .title {
+        padding: 15px 20px 14px 20px;
+        font-size: 15px;
+        color: $graytextdark;
+        text-transform: uppercase;
+      }
+    }
+    .modal-body {
+      padding: 15px 0 0 0;
+      .content {
+        padding: 0 20px 0 20px;
+      }
+      .slimScrollDiv .content {
+        padding-right: 30px;
+      }
+      .row {
+        &:nth-child(6) {
+          .form-group {
+            margin-bottom: 40px;
+          }
+        }
+        a {
+          color: $green;
+          &:hover,
+          &:focus,
+          &:active {
+            color: $green;
+            text-decoration: underline !important;
+          }
+        }
+        .form-group {
+          margin-bottom: 20px;
+        }
+        p {
+          margin: 0;
+          &.title {
+            font-family: 'SF UI Text Bold';
+            text-transform: uppercase;
+            margin-bottom: 15px;
+          }
+        }
+        p, .form-control {
+          color: $graytextdark;
+          font-size: 15px;
+        }
+        hr {
+          margin: 20px 0 15px 0;
+          border-top-color: #979797;
+          padding-right: 40px;
+        }
+        .form-control {
+          padding: 0 12px;
+        }
+        .checkbox-custom label .checkbox-label {
+          color: #74757E;
+          font-size: 16px;
+          padding-left: 6px;
+          text-transform: none;
+        }
+      }
+    }
+    .modal-footer {
+      padding: 15px 15px 20px 15px;
+      .controls {
+        margin: -5px -8px;
+        .btn {
+          margin: 5px 8px;
+          height: 35px;
+          line-height: 35px;
+          font-size: 14px;
+          &:not(.btn-default) {
+            font-family: 'SF UI Text Bold';
+            color: $green;
+            transition: opacity 0.2s;
+            &:hover,
+            &:focus,
+            &:active {
+              color: $green;
+              opacity: 0.75;
+            }
+          }
+        }
+      }
+    }
+  }
+}

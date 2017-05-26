@@ -1,0 +1,57 @@
+<component>
+  <section>
+    <templateId root="2.16.840.1.113883.10.20.22.2.5.1"/>
+    <code code="11450-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Problem List"/>
+    <title>Problem List</title>
+    <text>
+      <table width="95%" border="1">
+        <thead>
+          <tr>
+            <th>Problem Description</th>
+            <th>Problem StartDate</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% diagnoses.each do |diagnosis| %>
+            <tr ID="problem<%= diagnosis.id %>">
+              <td><%= diagnosis.snomed.try(:defaultTerm) %></td>
+              <td><%= diagnosis.start_date.try(:strftime, Date::DATE_FORMATS[:custom]) %></td>
+              <td><%= diagnosis.terminal ? 'complited' : 'active' %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </text>
+    <% diagnoses.each do |diagnosis| %>
+      <entry typeCode="DRIV">
+        <act classCode="ACT" moodCode="EVN">
+          <templateId root="2.16.840.1.113883.10.20.22.4.3"/>
+          <id root="2.16.840.1.113883.3.3388.1.1.1.573798.3" extension="138736163"/>
+          <code xsi:type="CE" code="CONC" codeSystem="2.16.840.1.113883.5.6" displayName="Concern"/>
+          <statusCode code="completed"/>
+          <effectiveTime xsi:type="IVL_TS">
+            <low <%= value_or_null_flavor(diagnosis.start_date) %>/>
+            <high <%= value_or_null_flavor(diagnosis.stop_date) %>/>
+          </effectiveTime>
+          <entryRelationship typeCode="SUBJ">
+            <observation classCode="OBS" moodCode="EVN" negationInd="false">
+              <templateId root="2.16.840.1.113883.10.20.22.4.4"/>
+              <id root="2.16.840.1.113883.3.3388.1.1.1.573798.3.138736163.2.1" extension="<%= diagnosis.id %>"/>
+              <code code="<%= diagnosis.snomed.try(:conceptId) %>" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED-CT" displayName="Diagnosis"/>
+              <text>
+                <reference value="#problem<%= diagnosis.id %>"/>
+              </text>
+              <statusCode code="completed"/>
+              <effectiveTime xsi:type="IVL_TS">
+                <low <%= value_or_null_flavor(diagnosis.start_date) %>/>
+                <high <%= value_or_null_flavor(diagnosis.stop_date) %>/>
+              </effectiveTime>
+              <value xsi:type="CD" nullFlavor="OTH" codeSystem="2.16.840.1.113883.6.96"/>
+            </observation>
+          </entryRelationship>
+        </act>
+      </entry>
+    <% end %>
+  </section>
+</component>

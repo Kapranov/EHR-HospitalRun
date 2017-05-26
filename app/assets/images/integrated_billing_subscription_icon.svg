@@ -1,0 +1,41 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 171.25 182.67">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #57b3a7;
+      }
+    </style>
+  </defs>
+  <title>Untitled-2</title>
+  <rect class="cls-1" x="85.75" y="48.25" width="35" height="4.5"/>
+  <rect class="cls-1" x="85.75" y="60" width="35" height="4.5"/>
+  <rect class="cls-1" x="85.75" y="71.75" width="35" height="4.5"/>
+  <rect class="cls-1" x="50.25" y="83.5" width="70.5" height="4.5"/>
+  <rect class="cls-1" x="49.75" y="94.75" width="70.5" height="4.5"/>
+  <rect class="cls-1" x="55.5" y="48.25" width="7.5" height="23.5"/>
+  <rect class="cls-1" x="269.25" y="256.25" width="7.5" height="23.5" transform="translate(-208.75 333) rotate(-90)"/>
+  <g>
+    <rect class="cls-1" x="33.25" y="20.25" width="104" height="3.5"/>
+    <rect class="cls-1" x="245.96" y="232.79" width="5.58" height="3.5" transform="translate(269.54 -222.21) rotate(90)"/>
+    <rect class="cls-1" x="346.46" y="232.79" width="5.58" height="3.5" transform="translate(370.04 -322.71) rotate(90)"/>
+  </g>
+  <g>
+    <rect class="cls-1" x="33.25" y="10" width="104" height="3.5"/>
+    <rect class="cls-1" x="247" y="221.5" width="3.5" height="3.5" transform="translate(258.25 -233.5) rotate(90)"/>
+    <rect class="cls-1" x="347.5" y="221.5" width="3.5" height="3.5" transform="translate(358.75 -334) rotate(90)"/>
+  </g>
+  <g>
+    <rect class="cls-1" x="33" width="104" height="3.5"/>
+    <rect class="cls-1" x="247.25" y="211" width="2.5" height="3.5" transform="translate(247.5 -243.75) rotate(90)"/>
+    <rect class="cls-1" x="347.75" y="211" width="2.5" height="3.5" transform="translate(348 -344.25) rotate(90)"/>
+  </g>
+  <g>
+    <rect class="cls-1" x="33.25" y="33.83" width="104" height="3.5"/>
+    <rect class="cls-1" x="217.04" y="275.29" width="63.42" height="3.5" transform="translate(312.04 -179.71) rotate(90)"/>
+    <rect class="cls-1" x="317.54" y="275.29" width="63.42" height="3.5" transform="translate(412.54 -280.21) rotate(90)"/>
+  </g>
+  <polygon class="cls-1" points="30.92 88 30.92 101.5 20.08 111 0.25 111 30.92 88"/>
+  <polygon class="cls-1" points="139.58 87.75 139.58 101.25 150.42 110.75 170.25 110.75 139.58 87.75"/>
+  <path class="cls-1" d="M323.17,320.67v5H275.83v-5H214v34.17H385V320.67H323.17Zm42.67,27.17H336.17v-3.42h29.67v3.42Zm0.33-6.67H336.5v-3.42h29.67v3.42Z" transform="translate(-213.75 -208)"/>
+  <path class="cls-1" d="M322.92,356.5v5H275.58v-5H213.75v34.17h171V356.5H322.92Zm42.67,27.17H335.92v-3.42h29.67v3.42Zm0.33-6.67H336.25v-3.42h29.67V377Z" transform="translate(-213.75 -208)"/>
+</svg>

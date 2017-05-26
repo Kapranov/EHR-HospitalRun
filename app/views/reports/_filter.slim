@@ -1,0 +1,14 @@
+javascript:
+  $(function () {
+    $('body').on('change', 'select#criteria', function() {
+      $.ajax({
+        url: '#{new_report_path}',
+        data: { criteria: $('select#criteria').val() }
+      }).done(function (filter_partial) {
+        $('#filter').html(filter_partial);
+        initPickers('#filter');
+        initSelect2('#filter');
+        $('#results').html('');
+      });
+    });
+  });

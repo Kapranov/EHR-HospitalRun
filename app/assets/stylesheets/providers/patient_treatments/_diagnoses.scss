@@ -1,0 +1,185 @@
+#modal-patient-diagnoses,
+#modal-patient-medications,
+#modal-patient-add-medications,
+#modal-patient-add-diagnoses {
+  .modal-dialog,
+  .modal-dialog .modal-content {
+    min-width: 0;
+    max-width: 754px;
+  }
+  .modal-dialog {
+    .modal-content {
+      .modal-header {
+        div[class*='col-']:first-child {
+          border-right: 1px solid #fff;
+        }
+        .title {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+      }
+      .modal-body {
+        padding: 0;
+        .slimScrollDiv {
+          .right-block {
+            padding-right: 45px;
+          }
+        }
+        .content {
+          padding: 0;
+        }
+        .btn {
+          width: auto;
+        }
+        .left-block {
+          border-right: 1px solid $green;
+          padding-right: 0;
+        }
+        .right-block {
+          border-left: 1px solid $green;
+          margin-left: -1px;
+          padding: 20px 35px 10px 15px;
+        }
+        .input-group-custom {
+          .form-control.open {
+            border-radius: 3px 3px 0 0;
+            border-color: $green;
+          }
+          .input-group-addon-search {
+            border-radius: 0 !important;
+          }
+        }
+        ul, .scrollable {
+          padding: 10px 0;
+          list-style-type: none;
+          display: block;
+          a {
+            width: 100%;
+            display: block;
+            padding: 6px 9px;
+            font-size: 15px;
+            color: $graytextdark;
+            transition: background-color 0.2s, color 0.2s;
+            &:hover,
+            &:active,
+            &:focus,
+            &.active {
+              background-color: $green;
+              color: #fff;
+              text-decoration: underline !important;
+            }
+          }
+        }
+        .scrollable {
+          padding: 5px 0;
+          a {
+            padding-left: 20px;
+          }
+        }
+        .scrollable-padding-container {
+          padding: 5px 0;
+        }
+        .scrollable-padding-container {
+          display: table;
+          width: 100%;
+          border: 1px solid $green;
+          border-radius: 0 0 3px 3px;
+          margin-top: -1px;
+          &.collapse {
+            display: none;
+          }
+          .scrollable {
+            padding-right: 32px;
+            max-height: 183px;
+          }
+        }
+      }
+      .modal-footer {
+        padding: 0;
+        .right-block .controls {
+          padding: 13px 9px;
+        }
+        .right-block {
+          padding-left: 0;
+          border-left: 1px solid $green;
+          margin-left: -1px;
+        }
+        .controls {
+          margin: -10px -15px;
+          .btn {
+            margin: 10px 15px;
+          }
+        }
+      }
+    }
+  }
+}
+
+#modal-patient-diagnoses-reconciliation {
+  .modal-dialog,
+  .modal-dialog .modal-content {
+    min-width: 0;
+    max-width: 1140px;
+  }
+  .modal-body {
+    padding-top: 10px;
+    padding-bottom: 15px;
+    .slimScrollDiv .content {
+      padding-right: 30px;
+    }
+    .content {
+      padding-top: 0;
+      padding-bottom: 0;
+      .controls {
+        margin: -10px -30px 0 -30px;
+        .btn {
+          margin: 10px;
+        }
+      }
+      .table-responsive {
+        margin-left: -30px;
+        margin-right: -30px;
+        border: 1px solid $green;
+        table {
+          margin-bottom: 0;
+          tr {
+            td {
+              border-top: 0;
+              &:not(:last-child) {
+                border-right: 1px solid $green;
+              }
+            }
+          }
+          thead {
+            tr {
+              td {
+                padding: 15px;
+                background-color: $greenlighter2;
+                font-size: 16px;
+                color: $green;
+                text-align: center;
+                border-bottom: 1px solid $green;
+              }
+            }
+          }
+          tbody {
+            tr {
+              td {
+                color: $graytextdark;
+                font-size: 15px;
+                padding: 15px;
+                text-align: center;
+                &.description {
+                  text-align: left;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .modal-footer {
+    padding: 0 15px 15px 15px;
+  }
+}

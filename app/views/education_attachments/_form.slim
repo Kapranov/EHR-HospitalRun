@@ -1,0 +1,21 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title
+        = "#{@education_attachment.persisted? ? 'Edit' : 'New'} Attachment"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @education_attachment do |f|
+      = f.hidden_field :education_material_id, value: @education_material.id
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-12
+                .attachment-container
+                  a.btn.btn-default.btn-attachment
+                    | Add Attachment
+                  = f.file_field :file_name
+      .modal-footer
+        .controls
+          = f.submit 'Save', class: 'btn btn-default'

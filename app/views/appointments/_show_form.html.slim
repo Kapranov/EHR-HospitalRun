@@ -1,0 +1,68 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-sm
+      p.title Appointment Details
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @appointment, remote: true do |a|
+      .modal-body
+        .scrollable-container
+          .content
+            .row.separated
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  = a.input_field :appointment_datetime_date, class: 'form-control date-picker', placeholder: 'Appointment Date'
+              .col-lg-3.col-md-3.col-sm-3
+                .form-group
+                  = a.input_field :appointment_datetime_time, class: 'form-control time-picker', placeholder: 'Appointment Time'
+              .col-lg-3.col-md-3.col-sm-3
+                .form-group
+                  = a.input_field :room_id, as: :select,  collection: @rooms, include_blank: false, class: 'select2', value: @appointment.room.try(:room), data: { placeholder: 'Room', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+            .row
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  = text_field_tag :full_name, @patient_full_name, class: 'form-control', placeholder: 'Patient'
+            .row.separated
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  .input-group.input-group-phone
+                    = a.input_field :contact_phone_code, as: :select, collection: ((@appointment.persisted? && @appointment.contact_phone_code.present?) ? [@appointment.contact_phone_code] : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                    = a.input_field :contact_phone_tel, as: :tel, class: 'form-control input-phone'
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  = a.input_field :contact_email, as: :email, class: 'form-control', placeholder: 'Contact Email'
+            .row
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  = a.input_field :patient_id, as: :select, collection: @patients, include_blank: false, class: 'select2', id: 'show-patient-id', readonly: true, data: { placeholder: 'Patient', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x'}
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  = a.input_field :provider_id, as: :select,  collection: @providers, include_blank: false, class: 'select2', data: { placeholder: 'Room', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+            .row
+              .col-lg-12.col-md-12.col-sm-12
+                .form-group
+                  .input-group
+                    span.input-group-addon
+                      | CC/Reason:
+                    = a.input_field :reason, class: 'form-control'
+            .row
+              .col-lg-12.col-md-12.col-sm-12
+                .form-group
+                  .input-group
+                    span.input-group-addon
+                      | Referred by:
+                    = a.input_field :referral_id, as: :select, collection: @referrals, include_blank: false, class: 'select2', data: { placeholder: 'Referral', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+            .row
+              .col-lg-12.col-md-12.col-sm-12
+                .form-group
+                  .input-group
+                    span.input-group-addon
+                      | Appt Status:
+                    = a.input_field :appointment_status_id, as: :select, collection: @appointment_statuses, class: 'select2', id: 'show-appointment-status', readonly: true, include_blank: false, data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x'}
+      .modal-footer
+        .controls
+          - if policy(@appointment).update?
+            a.btn.btn-default#edit-appointment href="#" Edit
+            = a.submit 'Save', class: 'btn btn-default'
+            a.btn.btn-default#reschedule-appointment href="#" data-id="#{@appointment.id}" Reschedule
+            = link_to 'Cancel Appt', appointment_path, method: 'delete', class: 'btn btn-default'

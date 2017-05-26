@@ -1,0 +1,65 @@
+- content_for :title
+  | EHR1 | Electronic Health Records - Patients
+- content_for :back_link do
+  = link_to 'Patients', patient_treatments_path, class: 'active'
+.content
+  .container
+    .patients-header
+      div role="tab-panel"
+        ul.nav.nav-tabs.styled
+          li.active
+            a data-toggle="tab" href="#patientsRecentTab" role="tab" Recent
+        .tab-content.bordered-container
+          #patientsRecentTab.tab-pane.active role="tabpanel"
+            .row.controls
+              .col-lg-4.col-md-4.col-sm-4
+                .form-group
+                  .input-group
+                    = select_tag :find_patients, '', { class: 'select2', data: { placeholder: 'Search Patients', theme: 'gray-lighter', arrow: 'none', padding: '3x', font: '1x' } }
+                    span#find-patients-button.input-group-addon.input-group-addon-search
+              .col-lg-4.col-md-4.col-sm-4
+                .form-group
+                  .checkbox-custom
+                    input.checkbox type="checkbox" id="patient_show_inactive"
+                    label for="patient_show_inactive"
+                      span.checkbox-icon-container
+                        span.checkbox-icon
+                      span.checkbox-label Show Inactive
+              .col-lg-4.col-md-4.col-sm-4
+                - if policy(Patient).create?
+                  .form-group
+                    = link_to 'Add Patient', new_patient_path(from_patients_index: true), remote: true, class: 'btn btn-default btn-modal', data: { target: '#modal-add-patient' }
+            = render 'patients', patients: @patients
+#modal-patient-main.modal-provider.modal.animated.fadeIn
+#modal-patient-diagnoses.modal-provider.modal.animated.fadeIn
+#modal-patient-add-diagnoses.modal-provider.modal.animated.fadeIn
+#modal-patient-medications.modal-provider.modal.animated.fadeIn
+#modal-patient-add-medications.modal-provider.modal.animated.fadeIn
+#modal-patient-allergy.modal-provider.modal.animated.fadeIn
+#modal-patient-smoking.modal-provider.modal.animated.fadeIn
+#modal-patient-add-medical-history.modal-provider.modal.animated.fadeIn
+#modal-patient-add-advanced-directives.modal-provider.modal.animated.fadeIn
+#modal-patient-add-message.modal-provider.modal.animated.fadeIn
+#modal-patient-add-insurance.modal-provider.modal.animated.fadeIn
+#modal-patient-add-payer.modal-provider.modal.animated.fadeIn
+#modal-patient-full-perio.modal-provider.modal.animated.fadeIn
+#modal-patient-perio-data-entry.modal-provider.modal.animated.fadeIn
+#modal-patient-add-encounter.modal-provider.modal.animated.fadeIn
+#modal-patient-add-procedure.modal-provider.modal.animated.fadeIn
+#modal-patient-show-procedure.modal-provider.modal.animated.fadeIn
+#modal-add-appointment.modal-provider.modal.animated.fadeIn
+#modal-new-patient.modal-provider.modal.animated.fadeIn
+#modal-new-referral.modal-provider.modal.animated.fadeIn
+#modal-patient-all-authorized-representatives.modal-provider.modal.animated.fadeIn
+#modal-patient-add-authorized-representative.modal-provider.modal.animated.fadeIn
+#modal-patient-show-authorized-representative.modal-provider.modal.animated.fadeIn
+#modal-patient-edit-authorized-representative.modal-provider.modal.animated.fadeIn
+#modal-patient-reset-password-authorized-representative.modal-provider.modal.animated.fadeIn
+#modal-patient-immunizations.modal-provider.modal.animated.fadeIn
+#modal-patient-immunization-vaccine.modal-provider.modal.animated.fadeIn
+#modal-ammendment.modal-provider.modal.animated.fadeIn
+#modal-attachment.modal-provider.modal.animated.fadeIn
+#modal-medline.modal-provider.modal-danger.modal.animated.fadeIn
+#modal-patient-diagnoses-education-materials.modal-provider.modal.animated.fadeIn
+#modal-alert-diagnosis-index.modal-provider.modal.modal-danger.animated.fadeIn
+#modal-family-history.modal-provider.modal.animated.fadeIn

@@ -1,0 +1,26 @@
+.modal-dialog.modal-md
+  .modal-content
+    .modal-header.modal-header-md
+      p.title Record Advanced Directive
+    = render_messages
+    = simple_form_for @advanced_directive, html: { autocomplete: 'off' }, remote: true do |f|
+      = hidden_field_tag :patient_id, @patient.id
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-8.col-md-8.col-sm-8
+                .form-group
+                  .input-group
+                    = f.input_field :record_date_date, as: :date_picker, class: 'form-control date-picker', placeholder: 'Date Recorded'
+                    span.input-group-addon.input-group-addon-calendar
+              .col-lg-4.col-md-4.col-sm-4
+                .form-group
+                  a.btn.btn-default.btn-today href="#" Today
+            .row
+              .col-lg-12.col-md-12.col-sm-12
+                = f.input_field :notes, as: :text, class: 'form-control', rows: 4, placeholder: 'Advanced Directive Notes'
+      .modal-footer
+        .controls
+          = f.submit 'Save', class: 'btn btn-default btn-padding-lg'
+          a.btn.btn-default.btn-padding-sm data-dismiss="modal" Cancel

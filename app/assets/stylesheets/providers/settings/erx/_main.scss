@@ -1,0 +1,61 @@
+#settings-erx-container {
+  .erx-global-settings {
+    .erx-global-settings-content {
+      min-height: 476px;
+      padding: 15px 20px;
+      .row:last-child .form-group {
+        margin-bottom: 0 !important;
+      }
+      .input-group {
+        width: 100%;
+        .input-group-addon {
+          width: 145px;
+          padding-left: 20px;
+          padding-right: 20px;
+          text-align: left;
+          border: 0;
+          background-color: $green;
+          font-size: 16px;
+          color: #fff;
+        }
+        .form-control {
+          border-left: 0;
+          padding: 0 20px;
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+        }
+        .form-control[disabled] {
+          background-color: #f5f5f5;
+        }
+        #clinic-key {
+          padding-right: 70px;
+        }
+        #show-key {
+          position: absolute;
+          right: 5px;
+          bottom: 3px;
+          font-size: 12px;
+          color: $graytextdark;
+          text-decoration: underline !important;
+          z-index: 3;
+          transition: opacity 0.2s;
+          &:hover,
+          &:focus,
+          &:active,
+          &.active {
+            opacity: 0.75;
+          }
+        }
+      }
+    }
+    .erx-global-settings-footer {
+      padding: 20px;
+      .controls {
+        .btn {
+          margin: 0;
+          float: right;
+        }
+      }
+    }
+  }
+}

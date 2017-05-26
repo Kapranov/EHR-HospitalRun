@@ -1,0 +1,67 @@
+<component>
+  <section>
+    <templateId root="2.16.840.1.113883.10.20.22.2.1.1"/>
+    <code code="10160-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="History of Medication Use"/>
+    <title>Medications</title>
+    <text>
+      <table width="95%" border="1">
+        <thead>
+          <tr>
+            <th>Shorthand</th>
+            <th>RXnormCode</th>
+            <th>GenericName</th>
+            <th>ProductStrength</th>
+            <th>StartDate</th>
+            <th>StopDate</th>
+            <th>SIG</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% medications.each do |medication| %>
+            <tr ID="Med<%= medication.id %>">
+              <td><%= medication.shorthand %></td>
+              <td><%= medication.portion.try(:instruction) %></td>
+              <td><%= medication.portion.try(:drug) %></td>
+              <td><%= medication.portion.try(:dose) %></td>
+              <td><%= medication.start_date.strftime(Date::DATE_FORMATS[:custom]) %></td>
+              <td><%= medication.stop_date.strftime(Date::DATE_FORMATS[:custom]) %></td>
+              <td><%= medication.signature %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </text>
+    <% medications.each do |medication| %>
+      <entry typeCode="DRIV">
+        <substanceAdministration classCode="SBADM" moodCode="EVN">
+          <templateId root="2.16.840.1.113883.10.20.22.4.16"/>
+          <id root="2.16.840.1.113883.3.3388.1.1.1.573798.3.138736163.1.4.1" extension="<%= medication.id %>"/>
+          <text>
+            <reference value="#Med<%= medication.id %>"/>
+          </text>
+          <statusCode code="completed"/>
+          <effectiveTime xsi:type="IVL_TS">
+            <low <%= value_or_null_flavor(medication.start_date) %>/>
+            <high <%= value_or_null_flavor(medication.stop_date) %>/>
+          </effectiveTime>
+          <consumable>
+            <manufacturedProduct classCode="MANU">
+              <templateId root="2.16.840.1.113883.10.20.22.4.23"/>
+              <id root="2.16.840.1.113883.3.3388.1.1.1.573798.3.138736163.1.4.1" extension="175080452"/>
+              <manufacturedMaterial>
+                <code code="198013" displayName="SUMAtriptan 50 mg" codeSystem="2.16.840.1.113883.6.88" codeSystemName="RxNorm"/>
+              </manufacturedMaterial>
+            </manufacturedProduct>
+          </consumable>
+          <entryRelationship typeCode="SUBJ" inversionInd="true">
+            <act classCode="ACT" moodCode="INT">
+              <templateId root="2.16.840.1.113883.10.20.22.4.20"/>
+              <code xsi:type="CE" code="409073007" codeSystem="2.16.840.1.113883.6.96" displayName="instruction"/>
+              <statusCode code="completed"/>
+            </act>
+          </entryRelationship>
+        </substanceAdministration>
+      </entry>
+    <% end %>
+  </section>
+</component>

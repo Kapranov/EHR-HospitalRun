@@ -1,0 +1,23 @@
+InsuranceController = function() {
+  this.initialize = function() {
+    var insuranceMainController = new InsuranceMainController();
+    insuranceMainController.initialize();
+  }
+}
+
+InsuranceMainController = function() {
+  this.initialize = function() {
+    initZipCodes();
+  }
+
+  var initZipCodes = function() {
+    var zipcodeEmergencyAttrsController = new ZipcodeController();
+    zipcodeEmergencyAttrsController.initialize(
+      '#modal-patient-main #guarantor_street_address',
+      '#modal-patient-main #guarantor_city',
+      '#modal-patient-main #guarantor_state',
+      '#modal-patient-main #guarantor_zip',
+      false
+    );
+  }
+}

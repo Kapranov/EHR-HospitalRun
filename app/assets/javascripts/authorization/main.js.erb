@@ -1,0 +1,317 @@
+//= require application
+//= require authorization/main
+//= require ui/main
+//= require helpers/zipcode
+
+$(document).ready(function() {
+  initPickers();
+  initModalsReposition();
+
+  if($('#signup-wrapper #new_user').length > 0) {
+    initSelect2('.authorization-signup-wrapper');
+
+    $('#collapse-parent .left-block').on('show.bs.collapse', function (e) {
+      if ($(this).hasClass('left-block'))
+        $('#collapse-parent .left-block.in').collapse('hide');
+    });
+    
+    $('#collapse-parent').on('shown.bs.collapse', function (e) {
+      var target = $(e.target).data('target');
+      var contentTop = $('.authorization-signup-wrapper .authorization-content .content-top');
+
+      $('.button-cat div[class*=item-]').removeClass('active');
+      if(target === '#complete')
+        $('.button-cat div[class*=item-]').addClass('performed');
+      else
+        $(target+' div[class*=item-]').addClass('active');
+    });
+
+    ValidationController = function() {
+      var form;
+
+      this.initialize = function(_form) {
+        form = $(_form);
+
+        form.validate({
+          ignore: ':hidden:not(.select2):not(.validate)',
+          highlight: highlightHandler,
+          unhighlight: unhighlightHandler,
+          onkeyup: formValidationStateChecking,
+          errorPlacement: function(error,element) {
+            return true;
+          },
+          rules: {
+            //Personal Info
+            'user[provider][title]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][first_name]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][last_name]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][business_name]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][degree]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][speciality]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            //Contact Info
+            'full_address': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][practice_street_address]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][practice_city]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][practice_state]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][practice_zip]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][street_address]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][city]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][state]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][zip]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][primary_phone_code]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][primary_phone_tel]': {
+              minlength: 7,
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][mobile_phone_code]': {
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][mobile_phone_tel]': {
+              minlength: 7,
+              notEqualTo: "#user_provider_primary_phone_tel",
+              required: false
+            },
+            //Additional Info
+            'user[provider][email]': {
+              email: true,
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[provider][alt_email]': {
+              email: true,
+              notEqualTo: "#user_email",
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[password]': {
+              minlength: 5,
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            },
+            'user[password_confirmation]': {
+              equalTo: "#user_password",
+              minlength: 5,
+              required: {
+                required: true,
+                depends: dependsHandler
+              }
+            }
+          }
+        });
+
+        formValidationStateChecking($('.left-block.in input').first())
+        $('#collapse-parent').on('shown.bs.collapse', function (e) {
+          formValidationStateChecking($('.left-block.in input, .left-block.in select').first())
+        });
+        $('input, select').change(function(e) {
+          formValidationStateChecking($(this));
+        });
+      }
+
+      var dependsHandler = function(element) {
+        return $(element).closest('.left-block').hasClass('in');
+      }
+
+      var formValidationStateChanged = function(isEnable, control) {
+        var parent = $(control).closest('.collapse.left-block.in');
+        if(parent.length > 0) {
+          var id = $(parent).attr('id').substring(7,$(parent).attr('id').length);
+          var rightCatButton = $(parent).closest('row').find('.right-block .button-cat');
+          if(!isEnable) {
+            disableControl($(parent).find('.button-next'));
+            $('#'+id+' div[class*=item-]').removeClass('performed');
+            $('#'+id+' div[class*=item-]').addClass('active');
+          }
+          else {
+            enableControl($(parent).find('.button-next'));
+            $('#'+id+' div[class*=item-]').removeClass('active');
+            $('#'+id+' div[class*=item-]').addClass('performed');
+          }
+        }
+      }
+
+      var highlightHandler = function(element) {
+        $(element).addClass('unvalid');
+        $(element).removeClass('valid');
+        if($(element).hasClass('select2')) {
+          $('.select2-id-'+$(element).attr('id')).addClass('unvalid');
+          $('.select2-id-'+$(element).attr('id')).removeClass('valid');
+        }
+      }
+
+      var unhighlightHandler = function(element) {
+        $(element).removeClass('unvalid');
+        $(element).addClass('valid');
+        if($(element).hasClass('select2')) {
+          $('.select2-id-'+$(element).attr('id')).removeClass('unvalid');
+          $('.select2-id-'+$(element).attr('id')).addClass('valid');
+        }
+      }
+
+      var formValidationStateChecking = function(element) {
+        if(form.valid())
+          formValidHandler(element);
+        else
+          formUnvalidHandler(element);
+      }
+
+      var formValidHandler = function(element) {
+        formValidationStateChanged(true, element);
+      }
+
+      var formUnvalidHandler = function(element) {
+        formValidationStateChanged(false, element);
+      }
+    }
+
+    var validationController = new ValidationController();
+    validationController.initialize('#new_user');
+
+    StreetAddressesController = function() {
+      var full_address, practice_suit_apt_number, btn_verify;
+
+      this.initialize = function() {
+        full_address = $('#signup-wrapper #full_address');
+        practice_suit_apt_number = $('#signup-wrapper #user_provider_practice_suit_apt_number');
+        btn_verify = $('#signup-wrapper #btn_verify');
+        initHandlers();
+      }
+
+      var initHandlers = function() {
+        var keyUp = function(e) {
+          btn_verify.attr('href', '<%= Rails.application.routes.url_helpers.registration_addresses_street_addresses_path %>'+'?full_street_line='+full_address.val()+'&suit_apt_number='+practice_suit_apt_number.val());
+          if(!full_address.prop('readonly')) {
+            if(full_address.val())
+              enableControl(btn_verify);
+            else
+              disableControl(btn_verify);
+          }
+        }
+
+        full_address.keyup(keyUp);
+        practice_suit_apt_number.keyup(keyUp);
+      }
+    }
+
+    var streetAddressesController = new StreetAddressesController();
+    streetAddressesController.initialize();
+
+    TabsController = function() {
+      var btnRightPanelHandler = function() {
+        var currentPanel = $('#collapse-parent .left-block.in');
+        var targetPanel = $($(this).data('target')); 
+
+        if(!targetPanel.hasClass('in')) {
+          currentPanel.collapse('hide');
+          targetPanel.collapse('show');
+        }
+      }
+
+      var btnSwitchPanelHandler = function() {
+        $($(this).attr('data-target')).collapse('show');
+      }
+
+      this.initialize = function() {
+        $('.authorization-signup-wrapper .button-cat.button-cat-development').click(btnRightPanelHandler);
+        $('.authorization-signup-wrapper .button-switch').click(btnSwitchPanelHandler);
+      }
+    }
+
+    var tabsController = new TabsController();
+    tabsController.initialize();
+  }
+
+  $('.modal-passwords').modal('show');
+});

@@ -1,0 +1,13 @@
+.modal-dialog
+  .modal-content
+    .modal-body
+      .scrollable-container
+        .content
+          p.message 
+            | User Activation
+            br
+            br
+              = "User, #{@user.provider.full_name} - Has been activated!"
+          .row
+            .col-lg-12
+              a.btn.btn-default href="#" data-dismiss="modal" Close

@@ -1,0 +1,147 @@
+.modal-dialog
+  .modal-content class="#{!@user.new_record? ? 'add-user-view' : ''}"
+    = simple_form_for [:admin, @user] do |u|
+      .modal-header
+        .row
+          .col-lg-6.col-md-6
+            p.title
+              = "#{@user.new_record? ? 'New' : 'Edit'} User"
+          .col-lg-6.col-md-6
+            p.title
+              - if !@user.new_record?
+                - if @provider.primary_phone.present?
+                  = "#{!@user.new_record? ? "Primary Mobile Number: #{@provider.primary_phone}" : ''}"
+                - else 
+                  | Primary Mobile Number: Not Present
+            a.close-button href="#" data-dismiss="modal"
+              .fa.fa-2x.fa-times-circle-o
+      .modal-body
+        = u.simple_fields_for @provider do |f|
+          .scrollable-container
+            .content
+              .panel.panel-default
+                .panel-body
+                  .row
+                    .col-lg-5
+                      .row
+                        .col-lg-3
+                          .form-group
+                            = f.input_field :title, as: :select, collection: Provider.titles, selected: Provider.titles.first, class: 'select2', placeholder: 'Title', data: { theme: 'admin-black-white', arrow: '1x', padding: '1x', font: '05x' }, readonly: !@user.new_record? ? true : false
+                        .col-lg-9
+                          .form-group
+                            = f.input_field :first_name, class: "form-control", readonly: !@user.new_record? ? true : false, placeholder: 'First Name', disabled: !@user.new_record? ? true : false
+                    .col-lg-2
+                      .form-group
+                        = f.input_field :middle_name, class: "form-control", readonly: !@user.new_record? ? true : false, placeholder: 'Middle Name', disabled: !@user.new_record? ? true : false
+                    .col-lg-5
+                      .form-group
+                        = f.input_field :last_name, class: "form-control", readonly: !@user.new_record? ? true : false, placeholder: 'Last Name', disabled: !@user.new_record? ? true : false
+                  .row
+                    .col-lg-3
+                      .form-group
+                        = f.input_field :degree, as: :select, collection: Provider.degrees, selected: Provider.degrees.first, class: 'select2', placeholder: 'Degree', data: { theme: 'admin-black-white', arrow: '1x', padding: '1x', font: '05x' }, disabled: !@user.new_record? ? true : false
+                    .col-lg-9
+                      .form-group
+                        = f.input_field :speciality, as: :select, collection: Provider.specialities, selected: Provider.specialities.first, class: 'select2', placeholder: 'Speciality', data: { theme: 'admin-black-white', arrow: '1x', padding: '1x', font: '05x' }, disabled: !@user.new_record? ? true : false
+              .panel.panel-default
+                .panel-header
+                  p.title Practice Address
+                .panel-body
+                  .row
+                    .col-lg-9
+                      .form-group
+                        = f.input_field :practice_street_address, as: :select, collection: [@provider.practice_street_address], class: 'select2', id: 'practice_street', placeholder: 'Street Address', tabindex: -1, data: { theme: 'admin-black-white', arrow: '1x', padding: '1x', font: '05x', placeholder: 'Street Address', target: '#mailing_street' }, include_blank: true
+                    .col-lg-3
+                      .form-group
+                        = f.input_field :practice_suit_apt_number, class: 'form-control', id: 'practice_suit', placeholder: 'Suite/Apt Number', data: { target: '#mailing_suit' }
+                  .row
+                    .col-lg-8
+                      .form-group
+                        = f.input_field :practice_city, class: 'form-control', id: 'practice_city', placeholder: 'City', readonly: true, tabindex: '-1', data: { target: '#mailing_city' }
+                    .col-lg-2
+                      .form-group
+                        = f.input_field :practice_zip, class: 'form-control', id: 'practice_state', placeholder: 'State', readonly: true, tabindex: '-1', data: { target: '#mailing_state' }
+                    .col-lg-2
+                      .form-group
+                        = f.input_field :practice_zip, class: 'form-control', id: 'practice_zip', placeholder: 'Zip Code', readonly: true, tabindex: '-1', data: { target: '#mailing_zip' }
+              .panel.panel-default
+                .panel-header
+                  .row
+                    .col-lg-2.col-md-2.col-sm-2
+                      p.title Mailing Address
+                    .col-lg-3.col-md-3.col-sm-3
+                      .checkbox-custom.same-as-practice
+                        input.checkbox type="checkbox" id="same_as_practice" checked="checked"
+                        label for="same_as_practice"
+                          span.checkbox-icon-container
+                            span.checkbox-icon
+                          span.checkbox-label Same as practice address
+                .panel-body
+                  .row
+                    .col-lg-9
+                      .form-group
+                        = f.input_field :street_address, as: :select, collection: [@provider.street_address], class: 'select2', id: 'mailing_street', placeholder: 'Street Address', tabindex: '-1', data: { theme: 'admin-black-white', arrow: '1x', padding: '1x', font: '05x', placeholder: 'Street Address' }, readonly: true, include_blank: true
+                    .col-lg-3
+                      .form-group
+                        = f.input_field :suit_apt_number, class: 'form-control', id: 'mailing_suit', placeholder: 'Suite/Apt Number', readonly: true, tabindex: '-1'
+                  .row
+                    .col-lg-8
+                      .form-group
+                        = f.input_field :city, class: 'form-control', id: 'mailing_city', placeholder: 'City', readonly: true, tabindex: '-1'
+                    .col-lg-2
+                      .form-group
+                        = f.input_field :state, class: 'form-control', id: 'mailing_state', placeholder: 'State', readonly: true, tabindex: '-1'
+                    .col-lg-2
+                      .form-group
+                        = f.input_field :zip, class: 'form-control', id: 'mailing_zip', placeholder: 'Zip Code', readonly: true, tabindex: '-1'
+                  .row
+                    .col-lg-7
+                      .form-group
+                        .input-group.input-group-phone
+                          = f.input_field :primary_phone_code, as: :select, collection: (Rails.env.development? ? AreaCode.all.map { |code| [code.code.to_s, code.code.to_s] } : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'admin-black-white', arrow: 'none', padding: '1x', font: '05x', width: '70px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                          = f.input_field :primary_phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Primary Phone Number'
+                    .col-lg-5
+                      .form-group
+                        .input-group.input-group-phone
+                          = f.input_field :mobile_phone_code, as: :select, collection: (Rails.env.development? ? AreaCode.all.map { |code| [code.code.to_s, code.code.to_s] } : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'admin-black-white', arrow: 'none', padding: '1x', font: '05x', width: '70px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                          = f.input_field :mobile_phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Mobile Phone Number'
+                  - if @user.new_record?
+                    .row
+                      .col-lg-7
+                        .form-group
+                          = u.input_field :email, as: :email, class: 'form-control input-email', placeholder: 'Primary EMail Address'
+                      .col-lg-5
+                        .form-group
+                          = f.input_field :alt_email, as: :email, class: 'form-control input-email ', placeholder: 'Alternative EMail Address'
+                  .links
+                    - if @user.new_record?
+                      .row
+                        .col-lg-12
+                          .form-group.generate-random
+                            .row
+                              .col-lg-4
+                                a#generate-random-password-btn href="#" Generate Random Password
+                              .generate-random-container.collapse.fade
+                                .col-lg-4.col-md-6.col-sm-6.random-password
+                                  = u.input_field :password, as: :password, class: 'input-password', id: 'random-password', readonly: true
+                                .col-lg-4.col-md-6.col-sm-6.show-random-password-container
+                                  .checkbox-custom.pull-right
+                                    input.checkbox type="checkbox" id="show-random-password-checkbox"
+                                    label for="show-random-password-checkbox"
+                                      span.checkbox-icon-container
+                                        span.checkbox-icon
+                                      span.checkbox-label Show Password
+                    .row
+                      .col-lg-12
+                        .form-group
+                          = link_to 'Send Welcome And Activation Email', '#', class: 'disabled'
+                    .row
+                      .col-lg-12
+                        .form-group
+                          = link_to 'Generate & Print Welcome Sheet', '#', class: 'disabled'
+      .modal-footer
+        .controls
+          .row
+            .col-lg-12
+              input.btn.btn-default type="submit" value="#{@user.new_record? ? 'Add New User' : 'Save'}"
+              a.btn.btn-default href="#" data-dismiss="modal" Cancel

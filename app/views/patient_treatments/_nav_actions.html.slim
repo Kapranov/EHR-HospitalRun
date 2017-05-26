@@ -1,0 +1,43 @@
+.dropdown.dropdown-actions
+  a.dropdown-toggle.btn.btn-default data-toggle="dropdown"
+    = title
+    span.fa.fa-angle-down
+  ul.dropdown-menu
+    - if policy(Procedure).create?
+      li
+        = link_to 'Add Procedure', new_procedure_path(patient_id: @patient.id), remote: true, class: 'checker unchecked btn-modal', data: { target: '#modal-patient-add-procedure' }
+
+    - if policy(Encounter).create?
+      li
+        = link_to 'Add Encounter Note', form_encounters_path(patient_id: @patient.id), remote: true, class: 'btn-modal', data: { target: '#modal-patient-add-encounter' }
+    li
+      hr
+    li
+      = link_to 'Invite to Patient Portal', invite_to_portal_providers_path(patient_id: @patient.id, from_patients_index: false, code: Activation.code), class: 'btn-modal', data: { target: '#modal-add-patient-invite-to-portal' }, remote: true
+    - if policy(EmailMessage).show?
+      li
+        = link_to 'Send a Message', new_email_message_path(id: @patient.id), remote: true, class: 'btn-modal', data: { target: '#modal-patient-add-message' }
+    li
+      hr
+    li.dropdown-submenu
+      a href="#" data-toggle="dropdown" Print / Send To
+      ul.dropdown-menu.pull-middle.bullet
+        li
+          a.disabled href="#" 
+            p Patient Chart
+            p.padding
+              | (includes everything)
+        li
+          a.disabled href="#" Treatments
+        li
+          a.disabled href="#" Encounter Note(s)
+        li
+          a.disabled href="#" Perio Chart
+    li
+      a.disabled href="#" Create Clinical Summary/Referral
+    li
+      = link_to 'Create C-CDA', new_ccda_path(patient_id: @patient.id)
+    li
+      hr
+    li
+      = link_to 'Syndromic Surveillance', syndromic_surveillances_path(patient_id: @patient.id)

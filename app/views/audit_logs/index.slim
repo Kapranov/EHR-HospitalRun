@@ -1,0 +1,9 @@
+- content_for :title
+  | EHR1 | Electronic Health Records - Settings (Audit Log)
+- content_for :back_link do
+  = link_to 'Settings', edit_erx_path(current_user.provider.erx), class: 'active'
+.col-lg-10
+  #settings-audit-container.right-block
+    = render 'audit_logs'
+javascript:
+  $('#item-settings-audit').parent().addClass('active');

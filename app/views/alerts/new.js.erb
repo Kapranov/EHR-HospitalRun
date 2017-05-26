@@ -1,0 +1,115 @@
+$('#modal-alert').html('<%= escape_javascript(render 'form') %>');
+
+initPickers('#modal-alert');
+initSelect2('#modal-alert');
+
+$('#modal-alert').modal('show');
+
+var ValidationController = function() {
+  var form;
+
+  this.initialize = function(_form) {
+    form = $(_form);
+
+    form.validate({
+      ignore: ':hidden:not(.select2)',
+      highlight: highlightHandler,
+      unhighlight: unhighlightHandler,
+      onkeyup: formValidationStateChecking,
+      errorPlacement: function(error,element) {
+        return true;
+      },
+      rules: {
+        'alert[name]': {
+          required: {
+            required: true
+          }
+        },
+        'alert[description]': {
+          required: {
+            required: true
+          }
+        },
+        'alert[resolution]': {
+          required: {
+            required: true
+          }
+        },
+        'alert[bibliography]': {
+          required: {
+            required: true
+          }
+        },
+        'alert[developer]': {
+          required: {
+            required: true
+          }
+        },
+        'alert[funding_source]': {
+          required: {
+            required: false
+          }
+        },
+        'alert[release_date_date]': {
+          required: {
+            required: true
+          }
+        },
+        'alert[rule]': {
+          required: {
+            required: true
+          }
+        }
+      }
+    });
+
+    formValidationStateChecking(form.find('input.form-control').first());
+
+    $('.select2').change(function(e) {
+      formValidationStateChecking(form.find('input.form-control').first());
+    });
+  }
+
+  var formValidationStateChanged = function(isEnable, control) {
+    if(isEnable)
+      enableControl(form.find('input[type=submit]'));
+    else
+      disableControl(form.find('input[type=submit]'));
+  }
+
+  var highlightHandler = function(element) {
+    $(element).addClass('unvalid');
+    $(element).removeClass('valid');
+    if($(element).hasClass('select2')) {
+      $('.select2-id-'+$(element).attr('id')).addClass('unvalid');
+      $('.select2-id-'+$(element).attr('id')).removeClass('valid');
+    }
+  }
+
+  var unhighlightHandler = function(element) {
+    $(element).removeClass('unvalid');
+    $(element).addClass('valid');
+    if($(element).hasClass('select2')) {
+      $('.select2-id-'+$(element).attr('id')).removeClass('unvalid');
+      $('.select2-id-'+$(element).attr('id')).addClass('valid');
+    }
+  }
+
+  var formValidationStateChecking = function(element) {
+    if(form.valid())
+      formValidHandler(element);
+    else
+      formUnvalidHandler(element);
+  }
+
+  var formValidHandler = function(element) {
+    formValidationStateChanged(true, element);
+  }
+
+  var formUnvalidHandler = function(element) {
+    formValidationStateChanged(false, element);
+  }
+}
+
+var validationController = new ValidationController();
+validationController.initialize('#modal-alert form.new_alert');

@@ -1,0 +1,104 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title Clinical Decision Support Alerts
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    .modal-body
+      .scrollable-container
+        .content
+          - if @alerts.present? && @alerts.any?
+            .row.row-alerts.collapse.fade.in
+              .col-lg-12
+                .panel-group.panel-group-alerts#alerts-container
+                  - @alerts.each_with_index do |alert, index|
+                    .panel.panel-alert
+                      .panel-heading
+                        a data-toggle="collapse" data-parent="#alerts-container" aria-expanded="#{index == 0 ? 'true' : 'false'}" href="#alert-#{alert.id}"
+                          p.title
+                            = alert.name
+                          .icon.icon-md.icon-circle.icon-ic-collapse.pull-right
+                      .panel-collapse.collapse id="alert-#{alert.id}" class="#{'in' if index == 0}"
+                        .panel-body
+                          .row
+                            .col-lg-12
+                              .form-group
+                                p.title Description*
+                                = text_field_tag :description, alert.description, readonly: true, class: 'form-control form-control-danger'
+                          .row
+                            .col-lg-12
+                              .form-group
+                                - if alert.triggers.any?
+                                    .table-responsive
+                                      table.table
+                                        thead
+                                          tr
+                                            td
+                                            td
+                                              p Category
+                                            td
+                                              p Code
+                                            td
+                                              p Code System
+                                            td
+                                              p Description
+                                        tbody
+                                          - alert.triggers.each do |trigger|
+                                            tr
+                                              td
+                                                - if trigger.system.to_s == 'Snomed'
+                                                  = link_to '', info_medline_plus_path(title: "#{trigger.code} (#{trigger.system.upcase}) - #{trigger.description}", link: trigger.medline_url), data: { target: '#modal-medline' }, class: 'icon icon-sm icon-circle icon-ic-info btn-modal', remote: true
+                                              td
+                                                p 
+                                                  = trigger.trigger_category.category
+                                              td
+                                                p 
+                                                  = trigger.code
+                                              td
+                                                p 
+                                                  = trigger.system
+                                              td
+                                                p
+                                                  = trigger.description
+                          .row
+                            .col-lg-12
+                              .form-group
+                                p.title Resolution:
+                                = text_area_tag :resolution, alert.resolution, readonly: true, class: 'form-control form-control-danger textarea-resize-vertical'
+                          .panel-collapse.collapse.panel-additional-info id="alert-#{alert.id}-additionalinfo"
+                            .panel-body
+                              .row
+                                .col-lg-12
+                                  .form-group
+                                    p.title Bibliography:
+                                    = text_area_tag :bibliography, alert.bibliography, readonly: true, class: 'form-control form-control-danger textarea-resize-vertical'
+                              .row
+                                .col-lg-12
+                                  .form-group
+                                    p.title Developer:
+                                    = text_field_tag :developer, alert.developer, readonly: true, class: 'form-control form-control-danger'
+                              .row
+                                .col-lg-6
+                                  .form-group.form-group-horizontal
+                                    .row
+                                      .col-lg-4.col-md-4
+                                        p.title Funding Source:
+                                      .col-lg-8.col-md-8
+                                        = text_field_tag :funding_source, alert.funding_source, readonly: true, class: 'form-control form-control-danger'
+                                .col-lg-6
+                                  .form-group.form-group-horizontal
+                                    .row
+                                      .col-lg-4.col-md-4
+                                        p.title Release Date(s)
+                                      .col-lg-8.col-md-8
+                                        .input-group.input-group-danger.disabled
+                                          = text_field_tag :release_date, alert.release_date_date, class: 'form-control date-picker'
+                                          span.input-group-addon.input-group-addon-calendar
+                          .form-group
+                            = link_to 'More Info', "#alert-#{alert.id}-additionalinfo", data: { toggle: 'collapse' }, class: 'toggle-more-info'
+          - else
+            .row
+              .col-lg-12
+                .form-group
+                  p.title-empty 
+                    = "Clinical Decision Support Alerts for ID #{params[:concept_id]} Not Found"

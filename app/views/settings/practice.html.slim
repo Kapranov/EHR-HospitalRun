@@ -1,0 +1,123 @@
+- content_for :title
+  | EHR1 | Electronic Health Records - Settings (Practice)
+- content_for :back_link do
+  = link_to 'Settings', settings_practice_path, class: 'active'
+.col-lg-10
+  #settings-practice-container.right-block
+    .row-container.practice-settings
+      .bordered-container
+        .category-header
+          p.title Practice Settings
+        - if policy(:setting).show?
+          .row-container.practice-locations
+            .bordered-container.bordered-container-actioned
+              .category-header
+                p.title Practice Locations
+                = link_to form_locations_path(opened_from_practice: true), class: 'btn-small', remote: true
+                  i.fa.fa-plus
+              .practice-locations-content
+                .table-responsive
+                  table.table
+                    thead
+                      tr
+                        th
+                          p Location name
+                        th
+                          p Address
+                        th
+                          p Phone
+                        th
+                          p # of Providers
+                    tbody
+                      - @locations.each do |location|
+                        tr
+                          td
+                            = link_to location.location_name, form_locations_path(id: location.id), remote: true
+                          td
+                            p
+                              = "#{location.location_address} #{location.city}, #{location.state}"
+                          td
+                            p
+                              = location.location_phone
+                          td
+                            p
+                              = location.amount_of_practice_user
+        - if policy(:practice).show?
+          .row-container.users
+            .bordered-container.bordered-container-actioned
+              .category-header
+                .row
+                  .col-lg-3.col-md-3.col-sm-3
+                    p.title Users
+                  .col-lg-4.col-md-4.col-sm-4
+                    p.title
+                      = 'Practice ID#:'
+                      span
+                        = current_user.id
+                  - if current_user.provider.main_provider.business_name.present?
+                    .col-lg-3.col-md-3.col-sm-3
+                      p.title
+                        = "Practice Name: #{current_user.provider.main_provider.business_name}"
+                  - if policy(:practice).create?
+                    div class="#{current_user.provider.main_provider.business_name.present? ? 'col-lg-2 col-md-2 col-sm-2' : 'col-lg-5 col-md-5 col-sm-5'}"
+                      = link_to new_practice_path, class: 'btn-small', remote: true
+                        i.fa.fa-plus
+              - if policy(:practice).show?
+                .users-content
+                  .table-responsive
+                    table.table
+                      thead
+                        tr
+                          th
+                          th
+                            p Full Name
+                          th
+                            p Email
+                          th colspan="2"
+                            p Role
+                          th
+                            p Status
+                          th
+                            p Emergency Access
+                      tbody
+                        - @practices.each do |practice|
+                          tr
+                            td
+                              - if gravatar?(practice.user)
+                                = gravatar_for(practice.user, { class: 'avatar', alt: 'avatar' })
+                              - else
+                                = link_to policy(:practice).update? ? edit_practice_path(practice) : '#', remote: true, class: 'avatar-container'
+                                  - if practice.profile_image.present?
+                                    = image_tag practice.profile_image.url, class: 'avatar', alt: 'avatar'
+                                  - else
+                                    = image_tag 'avatar-empty.svg', size: "100", class: "avatar avatar-empty"
+                            td
+                              = link_to practice.full_name, edit_practice_path(practice), remote: true
+                            td
+                              p
+                                = practice.user.email
+                            td
+                              p
+                                = practice.practice_role
+                            td
+                              .checkbox-custom
+                                = check_box_tag :provider, nil, practice.admin, id: "checkbox_users_#{practice.id}", class: 'checkbox admin-state', data: { id: practice.id }
+                                label[for="checkbox_users_#{practice.id}"]
+                                  span.checkbox-icon-container
+                                    span.checkbox-icon
+                                  span.checkbox-label Admin
+                            td
+                              - if practice.active
+                                a.status-state href="#" class="active" data-id="#{practice.id}" Active
+                              - else
+                                a.status-state href="#" class="inactive" data-id="#{practice.id}" Inactive
+                            td
+                              .checkbox-custom
+                                = check_box_tag :provider, nil, practice.emergency_access, id: "checkbox_users_emergency_access_#{practice.id}", class: 'checkbox emergency-access-state', data: { id: practice.id }
+                                label[for="checkbox_users_emergency_access_#{practice.id}"]
+                                  span.checkbox-icon-container
+                                    span.checkbox-icon
+#modal-settings-add-user-practice.modal.modal-provider.animated.fadeIn
+#modal-settings-add-user-added-practice.modal.modal-provider.animated.fadeIn
+javascript:
+  $('#item-settings-practice').parent().addClass('active');

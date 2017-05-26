@@ -1,0 +1,44 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header.modal-header-md
+      p.title Add Dx for Diagnosis Reconciliation
+      a.close-btn.close-btn-default data-dismiss="modal"
+    .modal-body
+      .scrollable-container
+        .content
+          .row
+            .col-lg-12
+              .controls.pull-right
+                = link_to diagnoses_path(patient_id: params[:patient_id]), remote: true, class: 'btn-plus btn btn-default btn-modal', data: { target: '#modal-patient-diagnoses' }
+                  span.glyphicon.glyphicon-plus
+          #diagnoses-container
+            = render 'reconciliation_diagnoses'
+    - if @exist_diagnosis.present?
+      .modal-footer
+        .row
+          .col-lg-12
+            .controls.pull-right
+              = link_to 'Previous', '#', id: 'previous-reconcilitation-diagnosis', class: 'btn btn-default'
+              = link_to 'Confirm', '#', id: 'confirm-reconcilitation-diagnosis', class: 'btn btn-default'            
+javascript:
+  $('#previous-reconcilitation-diagnosis').click(function (e) {
+  e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: '#{previous_reconciliation_diagnosis_path(@exist_diagnosis)}'
+    }).done(function (partial) {
+      $('#diagnoses-container').html(partial);
+      repositionModal($('#modal-patient-diagnoses-reconciliation'), false);
+    });
+  });
+
+  $('#confirm-reconcilitation-diagnosis').click(function (e) {
+  e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: '#{confirm_reconciliation_diagnosis_path(@exist_diagnosis)}'
+    }).done(function (partial) {
+      $('#diagnoses-container').html(partial);
+      repositionModal($('#modal-patient-diagnoses-reconciliation'), false);
+    });
+  });

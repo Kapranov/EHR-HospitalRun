@@ -1,0 +1,181 @@
+.modal-dialog role="document"
+  .modal-content
+    .modal-header.modal-header-md
+      p.title Add Patient Insurance
+    = render_messages
+    = simple_form_for @insurance, html: { autocomplete: 'off' }, remote: true do |i|
+      = i.input_field :patient_id, as: :hidden, value: @patient.id
+      .modal-body
+        .scrollable-container
+          .content
+            .top-block
+              .panel
+                .panel-body
+                  .row
+                    .col-lg-12.col-md-12.col-sm-12
+                      .form-group
+                        = i.input_field :payer_id, as: :hidden
+                        .input-group.input-group-search
+                          = select_tag :find_payers, options_for_select([['']]), class: 'select2', data: { theme: 'gray-lighter', arrow: 'none', padding: '3x', font: '1x', placeholder: 'Payer Name' }
+                          span.input-group-addon.input-group-addon-search#find_payers_button
+                  .row
+                    .col-lg-12
+                      .form-group
+                        .input-group.input-group-search.disabled
+                          = select_tag :find_plans_and_types, options_for_select([['']]), class: 'select2', data: { theme: 'gray-lighter', arrow: 'none', padding: '3x', font: '1x', placeholder: 'Plan Name & Type' }
+                          span.input-group-addon.input-group-addon-search id="find_plans_and_types_button"
+                  .row
+                    .col-lg-6
+                      .form-group
+                        = i.input_field :provider_id, as: :select, collection: Provider.all.map{ |p| [p.full_name, p.id] }, selected: current_user.provider.id, class: 'select2', include_blank: true, data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x', placeholder: 'Provider' }
+                    .col-lg-6
+                      .form-group
+                        .checkbox-custom
+                          = i.check_box :worker_compensation, class: 'checkbox'
+                          label for="insurance_worker_compensation"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Worker’s Compensation
+                  .row
+                    .col-lg-6
+                      .form-group
+                        = i.input_field :insurance_number, class: 'form-control', placeholder: 'Incurance ID'
+                    .col-lg-6
+                      .form-group
+                        = i.input_field :relation, as: :select, collection: Insurance.relations, selected: 0, class: 'select2', include_blank: true, data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x', placeholder: 'Relation to Insured' }
+                  .row
+                    .col-lg-6
+                      .form-group
+                        .input-group
+                          = i.input_field :effective_from_date, class: 'form-control date-picker', placeholder: 'Effective From'
+                          span.input-group-addon.input-group-addon-calendar
+                    .col-lg-6
+                      .form-group
+                        .input-group
+                          = i.input_field :effective_to_date, class: 'form-control date-picker', placeholder: 'Effective To'
+                          span.input-group-addon.input-group-addon-calendar
+                  .row
+                    .col-lg-6
+                      .form-group
+                        = i.input_field :copay_type, as: :select, collection: Insurance.copay_types, selected: 0, class: 'select2', include_blank: true, id: 'patients_insurance_copay_type', data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x', placeholder: 'CoPay Type' }
+                    .col-lg-6
+                      .form-group
+                        .input-group
+                          span.input-group-addon CoPay Amount
+                          = i.input_field :copay_amount, class: 'form-control', placeholder: '$', id: 'patients_insurance_copay_amount'
+                  .row
+                    .col-lg-6
+                      .form-group
+                        = i.input_field :claim, class: 'form-control', placeholder: 'Claim #'
+                    .col-lg-6
+                      .form-group
+                        = i.input_field :note, as: :text, class: 'form-control', placeholder: 'Notes', rows: 5
+            .bottom-block
+              .row
+                .col-lg-6.left-block
+                  .panel
+                    .panel-heading
+                      a data-toggle="collapse" href="#panelEmployer"
+                        p.panel-title Employer
+                    .panel-collapse.collapse.in id="panelEmployer"
+                      = i.simple_fields_for :employer, Employer.new do |e|
+                        .panel-body
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = e.input_field :name, class: 'form-control', placeholder: 'Employer Name'
+                          .row
+                            .col-lg-12
+                              .form-group
+                                .input-group.input-group-phone
+                                  = e.input_field :phone_code, as: :select, collection: [], class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                                  = e.input_field :phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Phone Number'
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = e.input_field :street_address, as: :select, collection: [], class: 'select2', include_blank: true, data: { theme: 'gray-lighter', arrow: '2x', 'arrow-padding': '05x', padding: '3x', font: '1x', placeholder: 'Street Address' }
+                          .row
+                            .col-lg-8
+                              .form-group
+                                = e.input_field :city, class: 'form-control', placeholder: 'City', readonly: true, tabindex: '-1'
+                            .col-lg-4
+                              .form-group
+                                = e.input_field :state, class: 'form-control form-control-padding-sm', placeholder: 'State', readonly: true, tabindex: '-1'
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = e.input_field :zip, class: 'form-control', placeholder: 'Zip', readonly: true, tabindex: '-1'
+                .col-lg-6.right-block
+                  .panel
+                    .panel-heading
+                      a data-toggle="collapse" href="#panelSubscriber"
+                        p.panel-title Subscriber Information
+                    .panel-collapse.collapse.in id="panelSubscriber"
+                      = i.simple_fields_for :subscriber, Subscriber.new do |s|
+                        .panel-body
+                          .row
+                            .col-lg-12
+                              .form-group
+                                .checkbox-custom
+                                  input.checkbox type="checkbox" id="patients_add_insurance_same_as_guarantor"
+                                  label for="patients_add_insurance_same_as_guarantor"
+                                    span.checkbox-icon-container
+                                      span.checkbox-icon
+                                    span.checkbox-label Same as Guarantor
+                          .row
+                            .col-lg-8
+                              .form-group
+                                = s.input_field :first_name, class: 'form-control', placeholder: 'First Name'
+                            .col-lg-4
+                              .form-group
+                                = s.input_field :middle_name, class: 'form-control', placeholder: 'M.I.'
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = s.input_field :last_name, class: 'form-control', placeholder: 'Last Name'
+                          .row
+                            .col-lg-12
+                              .form-group
+                                .input-group
+                                  = s.input_field :birth_date, as: :date_picker, class: 'form-control date-picker', placeholder: 'Date of Birth'
+                                  span.input-group-addon.input-group-addon-calendar
+                          .row
+                            .col-lg-5
+                              .form-group
+                                = s.input_field :gender, as: :select, collection: Subscriber.genders, selected: 0, class: 'select2', include_blank: true, data: { theme: 'gray-lighter', arrow: '2x', padding: '1x', font: '1x', placeholder: 'Sex' }
+                            .col-lg-7
+                              .form-group
+                                = s.input_field :social_number, class: 'form-control input-social-security', placeholder: 'Social Security'
+                          .row
+                            .col-lg-12
+                              .form-group
+                                .input-group.input-group-phone
+                                  = s.input_field :phone_code, as: :select, collection: [], class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                                  = s.input_field :phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Phone Number'
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = s.input_field :street_address, as: :select, collection: [], class: 'select2', include_blank: true, data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x', placeholder: 'Street Address' }
+                          .row
+                            .col-lg-8
+                              .form-group
+                                = s.input_field :city, class: 'form-control', placeholder: 'City', readonly: true, tabindex: '-1'
+                            .col-lg-4
+                              .form-group
+                                = s.input_field :state, class: 'form-control form-control-padding-sm', placeholder: 'State', readonly: true, tabindex: '-1'
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = s.input_field :zip, class: 'form-control', placeholder: 'Zip', readonly: true, tabindex: '-1'
+      .modal-footer
+        .row.controls
+          .col-lg-6
+            .checkbox-custom
+              = i.check_box :active, class: 'checkbox'
+              label for="insurance_active"
+                span.checkbox-icon-container
+                  span.checkbox-icon
+                span.checkbox-label Active
+          .col-lg-6
+            = i.submit 'Save', class: 'btn btn-default btn-padding-lg'
+            a.btn.btn-default.btn-padding-sm data-dismiss="modal" type="button" Cancel

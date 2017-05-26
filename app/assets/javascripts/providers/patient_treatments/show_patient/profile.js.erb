@@ -1,0 +1,41 @@
+ProfileController = function() {
+  this.initialize = function() {
+    var profileMainController = new ProfileMainController();
+    profileMainController.initialize();
+  }
+}
+
+ProfileMainController = function() {
+  this.initialize = function() {
+    initZipCodes();
+  }
+
+  var initZipCodes = function() {
+    var zipcodePatientAttrsController = new ZipcodeController();
+    zipcodePatientAttrsController.initialize(
+      '#modal-patient-main #user_patient_street_address',
+      '#modal-patient-main #user_patient_city',
+      '#modal-patient-main #user_patient_state',
+      '#modal-patient-main #user_patient_zip',
+      false
+    );
+
+    var zipcodeEmergencyAttrsController = new ZipcodeController();
+    zipcodeEmergencyAttrsController.initialize(
+      '#modal-patient-main #user_patient_emergency_contact_street_address',
+      '#modal-patient-main #user_patient_emergency_contact_city',
+      '#modal-patient-main #user_patient_emergency_contact_state',
+      '#modal-patient-main #user_patient_emergency_contact_zip',
+      false
+    );
+
+    var zipcodeEmergencyAttrsController = new ZipcodeController();
+    zipcodeEmergencyAttrsController.initialize(
+      '#modal-patient-main #user_patient_next_kin_street_address',
+      '#modal-patient-main #user_patient_next_kin_city',
+      '#modal-patient-main #user_patient_next_kin_state',
+      '#modal-patient-main #user_patient_next_kin_zip',
+      false
+    );
+  }
+}

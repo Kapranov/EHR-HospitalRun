@@ -1,0 +1,195 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title Add Procedure
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @procedure, html: { autocomplete: 'off' }, remote: true do |p|
+      = p.input_field :patient_id, as: :hidden, value: @patient.id
+      .modal-body
+        .scrollable-container
+          .content
+            - if @procedure_code.present?
+              .row.row-header.row-header-procedure-code-present
+                .col-lg-12
+                  = p.input_field :procedure_code_id, as: :hidden, value: @procedure_code.id
+                  p.title
+                    = @procedure_code.to_label
+            - else
+              .row.row-header
+                .col-lg-12.col-md-12.col-sm-12
+                  = p.input_field :procedure_code_id, as: :hidden
+                  .input-group.input-group-green
+                    = select_tag :procedure_code, '', { class: 'select2', data: { theme: 'green-light', arrow: '1x', padding: '3x', font: '1x', placeholder: 'Procedure Code' } }
+                    span.input-group-addon.input-group-addon-search#procedure_code_button
+            .row.row-content#row_main_info
+              - if @tooth.present?
+                = p.input_field :tooth_table_id, as: :hidden, value: @tooth.id
+                .col-lg-6.col-md-6.col-sm-6
+                  p
+                    = "Tooth: #{@tooth.tooth_num}"
+              - else
+                .col-lg-6.col-md-6.col-sm-6
+                  .form-group
+                    = p.input_field :tooth_table_id, as: :select, collection: @patient.tooth_tables.map{ |tooth| [tooth.tooth_num, tooth.id] }, class: 'select2', data: { theme: 'green-light', arrow: '1x', padding: '3x', font: '1x', placeholder: 'Tooth' }
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  = p.input_field :status, as: :select, collection: Procedure.statuses, selected: '', class: 'select2', include_blank: true, data: { theme: 'green-light', arrow: '1x', padding: '3x', font: '1x', placeholder: 'Status' }
+            .row.row-header
+              .col-lg-12
+                p.title Surface (select all that apply):
+            = p.simple_fields_for :surface, @surface do |s|
+              .row.row-content#row_surfaces
+                .col-lg-12
+                  .row
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :mesial, class: 'checkbox'
+                          label for="procedure_surface_mesial"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Mesial
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :incisal, class: 'checkbox'
+                          label for="procedure_surface_incisal"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Lingual
+                  .row
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :distal, class: 'checkbox'
+                          label for="procedure_surface_distal"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Incisal/Occlusal
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :lingual, class: 'checkbox'
+                          label for="procedure_surface_lingual"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Facial/Buccal
+                  .row
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :facial, class: 'checkbox'
+                          label for="procedure_surface_facial"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Distal
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :class_five, class: 'checkbox'
+                          label for="procedure_surface_class_five"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Class Five
+            .row.row-header
+              .col-lg-12
+                p.title Select Pit(s):
+            = p.simple_fields_for :pit, @pit do |s|
+              .row.row-content#row_pits
+                .col-lg-12
+                  .row
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :mesial, class: 'checkbox'
+                          label for="procedure_pit_mesial"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Mesial
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :mesiobuccal, class: 'checkbox'
+                          label for="procedure_pit_mesiobuccal"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Distal
+                  .row
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :mesiolingual, class: 'checkbox'
+                          label for="procedure_pit_mesiolingual"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Mesiobuccal
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :distal, class: 'checkbox'
+                          label for="procedure_pit_distal"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Distobuccal
+                  .row
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :distobuccal, class: 'checkbox'
+                          label for="procedure_pit_distobuccal"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Mesiolingual
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :distolingual, class: 'checkbox'
+                          label for="procedure_pit_distolingual"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Distolingual
+            .row.row-header
+              .col-lg-12
+                p.title Select Cusp(s):
+            = p.simple_fields_for :cusp, @cusp do |s|
+              .row.row-content#row_cusps
+                .col-lg-12
+                  .row
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :mesiobuccal, class: 'checkbox'
+                          label for="procedure_cusp_mesiobuccal"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Mesiobuccal
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :mesiolingual, class: 'checkbox'
+                          label for="procedure_cusp_mesiolingual"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Distobuccal
+                  .row
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :distobuccal, class: 'checkbox'
+                          label for="procedure_cusp_distobuccal"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Mesiolingual
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        .checkbox-custom
+                          = s.check_box :distolingual, class: 'checkbox'
+                          label for="procedure_cusp_distolingual"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Distolingual
+      .modal-footer
+        .controls
+          = p.submit 'Save', class: 'btn btn-default'
+          a.btn.btn-default data-dismiss="modal" Cancel

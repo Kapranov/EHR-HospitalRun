@@ -1,0 +1,738 @@
+function enableControl(control, isExplicit, isDisabled) {
+  var switchedControl = $(control);
+  if(switchedControl.attr('type') == 'checkbox' ||
+      switchedControl.attr('type') == 'radio')
+    $(switchedControl).prop('disabled', false);
+  else
+    $(switchedControl).attr('readonly', false);
+  if($(switchedControl).hasClass('form-control') ||
+     $(switchedControl).hasClass('select2')) {
+    $(switchedControl).prop('tabindex', 0);
+  }
+
+  if(switchedControl.hasClass('btn'))
+    switchedControl.removeClass('disabled');
+  if(switchedControl.parent().hasClass('input-group')) {
+    switchedControl.parent().find('.input-group-addon').removeClass('disabled');
+  }
+}
+
+function disableControl(control, isExplicit, isDisabled) {
+  var switchedControl = $(control);
+  if(switchedControl.attr('type') == 'checkbox' ||
+      switchedControl.attr('type') == 'radio')
+    $(switchedControl).prop('disabled', true);
+  else
+    $(switchedControl).attr('readonly', true);
+  if($(switchedControl).hasClass('form-control') ||
+     $(switchedControl).hasClass('select2')) {
+    $(switchedControl).prop('tabindex', -1);
+  }
+  if(switchedControl.hasClass('btn'))
+    switchedControl.addClass('disabled');
+  if(switchedControl.parent().hasClass('input-group')) {
+    switchedControl.parent().find('.input-group-addon').addClass('disabled');
+  }
+}
+
+function switchControlState(control, state) {
+  if(state)
+    enableControl(control);
+  else
+    disableControl(control);
+}
+
+function modalBackward(parentModal) {
+  $(parentModal).css('z-index', '1040');
+  $('.modal-backdrop').css('visibility', 'hidden');
+}
+
+function modalForward(parentModal) {
+  $(parentModal).css('z-index', '1050');
+  $('.modal-backdrop').first().css('visibility', 'visible');
+  if($('body').find('.modal.in').length>0)
+    $('body').addClass('modal-open');
+}
+
+function passwordInputChangeSize(element)
+{
+  if($(element).val().length>0)
+    $(element).addClass('input-password');
+  else
+    $(element).removeClass('input-password');
+}
+
+$(function passwordInputChangeSizeHandler() {
+  $('input[type=password].input-password-heavy').bind('input change', function() {
+    passwordInputChangeSize($(this));
+  });
+});
+
+function repositionModal(modal, isPatientModal) {
+  var modal = modal,
+  dialog = modal.find('.modal-dialog');
+  modal.css('display', 'block');
+
+  var margin = Math.max(0, ($(window).height() - dialog.height()) / 2);
+  if(isPatientModal && margin>=60)
+    margin-=50;
+  margin = margin>=10?margin:10;
+  dialog.css("margin-top", margin);
+  dialog.css("margin-bottom", margin);
+
+  if($(modal).find('.scrollable-container').closest('.modal-body')) {
+    var scrollableContainer;
+    if($(modal).find('.tab-pane.active').length>0)
+      scrollableContainer = $(modal).find('.tab-pane.active .scrollable-container')
+    else
+      scrollableContainer = $(modal).find('.scrollable-container')
+    var content = scrollableContainer.find('.content').first();
+    var height;
+    height = $(window).height()-
+              (margin)-
+              $(modal).find('.modal-header').outerHeight()-
+              $(modal).find('.modal-footer').outerHeight()-
+              ($(modal).find('.nav-tabs').outerHeight()==null?0:$(modal).find('.nav-tabs').outerHeight())-
+              ($(modal).find('.controls-container')==null?0:$(modal).find('.controls-container').outerHeight())-
+              ($(modal).find('.modal-body').css('padding-top')==null?0:$(modal).find('.modal-body').css('padding-top').replace('px', '')==null?0:$(modal).find('.modal-body').css('padding-top').replace('px', ''))-
+              ($(modal).find('.modal-body').css('padding-bottom')==null?0:$(modal).find('.modal-body').css('padding-bottom').replace('px', '')==null?0:$(modal).find('.modal-body').css('padding-bottom').replace('px', ''))-
+              20;
+
+    if(content.height()> height){
+      scrollableContainer.css({
+        'height': height,
+        'overflow-y': 'hidden'
+       });
+      if(modal.hasClass('modal-admin'))
+        scrollableContainer.slimScroll({ theme: 'admin-black-white' });
+      else
+        scrollableContainer.slimScroll();
+      margin = Math.max(0, ($(window).height() - dialog.height()) / 2);
+      if(isPatientModal && margin>=60)
+        margin-=50;
+      margin = margin>=10?margin:10;
+      dialog.css("margin-top", margin);
+      dialog.css("margin-bottom", margin);
+    }
+    else {
+      scrollableContainer.css({
+        'height': 'auto'
+      });
+      scrollableContainer.slimScroll({
+        'destroy': true
+      });
+    }
+  }
+}
+
+function placeholdersHideOnClick(parent) {
+  var placeholder = '';
+  $(parent).find('.form-control.placeholder-hide').bind('focus', function() {
+    placeholder = $(this).attr('placeholder');
+    $(this).attr('placeholder', '');
+  });
+
+  $(parent).find('.form-control.placeholder-hide').bind('blur', function() {
+    $(this).attr('placeholder', placeholder);
+  });
+}
+
+function initPickers(parent) {
+  $(typeof parent != 'undefined'?parent+' '+'.time-picker':'.time-picker').val(moment($('.time-picker').val(), 'hh:mm').format('h:mm A'));
+  $(typeof parent != 'undefined'?parent+' '+'.time-picker':'.time-picker').inputmask('hh:mm T');
+
+  $(typeof parent != 'undefined'?parent+' .date-picker':'.date-picker').datepicker({
+    autoclose: true,
+    format: 'mm/dd/yyyy',
+    startDate: new Date(1900, 1, 1),
+    enableOnReadonly: false
+  }).inputmask({ 
+    mask: 'm/d/y'
+  });
+  
+  $(typeof parent != 'undefined'?parent+' '+'.input-group-addon-calendar':'.input-group-addon-calendar').on('click', function() {
+    var picker = $(this).closest('.input-group').find('.date-picker');
+    if(picker.hasClass('showing')){
+      picker.datepicker('hide');
+      picker.removeClass('showing');
+    }
+    else {
+      picker.datepicker('show');
+      picker.addClass('showing');
+    }
+  })
+  
+  $(typeof parent != 'undefined'?parent+' '+'.color-picker':'.color-picker').colorpicker({});
+  $(typeof parent != 'undefined'?parent+' '+'.input-phone':'.input-phone').inputmask('999-9999');
+  $(typeof parent != 'undefined'?parent+' '+'.input-social-security':'.input-social-security').inputmask({
+    mask: '999-99-9999',
+    removeMaskOnSubmit: true
+  });
+  
+  $(typeof parent != 'undefined'?parent+' '+'input[type=password].input-password-heavy':'input[type=password].input-password-heavy').bind('input change', function() {
+    passwordInputChangeSize($(this));
+  });
+
+  $('.btn-today').click(function(e) {
+    e.preventDefault();
+    $(this).closest('.row').find('.date-picker').datepicker('setDate', moment()._d);
+  });
+
+  $('.attachment-container .btn-attachment').on('click', function(e) {
+    e.preventDefault();
+    $(this).closest('.attachment-container').find('input[type="file"]').trigger('click');
+  })
+}
+
+function initModalsReposition(isPatientModal) {
+  $('.modal').on('show.bs.modal', function(e) {
+    if($(e.target).hasClass('modal')) 
+      repositionModal($(this), isPatientModal);
+  });
+  $(window).on('resize', function() {
+    $('.modal:visible').each(function() {
+      repositionModal($(this), isPatientModal);
+    });
+  });
+}
+
+function initModalFadeInOut(parent) {
+  $($(typeof parent != 'undefined'?parent+' '+'.btn-modal':'.btn-modal')).unbind('click');
+  $($(typeof parent != 'undefined'?parent+' '+'.btn-modal':'.btn-modal')).on('click', function() {
+    var parent = $(this).closest('.modal');
+
+    var showModalHandler = function(e) {
+      if($(e.target).hasClass('modal')){
+        modalBackward(parent);
+        repositionModal($(this));
+      }
+    }
+    var hiddenModalHandler = function(e) {
+      if($(e.target).hasClass('modal')){
+        modalForward(parent);
+      }
+    }
+
+    $($(this).attr('data-target')).on('show.bs.modal', showModalHandler);
+    
+    $($(this).attr('data-target')).unbind('hidden.bs.modal');
+    $($(this).attr('data-target')).on('hidden.bs.modal', hiddenModalHandler);
+    $(parent).on('hidden.bs.modal', hiddenModalHandler);
+  });
+}
+
+function initSelect2(parent) {
+  $(typeof parent != 'undefined'?parent+' '+'select.select2':'select.select2').each(function() {
+    $(this).select2({
+      width: typeof $(this).data('width') != 'undefined' ? $(this).data('width') : '100%',
+      minimumResultsForSearch: $(this).data('search') != 'undefined' ? ($(this).data('search')==true ? 1 : Infinity) : Infinity,
+      theme: $(this).data('theme'),
+      arrowPadding: typeof $(this).data('arrow-padding') != 'undefined' ? $(this).data('arrow-padding') : '1x',
+      font: typeof $(this).data('font') != 'undefined' ? $(this).data('font') : '1x',
+      padding: $(this).data('padding'),
+      arrow: $(this).data('arrow'),
+      dir: typeof $(this).data('dir') != 'undefined' ? $(this).data('dir') : 'ltr',
+      textAlign: typeof $(this).data('text-align') != 'undefined' ? $(this).data('text-align') : 'left',
+      multiple: typeof $(this).data('search-input') != 'undefined' ? $(this).data('search-input') : false
+    })
+  });
+
+  $(function() {
+    function processResults(data, params) {
+      return {
+        results: data
+      };
+    }
+
+    function templateResult(code) {
+      if (code.loading) return code.text;
+      return '<span>'+code.code+'</span>';
+    }
+
+    function templateSelection(code, container) {
+      return '('+code.text+')';
+    }
+
+    var phoneCodeSelect = $(typeof parent != 'undefined'?parent+' .input-group-phone .input-phone-code':'.input-group-phone .input-phone-code');
+
+    phoneCodeSelect.select2({
+      placeholder: '(      )',
+      ajax: {
+        url: '<%= Rails.application.routes.url_helpers.get_area_codes_area_codes_path %>',
+        processResults: processResults,
+        data: function (params) {
+          return {
+            area_code: params.term
+          };
+        },
+        cache: true
+      },
+      escapeMarkup: function (markup) { return markup; },
+      minimumInputLength: 1,
+      maximumSelectionLength: 1,
+      templateResult: templateResult,
+      templateSelection: templateSelection
+    });
+  });
+}
+
+$(function showDebugInformation() {
+  var debugInfoContainer = $('#debug-info-container');
+  var consoleContainer = $('#console');
+
+  var debugInfoContainerSwitcher = function() {
+    if($('#modal-web-console-alert').hasClass('in'))
+      $('#modal-web-console-alert').modal('hide');
+    $('#debug-button').toggleClass('active');
+    $('#debug-button').closest('.controls').toggleClass('active');
+    if(debugInfoContainer.hasClass('in'))
+      debugInfoContainer.fadeOut({
+        duration: 'fast', 
+        complete: function() {
+          debugInfoContainer.css('visibility', 'hidden');
+        }
+      });
+    else
+      debugInfoContainer.fadeIn({
+        duration: 'fast', 
+        complete: function() {
+          debugInfoContainer.css('visibility', 'visible');
+        }
+      });
+    debugInfoContainer.toggleClass('in');
+  }
+
+  var consoleContainerSwitcher = function() {
+    if($('#console').length > 0) {
+      $('#console-button').toggleClass('active');
+      $('#console-button').closest('.controls').toggleClass('active');
+      if(consoleContainer.hasClass('in'))
+        consoleContainer.fadeOut('fast');
+      else
+        consoleContainer.fadeIn('fast');
+      consoleContainer.toggleClass('in');
+    }
+    else {
+      if(!$('#modal-web-console-alert').hasClass('in')) {
+        $('#console-button').removeClass('active');
+          $.ajax({
+            url: '<%= Rails.application.routes.url_helpers.web_console_show_web_console_alert_path %>'
+          });
+      }
+    }
+  }
+
+  $('#debug-button').click(function(e) {
+    e.preventDefault();
+    if(consoleContainer.hasClass('in')) 
+      consoleContainerSwitcher();
+    debugInfoContainerSwitcher();
+  })
+  
+  $('#console-button').click(function(e) {
+    e.preventDefault();
+    if(debugInfoContainer.hasClass('in'))
+      debugInfoContainerSwitcher();
+    consoleContainerSwitcher();
+  })
+
+  debugInfoContainer.find('.debug_dump').slimScroll({
+    distance: 5
+  });
+  consoleContainer.find('.console-outer').slimScroll({
+    distance: 5
+  });
+
+  $(document).mousedown(function(e) {
+    if($(e.target).closest('#debug-button').length == 0 && $(e.target).closest('#console-button').length == 0) {
+      if($(e.target).closest('.debug-container').length == 0)
+        if(debugInfoContainer.hasClass('in'))
+          debugInfoContainerSwitcher();
+      if($(e.target).closest('#console').length == 0)
+        if(consoleContainer.hasClass('in'))
+          consoleContainerSwitcher();
+    }
+  })
+});
+
+SubjectMenuController = function() {
+  var parentModal;
+  var subjectsList;
+  var subjectsContainer;
+
+  this.initialize = function(modal) {
+    parentModal = modal;
+    subjectsList = $(parentModal+' #subjects-list');
+    subjectsContainer = $(parentModal+' #subjects-container');
+    disableControl(subjectsList.find('li .form-control'));
+    initButtons();
+    getSubjects();
+  }
+
+  function switchSubjectInputState(enable, control) {
+    if(enable) {
+      $(control).closest('li').addClass('editing');
+      enableControl(control);
+      control.focus();
+    }
+    else {
+      $(control).closest('li').removeClass('editing');
+      disableControl(control);
+    }
+  }
+  
+  function getSubjects() {
+    subjectsList.html('');
+    $.ajax({
+      url: '<%= Rails.application.routes.url_helpers.get_subjects_email_messages_path %>'
+    }).done(function(subjects) {
+      $(subjects).each(function() {
+        subjectsList.append('<li class="input-group">\
+          <a class="subject-input">\
+            <input class="form-control" type="text" value="'+$(this)[0]['name']+'"'+' data-id="'+$(this)[0]['id']+'"/>\
+          </a>\
+          <a class="subject-edit input-group-addon" href="#">\
+            <i class="fa fa-pencil"></i></a>\
+        </li>');
+      })
+      disableControl(subjectsList.find('.input-group .form-control'));
+      if(subjectsList.attr('data-selected')) {
+        var selected = subjectsList.find('.form-control[data-id='+subjectsList.data('selected')+']');
+        $(parentModal+' #subject-button').text(selected.attr('value'));
+        $(parentModal+' #email_message_subject_id').attr('value', selected.data('id'));
+        subjectsList.find('li').removeClass('active');
+        selected.closest('li').addClass('active');
+      }
+      initHandlers();
+    });
+  }
+
+  var inputHandler = function(e) {
+    e.preventDefault();
+    var input = $(this).find('.form-control');
+    if(!($(this).parent().hasClass('editing'))) {
+      $(parentModal+' #subject-button').text(input.attr('value'));
+      $(parentModal+' #email_message_subject_id').attr('value', input.data('id'));
+      subjectsContainer.css('display', 'none');
+      $(subjectsContainer).parent().removeClass('open');
+      subjectsList.find('li').removeClass('active');
+      $(this).parent().addClass('active');
+    }
+  }
+
+  var editHandler = function(e) {
+    e.preventDefault();
+    var input = $(this).parent().find('.form-control');
+    if(!($(this).closest('li').hasClass('editing'))) {
+      switchSubjectInputState(true, input);
+    }
+    else {
+      $.ajax({
+        url: '<%= Rails.application.routes.url_helpers.update_subject_email_messages_path %>',
+        data: { id: input.data('id'), name: input[0].value }
+      }).done(function(subjects) {
+        switchSubjectInputState(false, input);
+        $(this).closest('li').removeClass('editing');
+      });
+    }
+  }
+
+  function initHandlers() {
+    $(parentModal+' #subjects-list').find('li a.subject-input').click(inputHandler);
+    $(parentModal+' #subjects-list .subject-edit').click(editHandler);
+  }
+
+  function initButtons() {
+    $(parentModal+' #subject-button').click(function(e) {
+      e.preventDefault();
+      if(subjectsContainer.css('display')=='none') {
+        subjectsContainer.css('display', 'block');
+        $(this).parent().addClass('open');
+      }
+      else {
+        subjectsContainer.css('display', 'none');
+        $(this).parent().removeClass('open');
+      }
+    });
+
+    $(parentModal+' #subject-add-button').click(function(e) {
+      e.preventDefault();
+      var addInput = $(parentModal+' #subject-add-input');
+      if(addInput.val().length > 0) {
+        var insertedItem = subjectsList.find('li').last().clone();
+        var input = insertedItem.find('.form-control');
+        input.val('');
+        insertedItem.removeClass('editing');
+        insertedItem.removeClass('active');
+        insertedItem.find('a.subject-input').click(inputHandler);
+        insertedItem.find('.subject-edit').click(editHandler);
+        $.ajax({
+          url: '<%= Rails.application.routes.url_helpers.add_subject_email_messages_path %>',
+          data: {
+            name: addInput.val()
+          }
+        }).done(function(subject) {
+          addInput.val('');
+          input.data('id', subject['id']);
+          input.val(subject['name']);
+          subjectsList.append(insertedItem);
+        });
+      }
+    })
+  }
+};
+
+var ControlCheckingController = function() {
+  var btn, checkbox;
+
+  this.initialize = function(_checkbox, _btn) {
+    checkbox = $(_checkbox);
+    btn = $(_btn);
+    initAll();
+  }
+
+  function buttonStateChange() {
+    if($(checkbox).is(':checked'))
+      enableControl(btn);
+    else
+      disableControl(btn);
+  }
+
+  function initAll() {
+    buttonStateChange();
+    checkbox.change(function() {
+      buttonStateChange();
+    })
+  }
+};
+
+var PracticeMailingAdressesFillController = function() {
+  var practiceAdresses, mailingAdresses, checkbox, tempVars = ['','','','',''];
+
+  this.initialize = function(
+    _practice_street, _practice_suit, _practice_city, _practice_state, _practice_zip,
+    _mailing_street, _mailing_suit, _mailing_city, _mailing_state, _maling_zip,
+    _checkbox
+  ) {
+    practiceAdresses = [$(_practice_street), $(_practice_suit), $(_practice_city), $(_practice_state), $(_practice_zip)];
+    mailingAdresses = [$(_mailing_street), $(_mailing_suit), $(_mailing_city), $(_mailing_state), $(_maling_zip)];
+    checkbox = $(_checkbox);
+    initAll();
+  }
+
+  function initAll() {
+    var checkboxChangeHandler = function() {
+      if(checkbox.is(":checked")) {
+        for(var i = 0; i < mailingAdresses.length; i++) {
+          disableControl(mailingAdresses[i], false, false);
+          tempVars[i] = mailingAdresses[i].val();
+          if(i == 0) {
+            mailingAdresses[i].html('<option></option><option value="'+practiceAdresses[i].val()+'">'+practiceAdresses[i].val()+'</option>');
+            mailingAdresses[i].val(practiceAdresses[i].val()).trigger('change');
+          }
+          else
+            mailingAdresses[i].val(practiceAdresses[i].val()).trigger('change');
+        }
+      }
+      else {
+        for(var i = 0; i < mailingAdresses.length; i++) {
+          if(i < 2)
+            enableControl(mailingAdresses[i], false, false);
+          if(i == 0) {
+            mailingAdresses[i].html('<option></option>');
+            mailingAdresses[i].val(null).trigger('change');
+          }
+          else
+            mailingAdresses[i].val(tempVars[i]);
+        }
+      }
+    };
+
+    checkbox.change(checkboxChangeHandler);
+
+    for(var i = 0; i < practiceAdresses.length; i++) {
+      if(i == 0) {
+        $(practiceAdresses[i]).on('select2:select', function(e) {
+          if(checkbox.is(":checked")) {
+            var target = $($(this).data('target'));
+            target.html('<option></option><option value="'+$(this).val()+'">'+$(this).val()+'</option>');
+            target.val($(this).val()).trigger('change');
+          }
+        })
+      }
+      else {
+        $(practiceAdresses[i]).on('input change', function() {
+          if(checkbox.is(':checked')) {
+            var target = $($(this).data('target'));
+            target.val($(this).val());
+          }
+        });
+      }
+    }
+  }
+}
+
+ValidationController = function() {
+  var form, submit;
+
+  this.initialize = function(_form, _rules, _ignore_rules, _submit) {
+    form = $(_form);
+    ignore_rules = _ignore_rules;
+    rules = _rules;
+    submit = _submit;
+
+    form.validate({
+      ignore: form.find($(typeof ignore_rules != 'undefined' ? ignore_rules : ':hidden:not(.select2):not(.validate)')),
+      highlight: highlightHandler,
+      unhighlight: unhighlightHandler,
+      onkeyup: formValidationStateChecking,
+      errorPlacement: function(error, element) { return true; },
+      rules: rules
+    });
+
+    formValidationStateChecking(form.find('input.form-control').first());
+
+    $('.select2').change(function(e) {
+      formValidationStateChecking(form.find('input.form-control').first());
+    });
+  }
+
+  var formValidationStateChanged = function(isEnable, control) {
+    if(isEnable)
+      enableControl(form.find($(typeof submit != 'undefined' ? parent: 'input[type=submit]')));
+    else
+      disableControl(form.find($(typeof submit != 'undefined' ? parent : 'input[type=submit]')));
+  }
+
+  var highlightHandler = function(element) {
+    $(element).addClass('unvalid');
+    $(element).removeClass('valid');
+    if($(element).hasClass('select2')) {
+      $('.select2-id-'+$(element).attr('id')).addClass('unvalid');
+      $('.select2-id-'+$(element).attr('id')).removeClass('valid');
+    }
+  }
+
+  var unhighlightHandler = function(element) {
+    $(element).removeClass('unvalid');
+    $(element).addClass('valid');
+    if($(element).hasClass('select2')) {
+      $('.select2-id-'+$(element).attr('id')).removeClass('unvalid');
+      $('.select2-id-'+$(element).attr('id')).addClass('valid');
+    }
+  }
+
+  var formValidationStateChecking = function(element) {
+    if(form.valid())
+      formValidHandler(element);
+    else
+      formUnvalidHandler(element);
+  }
+
+  var formValidHandler = function(element) {
+    formValidationStateChanged(true, element);
+  }
+
+  var formUnvalidHandler = function(element) {
+    formValidationStateChanged(false, element);
+  }
+}
+
+EmailCheckingController = function() {
+  var email_input, email_checkbox;
+
+  this.initialize = function(_email_input, _email_checkbox) {
+    email_input = $(_email_input);
+    email_checkbox = $(_email_checkbox);
+
+    initAll();
+  }
+
+  var initAll = function() {
+    email_checkbox.closest('.checkbox-custom').addClass('disabled');
+
+    if(email_input.val(). length == 0)
+      email_checkbox.prop('checked', true);
+    else
+      email_checkbox.prop('checked', false);
+
+    email_input.keyup(function(e) {
+      if(email_input.val().length > 0)
+        email_checkbox.prop('checked', false);
+      else
+        email_checkbox.prop('checked', true);
+    });
+  }
+}
+
+AttachmentsController = function() {
+  var attachments_container, attachments_list_container, attachment_add_btn;
+  var modal, field_name;
+
+  this.initialize = function(_modal, _attachments_container, _attachment_add_btn, _field_name) {
+    modal =                    $(_modal);
+    attachments_container =    $(_attachments_container);
+    attachments_list_container = attachments_container.find('.panel-body ul');
+    attachment_add_btn         = attachments_container.find(_attachment_add_btn);
+    field_name                 = _field_name;
+
+
+    initAll();
+    initExistingAttachments();
+  }
+
+  var initAll = function() {
+    attachment_add_btn.click(function() {
+      if(!attachments_container.find('.panel-body').hasClass('in'))
+        attachments_container.find('.panel-body').addClass('in');
+      var num = $(this).data('num');
+      attachments_list_container.append('\
+        <li data-number="' + num + '">\
+          <div class="attachment">\
+            <span class="separator">-</span>\
+            <div class="attachment-container">\
+              <input type="file" name="'+field_name.replace('_NUMBER_', num)+'" id="' + field_name.replace('_NUMBER_', num).replace(/[]/g,'_') + '" multipart="true">\
+              <a href="#" class="title btn-attachment">Choose File</a>\
+            </div>\
+            <a href="#" class="icon icon-sm icon-circle icon-ic-delete pull-right attachment-delete"></a>\
+          </div>\
+        </li>\
+      ');
+      initAttachmentHandlers(num);
+      $(this).data('num', num + 1);
+
+      if(typeof modal != 'undefined')
+        repositionModal(modal, false);
+    });
+  }
+
+  var removeHandler = function(e) {
+    $(this).closest('li').remove();
+    if(attachments_list_container.find('li').length == 0)
+      attachments_container.find('.panel-body').removeClass('in');
+    if(typeof modal != 'undefined')
+      repositionModal(modal, false);
+  }
+
+  var initExistingAttachments = function() {
+    attachments_list_container.find('li .icon-ic-delete').click(removeHandler);
+  }
+
+  var initAttachmentHandlers = function(num) {
+    var item = attachments_container.find('li[data-number="' + num + '"]');
+    var attachment_button = item.find('.btn-attachment');
+    var attachment_input = item.find('input[type="file"]');
+    var attachment_remove_button = item.find('.icon-ic-delete');
+
+    attachment_button.click(function(e) {
+      e.preventDefault();
+      attachment_input.trigger('click');
+    });
+
+    attachment_input.change(function(e) {
+      attachment_button.text(attachment_input[0].files[0].name);
+    });
+
+    attachment_remove_button.click(removeHandler);
+  }
+}

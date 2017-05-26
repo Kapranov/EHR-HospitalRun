@@ -1,0 +1,100 @@
+$("#modal-patient-add-diagnoses").html("<%= escape_javascript(render 'form') %>")
+
+initPickers('#modal-patient-add-diagnoses');
+initSelect2('#modal-patient-add-diagnoses');
+initModalFadeInOut('#modal-patient-add-diagnoses');
+
+$("#modal-patient-add-diagnoses").modal("show");
+$("#modal-patient-add-medications").modal("hide");
+
+FindSnomedsController = function() {
+  var diagnosis, term, concept_id, id, diagnosis_button, diagnosis_first_button, patient_id;
+  var education_materials_btn, medline_btn;
+  var link;
+
+  this.initialize = function() {
+    diagnosis = $('#find_diagnosis')
+    term = $('#snomed_term');
+    concept_id = $('#snomed_concept_id');
+    id = $('#diagnosis_snomed_id');
+    diagnosis_button = $('#find_diagnosis_button');
+    diagnosis_first_button = $('#find_diagnosis_first_button');
+    patient_id = $('#diagnosis_patient_id');
+
+    medline_btn = $('#medline_show');
+    education_materials_btn = $('#education_materials_show');
+
+    link = '<%= Rails.application.routes.url_helpers.snomed_snomeds_path %>';
+
+    diagnosis.select2({
+      width: '100%',
+      placeholder: 'Search Diagnosis',
+      ajax: {
+        url: link,
+        processResults: processResults,
+        data: function (params) {
+          return {
+            part: params.term
+          };
+        },
+        cache: true
+      },
+      escapeMarkup: function (markup) { return markup; },
+      minimumInputLength: 1,
+      templateResult: templateResult,
+      templateSelection: templateSelection
+    });
+
+    diagnosis_button.click(function(e) {
+      diagnosis.select2('open');
+    });
+    diagnosis.html("<option value=<%= @snomed.try(:conceptId) %> selected=selected>"+"<%= @snomed.try(:conceptId) %>"+'</option>').change();
+  }
+
+  function processResults(data, params) {
+    return {
+      results: data
+    };
+  }
+
+  function templateResult(diagnosis) {
+    if (diagnosis.loading) return diagnosis.text;
+    return '<span>'+diagnosis.concept_id+' - '+diagnosis.term+'</span>';
+  }
+
+  function templateSelection(diagnosis) {
+    if(diagnosis.concept_id && diagnosis.term) {
+      callAlertModal(diagnosis.concept_id);
+      concept_id.val(diagnosis.concept_id).change();
+      id.val(diagnosis.id).change();
+      term.val(diagnosis.term).change();
+      concept_id.addClass('form-control-bold');
+      term.addClass('form-control-bold');
+      medline_btn.removeClass('disabled');
+      medline_btn.attr('href', '<%= info_medline_plus_path %>'+
+        '?snomed_concept_id='+diagnosis.concept_id+
+        '&snomed_term='+diagnosis.term.replace('(', '').replace(')', ''));
+      education_materials_btn.attr('href', '<%= education_materials_diagnoses_path %>'+
+        '?patient_id='+patient_id.val()+
+        '&snomed_id='+diagnosis.concept_id);
+      return diagnosis.concept_id;
+    }
+    else {
+      if(!concept_id.val() && !term.val()) {
+        concept_id.removeClass('form-control-bold');
+        term.removeClass('form-control-bold');
+        medline_btn.addClass('disabled');
+      }
+      return diagnosis.text;
+    }
+  }
+
+  var callAlertModal = function(concept_id) {
+    $.ajax({
+      url: '<%= diagnosis_index_alerts_path %>' + '?concept_id=' + concept_id
+    });
+  }
+};
+
+var findSnomedsController = new FindSnomedsController();
+findSnomedsController.initialize();

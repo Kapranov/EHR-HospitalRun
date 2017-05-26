@@ -1,0 +1,133 @@
+.content
+  .row
+    .col-lg-12
+      p.title Shopping Cart
+  - if @ehr_subscription.present?
+    .table-responsive
+      table.table
+        thead
+          tr
+            td
+            td Number of Users
+            td Price (USD)
+            td
+        tbody
+          tr.main-subscription
+            td
+              p.title Electronic Health Record (EHR) Subscription
+            td
+              p
+                = @ehr_subscription.doctors
+            td
+              .row
+                .col-lg-3.col-xs-3
+                  p $
+                .col-lg-9.col-xs-9
+                  p
+                    = @ehr_subscription.price_for_doctors
+            td
+              = link_to '', payments_destroy_subscription_path(ehr: true), class: 'icon-sm icon-ic-trash', method: :delete
+          - if @ehr_subscription.additional_staff
+            tr
+              td
+                p.title Additional Auxiliary Staff Member(s)
+              td
+                p
+                  = @ehr_subscription.staff
+              td
+                .row
+                  .col-lg-3.col-xs-3
+                    p $
+                  .col-lg-9.col-xs-9
+                    p
+                      = @ehr_subscription.price_for_staff
+              td
+                = link_to '', payments_destroy_subscription_path(staff: true), class: 'icon-sm icon-ic-trash', method: :delete
+        tfoot
+          tr.additional-pay
+            td colspan="2"
+              p One-time activation fee (per-doctor)
+            td
+              .row
+                .col-lg-3.col-xs-3
+                  p $
+                .col-lg-9.col-xs-9
+                  p
+                    = Payment.fee
+            td
+          tr
+            td.summary-title colspan="4"
+              p TOTAL PRICE
+          tr
+            td.summary-price colspan="4"
+              p
+                | $&nbsp;
+                = @ehr_subscription.total
+    .row.bottom-block
+      .col-lg-6.col-md-6.col-sm-6
+        .panel
+          .panel-header
+            p.title
+              | Contact Details
+              a.fa.fa-pencil.disabled href="#"
+          .panel-body.top-block
+            p.title Your contact info
+            ul
+              li
+                p 
+                  = "#{@provider.first_name} #{@provider.last_name}"
+              li
+                p
+                  = @provider.user.email
+              li
+                p
+                  = "(#{@provider.primary_phone_code})#{@provider.primary_phone_tel[0..2]}-#{@provider.primary_phone_tel[2..-1]}"
+          .panel-body
+            p.title Company info
+            ul
+              li
+                p 
+                  = @provider.business_name
+              li
+                p 
+                  = @provider.street_address
+              li
+                p
+                  = "#{@provider.city}, #{@provider.state}, #{@provider.zip}"
+      .col-lg-6.col-md-6.col-sm-6
+        .panel.disabled
+          .panel-header
+            p.title
+              | Additional Details
+              a.fa.fa-pencil.disabled href="#"
+          .panel-body.top-block
+            p.title Purchase Order Number
+            ul
+              li
+                p 
+                  | 12345
+          .panel-body
+            p.title Order Notes
+            ul
+              li
+                p 
+                  | Hi this is test notes
+  - else
+    p Quote is empty
+  - if @ehr_subscription.present?
+    hr
+    .controls.controls-bottom
+      .row
+        .col-lg-12
+          .checkbox-custom.pull-right
+            = check_box_tag :accept_agreement, false
+            label for="accept_agreement"
+              span.checkbox-icon-container
+                span.checkbox-icon
+              span.checkbox-label
+                span 
+                  | I accept the&nbsp;
+                a.disabled href="#" Customer Agreement
+      .row
+        .col-lg-12
+          = link_to 'SAVE QUOTE', payments_quote_confirmation_path, class: 'btn btn-default pull-right'

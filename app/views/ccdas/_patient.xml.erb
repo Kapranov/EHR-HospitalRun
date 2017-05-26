@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClinicalDocument xmlns="urn:hl7-org:v3" xmlns:sdtc="urn:hl7-org:sdtc" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fn="http://www.w3.org/2005/xpath-functions">
+  <realmCode code="US"/>
+  <typeId root="2.16.840.1.113883.1.3" extension="POCD_HD000040"/>
+  <templateId root="2.16.840.1.113883.10.20.22.1.1" />
+  <templateId root='2.16.840.1.113883.10.20.22.1.2'/> 
+  <id root="2.16.840.1.113883.3.3388.1.1.1.573798" extension="499fe9eb-56ce-405b-b68c-24690edbc947"/>
+  <code code="34133-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Summarization of episode note"/>
+  <title>Clinical Summary</title>
+  <effectiveTime xsi:type="IVL_TS" value="<%= Time.now.utc.to_formatted_s(:number) %>"/>
+  <confidentialityCode code="R" codeSystem="2.16.840.1.113883.5.25" codeSystemName="Confidentiality" displayName="Restricted"/>
+  <languageCode code="en-US"/>
+  <recordTarget>
+    <patientRole>
+      <id root="2.16.840.1.113883.3.3388.1.1.1.573798.3" extension="E8907E28-EC6C-4021-81B1-3FC7BF2CF659"/>
+      <addr use="HP">
+        <streetAddressLine><%= @ccda.patient.street_address %></streetAddressLine>
+        <city><%= @ccda.patient.city %></city>
+        <state><%= @ccda.patient.state %></state>
+        <postalCode><%= @ccda.patient.zip %></postalCode>
+      </addr>
+      <telecom use="WP" <%= value_or_null_phone(@ccda.patient.primary_phone) %>/>
+      <patient>
+        <name use="L">
+          <given><%= @ccda.patient.first_name %></given>
+          <family><%= @ccda.patient.last_name %></family>
+        </name>
+        <administrativeGenderCode code="<%= @ccda.patient.gender_code %>" codeSystem="2.16.840.1.113883.5.1" displayName="<%= @ccda.patient.gender.to_s %>" />
+        <birthTime value="<%= Time.at(@ccda.patient.birth).utc.to_formatted_s(:number) %>"/>
+          <% if @ccda.patient.race_code.present? %>
+            <raceCode code="<%= @ccda.patient.race_code %>" codeSystemName="CDC Race and Ethnicity" codeSystem="2.16.840.1.113883.6.238"/>
+          <% else %>
+            <raceCode nullFlavor="NI" codeSystemName="CDC Race and Ethnicity" codeSystem="2.16.840.1.113883.6.238"/>
+          <% end %>
+          <% if @ccda.patient.ethnicity_code.present? %>
+            <ethnicGroupCode code="<%= @ccda.patient.ethnicity_code %>" codeSystem="2.16.840.1.113883.6.238"/>
+          <% else %>
+            <ethnicGroupCode nullFlavor="NI"/>
+          <% end %>
+          <languageCommunication>
+            <languageCode code="<%= @ccda.patient.language_code %>"/>
+          </languageCommunication>
+      </patient>
+    </patientRole>
+  </recordTarget>
+  <author>
+    <time value="<%= Time.now.utc.to_formatted_s(:number) %>"/>
+    <assignedAuthor>
+      <id root="2.16.840.1.113883.3.3388.1.1.1.573798.1.3" extension="<%= @ccda.patient.created_by.id %>"/>
+      <addr use="WP">
+        <streetAddressLine><%= @ccda.patient.created_by.location.location_address %></streetAddressLine>
+        <city><%= @ccda.patient.created_by.location.city %></city>
+        <state><%= @ccda.patient.created_by.location.state %></state>
+        <postalCode><%= @ccda.patient.created_by.location.zip %></postalCode>
+        <country>United States of America</country>
+      </addr>
+      <telecom <%= value_or_null_phone(@ccda.patient.primary_phone) %>/>
+      <assignedPerson>
+        <name>Auto Generated</name>
+      </assignedPerson>
+    </assignedAuthor>
+  </author>
+  <dataEnterer>
+    <assignedEntity>
+      <id root="2.16.840.1.113883.3.3388.1.1.1.573798.1.1.3" extension="1245312"/>
+      <addr use="WP">
+        <streetAddressLine><%= @ccda.patient.created_by.location.location_address %></streetAddressLine>
+        <city><%= @ccda.patient.created_by.location.city %></city>
+        <state><%= @ccda.patient.created_by.location.state %></state>
+        <postalCode><%= @ccda.patient.created_by.location.zip %></postalCode>
+        <country>United States of America</country>
+      </addr>
+      <telecom use="WP" <%= value_or_null_phone(@ccda.patient.created_by.location.location_phone) %>/>
+      <assignedPerson>
+        <name>
+          <given><%= @ccda.patient.created_by.first_name %></given>
+          <family><%= @ccda.patient.created_by.last_name %></family>
+        </name>
+      </assignedPerson>
+    </assignedEntity>
+  </dataEnterer>
+  <custodian>
+    <assignedCustodian>
+      <representedCustodianOrganization>
+        <id root="2.16.840.1.113883.3.3388.1.1.1.573798" extension="<%= @ccda.patient.provider.id %>"/>
+        <name><%= @ccda.patient.provider.business_name %></name>
+        <telecom <%= value_or_null_phone(@ccda.patient.provider.primary_phone) %>/>
+        <addr>
+          <streetAddressLine><%= @ccda.patient.provider.location.location_address %></streetAddressLine>
+          <city><%= @ccda.patient.provider.location.city %></city>
+          <state><%= @ccda.patient.provider.location.state %></state>
+          <postalCode><%= @ccda.patient.provider.location.zip %></postalCode>
+        </addr>
+      </representedCustodianOrganization>
+    </assignedCustodian>
+  </custodian>
+  <%= render 'ccdas/documentation.xml' %>
+  <component>
+    <structuredBody>
+      <%= render 'ccdas/components/allergies.xml',  allergies: @ccda.patient.allergies %>
+      <%= render 'ccdas/components/assessment_plan.xml' %>
+      <%= render 'ccdas/components/encounters.xml', encounters: @ccda.patient.encounters %>
+      <%= render 'ccdas/components/immunizations.xml', immunizations: @ccda.patient.immunizations %>
+      <%= render 'ccdas/components/instructions.xml' %>
+      <%= render 'ccdas/components/medications.xml', medications: @ccda.patient.medications %>
+      <%= render 'ccdas/components/diagnoses.xml', diagnoses: @ccda.patient.diagnoses %>
+      <%= render 'ccdas/components/procedures.xml', procedures: @ccda.patient.procedures %>
+      <%= render 'ccdas/components/results.xml' %>
+      <%= render 'ccdas/components/histories.xml', history: @ccda.patient.past_medical_history %>
+      <%= render 'ccdas/components/vital.xml' %>
+    </structuredBody>
+  </component>
+</ClinicalDocument>

@@ -1,0 +1,265 @@
+#modal-patient-add-medical-history {
+  .modal-dialog {
+    .modal-content {
+      .modal-body {
+        padding-top: 20px;
+        padding-bottom: 0;
+        .content {
+          padding: 0 15px !important;
+        }
+        .slimScrollDiv .content {
+          padding-right: 30px !important;
+        }
+        .form-group {
+          margin-bottom: 15px;
+        }
+        .title {
+          color: $graytextdark;
+          font-size: 12px;
+          margin-bottom: 5px;
+        }
+        textarea.form-control {
+          height: 90px !important;
+        }
+        .panel-family-health-history {
+          margin: 0 -15px;
+          border: 0;
+          border-radius: 0;
+          .panel-heading {
+            min-height: 50px;
+            padding: 0 15px;
+            background-color: $greenlighter;
+            .title {
+              float: left;
+              padding: 16px 0;
+              color: $graytextdark;
+              font-size: 12px;
+              margin: 0;
+            }
+            .btn-small {
+              width: 80px;
+              height: 30px;
+              margin: 10px 0;
+              float: right;
+              display: inline-block;
+              border-color: $green;
+              .fa {
+                font-size: 24px;
+              }
+            }
+          }
+          .panel-body {
+            padding: 15px !important;
+            ul {
+              list-style-type: none;
+              li {
+                a {
+                  display: block;
+                  font-size: 15px;
+                  color: $graytextdark;
+                  transition: opacity .2s;
+                  span {
+                    font-family: 'SF UI Text Bold';
+                  }
+                  &:hover,
+                  &:focus,
+                  &:active {
+                    text-decoration: underline !important;
+                    opacity: .75;
+                  }
+                }
+                ul {
+                  padding-left: 20px;
+                  li {
+                    &:before {
+                      content: '- ';
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .modal-footer {
+        padding: 5px 15px 20px 15px !important;
+        .controls {
+          margin: -5px -10px;
+          .btn {
+            margin: 5px 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+#modal-family-history {
+  .modal-dialog,
+  .modal-dialog .modal-content {
+    max-width: 555px;
+  }
+  .modal-dialog {
+    .modal-content {
+      .modal-body {
+        padding: 0;
+        .content {
+          padding: 0 15px;
+        }
+        .slimScrollDiv .content {
+          padding-right: 30px;
+        }
+        .form-group {
+          margin-bottom: 15px;
+        }
+        .form-control {
+          color: $graytextdark;
+        }
+        .title {
+          margin-bottom: 5px;
+          color: $graytextdark;
+          font-size: 12px;
+        }
+        .title-bold {
+          margin: 12px 0;
+          color: $graytextdark;
+          font-size: 15px;
+          font-family: 'SF UI Text Bold';
+        }
+        .top-block {
+          margin-left: -15px;
+          margin-right: -15px;
+          padding-top: 15px;
+          background-color: $greenlighter;
+          .row {
+            margin-left: -10px;
+            margin-right: -10px;
+            div[class*='col-'] {
+              padding-left: 10px;
+              padding-right: 10px;
+            }
+          }
+          .checkbox-custom.checkbox-custom-green {
+            label {
+              .checkbox-label {
+                color: $green;
+                padding-top: 5px;
+                padding-left: 15px;
+                font-size: 16px;
+              }
+            }
+          }
+          .left-block {
+            .title-bold {
+              margin-top: 35px;
+              text-align: center;
+            }
+            .relative-icon {
+              width: 65px;
+              height: 65px;
+              margin: 0 auto 68px auto;
+              border: 1px solid $green;
+              border-radius: 50%;
+              background-color: $greenlight;
+              .form-control {
+                height: 32px;
+                padding: 0 5px;
+                background-color: transparent;
+                border: 0;
+                position: relative;
+                top: calc(50% - 16px);
+                left: 0;
+                color: $graytextdark;
+                font-size: 24px;
+                text-align: center;
+                opacity: 1 !important;
+              }
+            }
+          }
+          .right-block {
+            .title-bold {
+              text-align: right;
+            }
+            @media(max-width: 991px) {
+              .title-bold {
+                text-align: left !important;
+              }
+              .checkbox-custom {
+                float: left !important;
+                margin-bottom: 15px;
+              }
+            }
+          }
+        }
+        .content-block {
+          textarea.form-control {
+            min-height: 90px;
+            resize: none;
+          }
+          .panel {
+            .panel-heading {
+              padding: 0;
+              background-color: $greenlighter;
+              .title {
+                display: block;
+                margin-bottom: 0;
+                padding: 14px;
+                font-size: 14px;
+                color: $green;
+                &:after {
+                  content: '';
+                  position: absolute;
+                  right: 30px;
+                  top: 14px;
+                  font: normal normal normal 14px/1 FontAwesome;
+                  font-size: 24px;
+                  text-rendering: auto;
+                  -webkit-font-smoothing: antialiased;
+                  -moz-osx-font-smoothing: grayscale;
+                }
+                &[aria-expanded="true"]:after {
+                  content: '\f106';
+                }
+                &[aria-expanded="false"]:after {
+                  content: '\f107';
+                }
+              }
+            }
+            .panel-body {
+              padding-bottom: 0;
+            }
+          }
+          ul {
+            padding-left: 20px;
+            list-style-type: none;
+            li {
+              p {
+                padding-right: 30px;
+                color: $graytextdark;
+                font-size: 15px;
+                margin-bottom: 0;
+                &:before {
+                  content: '- ';
+                }
+                .icon {
+                  position: absolute;
+                  margin-top: -45px;
+                  right: 10px;
+                }
+              }
+            }
+          }
+        }
+      }
+      .modal-footer {
+        padding: 5px 15px 15px 15px;
+        .controls {
+          margin: -5px -10px;
+          .btn {
+            margin: 5px 10px;
+          }
+        }
+      }
+    }
+  }
+}

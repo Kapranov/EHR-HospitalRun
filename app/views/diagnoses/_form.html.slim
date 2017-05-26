@@ -1,0 +1,95 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header.modal-header-md
+      .row
+        .col-lg-4.col-md-4.col-sm-4.hidden-xs
+          p.title Diagnosis (Dx)
+        .col-lg-8.col-md-8.col-sm-8
+          p.title Record Diagnosis (Dx)
+          a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @diagnosis, html: { autocomplete: 'off' }, remote: true do |d|
+      .modal-body
+        .scrollable-container
+          .content
+            = d.input_field :patient_id, as: :hidden, value: @patient.id
+            = d.input_field :snomed_id,  as: :hidden, value: @snomed.try(:id)
+            .row
+              .col-lg-4.col-md-4.col-sm-4.hidden-xs.left-block
+                ul
+                  - if policy(Medication).update?
+                    - if @diagnosis.medications.any?
+                      - @diagnosis.medications.each do |medication|
+                        li
+                          = link_to "#{medication.shorthand} #{medication.signature}", form_medications_path(id: medication.id, patient_id: @patient.id, diagnosis_id: params[:id]), remote: true, class: 'btn-modal underlined', data: { target: '#modal-patient-add-medications' }
+              .col-lg-8.col-md-8.col-sm-8.right-block
+                .row
+                  .col-lg-12
+                    .form-group-large
+                      .input-group.input-group-green
+                        = select_tag :find_diagnosis, '', { class: 'select2', data: { placeholder: 'Search Diagnosis', theme: 'green-white-light', arrow: 'none', padding: '3x', font: '1x', 'font-weight': 'bold' } }
+                        span.input-group-addon.input-group-addon-search#find_diagnosis_button
+                .row
+                  .col-xs-12
+                    .form-group-large
+                      = text_field_tag :snomed_term, @snomed.try(:defaultTerm), class: "form-control form-control-green #{'form-control-bold' if @snomed.try(:defaultTerm).present?}", readonly: true, tabindex: -1, placeholder: 'Description'
+                .row
+                  .col-xs-12
+                    .form-group-large
+                      = text_field_tag :snomed_concept_id, @snomed.try(:conceptId), class: "form-control form-control-green #{'form-control-bold' if @snomed.try(:conceptId).present?}", readonly: true, tabindex: -1, placeholder: 'Code'
+                .row
+                  .col-xs-8
+                    .form-group-large
+                      .input-group.input-group-green
+                        = d.input_field :start_date_date, as: :date_picker, class: 'form-control form-control-green date-picker', placeholder: 'Start Date'
+                        span.input-group-addon.input-group-addon-calendar
+                  .col-xs-4
+                    .form-group-large
+                      a.btn.btn-default.btn-today Today
+                .row
+                  .col-xs-8
+                    .form-group-large
+                      .input-group.input-group-green
+                        = d.input_field :stop_date_date, as: :date_picker, class: 'form-control form-control-green date-picker', placeholder: 'Stop Date'
+                        span.input-group-addon.input-group-addon-calendar
+                  .col-xs-4
+                    .form-group-large
+                      a.btn.btn-default.btn-today Today
+                .row
+                  .col-xs-12
+                    .checkbox-group
+                      p.checkbox-group-title Acuity
+                      .checkbox-custom.checkbox-custom-green
+                        = d.check_box :acute, class: 'checkbox', checked: true
+                        label for="diagnosis_acute"
+                          span.checkbox-icon-container
+                            span.checkbox-icon
+                          span.checkbox-label Acute
+                      .checkbox-custom.checkbox-custom-green
+                        = d.check_box :terminal, class: 'checkbox'
+                        label for="diagnosis_terminal"
+                          span.checkbox-icon-container
+                            span.checkbox-icon
+                          span.checkbox-label Terminal
+                / - if params[:id].present? && policy(Medication).create?
+                /   .row.links
+                /     .col-xs-12
+                /       = link_to 'Record Medication', form_medications_path(patient_id: @patient.id, diagnosis_id: params[:id]), remote: true, class: 'btn-modal underlined', data: { target: '#modal-patient-add-medications' }
+                .row
+                  .col-xs-12
+                    .form-group-large
+                      = d.input_field :note, as: :text, class: 'form-control form-control-green', placeholder: 'Diagnosis Notes:'
+                .row.links
+                  .col-lg-3.col-md-3.col-sm-3
+                    p Resources:
+                  - if @snomed.present?
+                    .col-lg-4.col-md-4.col-sm-4
+                      = link_to 'Medline Plus', info_medline_plus_path(snomed_concept_id: @snomed.try(:conceptId), snomed_term: @snomed.try(:defaultTerm).gsub('(','').gsub(')','')), id: 'medline_show', class: 'underlined btn-modal', data: { target: '#modal-medline' }, remote: true
+                  .col-lg-5.col-md-5.col-sm-5
+                    = link_to 'Patient Education Materials', education_materials_diagnoses_path(patient_id: @patient.id, snomed_id: @snomed.try(:conceptId)), class: 'underlined btn-modal', id: 'education_materials_show', data: { target: '#modal-patient-diagnoses-education-materials' }, remote: true
+      .modal-footer
+        .row
+          .col-lg-4.col-md-4.col-sm-4.hidden-xs.left-block
+          .col-lg-8.col-md-8.col-sm-8.right-block
+            .controls
+              = d.submit 'Save', class: 'btn btn-default btn-padding-md'

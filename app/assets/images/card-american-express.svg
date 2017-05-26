@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="137px" height="77px" viewBox="0 0 137 77" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.1 (29687) - http://www.bohemiancoding.com/sketch -->
+    <title>Amex</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="114" height="72" rx="4"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-2" y="-2" width="118" height="76">
+            <rect x="-2" y="-2" width="118" height="76" fill="white"></rect>
+            <use xlink:href="#path-1" fill="black"></use>
+        </mask>
+        <circle id="path-3" cx="112.5" cy="17.5" r="17.5"></circle>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-4">
+            <feMorphology radius="0.5" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="2" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Doctor---Subscription---EHR-Ordering---Checkout---Payment-Page" transform="translate(-411.000000, -503.000000)">
+            <g id="Contact-Details" transform="translate(239.000000, 232.000000)">
+                <g id="Security-Code" transform="translate(2.000000, 232.000000)">
+                    <g id="Information" transform="translate(125.000000, 0.000000)">
+                        <g id="Amex" transform="translate(47.000000, 42.000000)">
+                            <g id="Rectangle-157">
+                                <use fill="#A7CC4A" fill-rule="evenodd" xlink:href="#path-1"></use>
+                                <use stroke="#7DA941" mask="url(#mask-2)" stroke-width="4" xlink:href="#path-1"></use>
+                            </g>
+                            <ellipse id="Oval-17" fill="#97BB48" cx="57.5" cy="36.5" rx="25.5" ry="29.5"></ellipse>
+                            <path d="M0,3.99941455 C0,1.79059889 1.7874392,0 4.00987566,0 L44.9901243,0 C47.2047175,0 49.7800973,1.60477169 50.7476302,3.59512492 L82.2523698,68.4048751 C83.2175593,70.3904077 82.2066793,72 80.0050156,72 L3.99498437,72 C1.78861542,72 0,70.2022516 0,68.0005854 L0,3.99941455 Z" id="Rectangle-157-Copy" fill-opacity="0.5" fill="#9ECA3B"></path>
+                            <text id="5555-122222-60000" font-family="SFUIText-Regular, SF UI Text" font-size="10" font-weight="normal" fill="#000000">
+                                <tspan x="9" y="40">5555 122222 60000</tspan>
+                            </text>
+                            <g id="Oval-18">
+                                <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                                <use stroke="#D4E7A7" stroke-width="1" fill="#C0DD7F" fill-rule="evenodd" xlink:href="#path-3"></use>
+                            </g>
+                            <text id="1234" font-family="SFUIText-Bold, SF UI Text" font-size="11" font-weight="bold" fill="#000000">
+                                <tspan x="99" y="21">1234</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

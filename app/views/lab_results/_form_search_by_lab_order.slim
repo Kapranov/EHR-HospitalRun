@@ -1,0 +1,25 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title Search by Lab Order Number
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    .modal-body
+      .scrollable-container
+        .content
+          .row
+            .col-lg-12
+              p.title Lab Order #:
+              .row
+                .col-lg-8.col-md-8
+                  .form-group
+                    = hidden_field_tag :search_by_lab_order_id, nil, class: 'validate'
+                    .input-group.input-group-green
+                      = select_tag :search_by_lab_order_find_lab_order, nil, class: 'select2', data: { theme: 'labs-imaging', arrow: 'none', padding: '2-5x', font: '1x' }
+                      span.input-group-addon.input-group-addon-search#search_by_lab_order_find_lab_order_btn
+                .col-lg-4.col-md-4
+                  .form-group
+                    = link_to 'Search', '#', class: 'btn btn-default btn-padding-md btn-modal', id: 'search_by_lab_order_search_results_btn', data: { 'target': '#modal-lab-result-results-search-by-lab-order' }, remote: true
+    .modal-footer
+      .controls
+        = link_to 'Don’t have Lab Order #, manual entry', new_lab_result_path, class: 'btn btn-danger btn-padding-lg btn-modal', data: { target: '#modal-lab-results' }, id: 'search_by_lab_order_result_btn', remote: true

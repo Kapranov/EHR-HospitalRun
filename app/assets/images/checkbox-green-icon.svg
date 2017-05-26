@@ -1,0 +1,23 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 11">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #41b6a6;
+      }
+    </style>
+  </defs>
+  <title>checkbox-green-icon</title>
+  <g id="Page-1">
+    <g id="Doctor---Dashboard-Message---Reply">
+      <g id="Open-Message">
+        <g id="Button-Bar">
+          <g id="Urgent">
+            <g id="Base-_-Checked-Icon" data-name="Base-+-Checked-Icon">
+              <path id="Checked-Icon" class="cls-1" d="M5.11,8.5L1.77,5.12a1,1,0,0,0-1.46,0A1.05,1.05,0,0,0,.3,6.6l4.06,4.1a1.09,1.09,0,0,0,1.51,0L14.7,1.78a1.05,1.05,0,0,0,0-1.48,1,1,0,0,0-1.46,0Z" transform="translate(0 0)"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

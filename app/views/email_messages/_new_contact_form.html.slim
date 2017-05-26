@@ -1,0 +1,72 @@
+.modal-dialog.modal-md
+  .modal-content
+    .modal-header.modal-header-md
+      p.title New Contact
+    .modal-body
+      .scrollable-container
+        .content
+          .row
+            .col-lg-12
+              .form-group
+                = hidden_field_tag :practice_id, '', id: 'contacts-new-contact-practice-id'
+                .input-group
+                  = select_tag :find_contacts_practice_staff, options_for_select([['']]), class: 'select2', data: { placeholder: 'Search Practice Staff', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+                  span#find_contacts_practice_staff_button.input-group-addon.input-group-addon-search
+          .row
+            .col-lg-4
+              .form-group
+                = text_field_tag nil, nil, readonly: true, tabindex: -1, class: 'form-control', readonly: true, id: 'contacts-new-contact-first-name', placeholder: 'First Name'
+            .col-lg-2
+              .form-group
+                = text_field_tag nil, nil, readonly: true, tabindex: -1, class: 'form-control', readonly: true, id: 'contacts-new-contact-middle-name', placeholder: 'M.I.'
+            .col-lg-6
+              .form-group
+                = text_field_tag nil, nil, readonly: true, tabindex: -1, class: 'form-control', readonly: true, id: 'contacts-new-contact-last-name', placeholder: 'Last Name'
+          .row
+            .col-lg-4
+              .form-group
+                .disabled
+                  = select_tag nil, options_for_select(Provider.degrees.map {|degree| ["#{degree.to_s.titleize == 'N/A Degree' ? 'N/A' : degree.to_s.titleize.upcase}",degree]}), class: 'select2', id: 'contacts-new-contact-degree', data: { placeholder: 'Degree', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+            .col-lg-8
+              .form-group
+                .disabled
+                  = select_tag nil, options_for_select(Provider.specialities.map {|speciality| ["#{speciality.to_s.titleize == 'N/A Speciality' ? 'N/A' : speciality.to_s.titleize}",speciality]}), class: 'select2', id: 'contacts-new-contact-speciality', data: { placeholder: 'Speciality', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+          .row
+            .col-lg-12
+              .form-group
+                = email_field_tag nil, nil, readonly: true, tabindex: -1, class: 'form-control input-email', id: 'contacts-new-contact-email', placeholder: 'Email Address'
+          .row
+            .col-lg-6
+              .form-group
+                = telephone_field_tag nil, nil, readonly: true, tabindex: -1, class: 'form-control input-phone', id: 'contacts-new-contact-phone', placeholder: 'Phone'
+            .col-lg-6
+              .form-group
+                = telephone_field_tag nil, nil, readonly: true, tabindex: -1, class: 'form-control input-phone', id: 'contacts-new-contact-fax', placeholder: 'Fax'
+          .row
+            .col-lg-12
+              .form-group
+                .disabled
+                  = select_tag nil, options_for_select([['']]), class: 'select2', id: 'contacts-new-contact-street', data: { placeholder: 'Street Address 1', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+          .row
+            .col-lg-12
+              .form-group
+                = text_field_tag nil, nil, readonly: true, tabindex: -1, class: 'form-control', id: 'contacts-new-contact-practice-street', placeholder: 'Street Address 2'
+          .row
+            .col-lg-7
+              .form-group
+                = text_field_tag nil, nil, readonly: true, tabindex: -1, class: 'form-control', id: 'contacts-new-contact-city', placeholder: 'City'
+            .col-lg-2
+              .form-group
+                = text_field_tag nil, nil, readonly: true, tabindex: -1, class: 'form-control', id: 'contacts-new-contact-state', placeholder: 'State'
+            .col-lg-3
+              .form-group
+                = text_field_tag nil, nil, readonly: true, tabindex: -1, class: 'form-control', id: 'contacts-new-contact-zip', placeholder: 'Zip'
+    .modal-footer
+      .controls
+        .checkbox-heart.checkbox-fav.pull-left
+          = check_box_tag nil, nil, false, id: 'contact_favorite', class: 'checkbox'
+          label for="contact_favorite"
+            span.checkbox-icon
+            span.checkbox-label Favorite
+        a.btn.btn-default.btn-padding-md#contact-save Save
+        a.btn.btn-default.btn-padding-md data-dismiss="modal" Cancel

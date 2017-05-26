@@ -1,0 +1,19 @@
+= simple_form_for LabResult.new do |f|
+  - if lab_order.present? && lab_order.test_orders.any?
+    - lab_order.test_orders.each do |test_order|
+      = f.simple_fields_for "test_orders[edit][#{test_order.id}]", test_order do |t|
+        tr
+          td
+            p
+              = test_order.code
+          td
+            p
+              = test_order.test
+          td
+            = t.input_field :result, class: 'form-control form-control-green'
+          td
+            = t.input_field :units, class: 'form-control form-control-green'
+          td
+            = t.input_field :flag, class: 'form-control form-control-green'
+          td
+            = t.input_field :range, class: 'form-control form-control-green'

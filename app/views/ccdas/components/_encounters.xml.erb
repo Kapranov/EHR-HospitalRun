@@ -1,0 +1,42 @@
+<component>
+  <section>
+    <templateId root="2.16.840.1.113883.10.20.22.2.22.1"/>
+    <code code="46240-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="History of Encounters"/>
+    <title>Encounters</title>
+    <text>
+      <table width="95%" border="1">
+        <thead>
+          <tr>
+            <th>Notes</th>
+            <th>Performer</th>
+            <th>Date of Service</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% encounters.each do |encounter| %>
+            <tr>
+              <td><%= encounter.notes %></td>
+              <td><%= encounter.patient.try(:created_by).try(:full_name) %></td>
+              <td><%= encounter.created_at.strftime(Date::DATE_FORMATS[:custom]) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </text>
+    <% encounters.each do |encounter| %>
+      <entry typeCode="DRIV">
+        <encounter classCode="ENC" moodCode="EVN">
+          <templateId root="2.16.840.1.113883.10.20.22.4.49"/>
+          <id root="2.16.840.1.113883.3.3388.1.1.1.573798.3.138736163.1.3.2" extension="267701334"/>
+          <text>
+            <reference value="<%= encounter.id %>"/>
+          </text>
+          <effectiveTime xsi:type="IVL_TS">
+            <low nullFlavor='UNK'/>
+            <high <%= value_or_null_flavor(encounter.serviced_at) %>/>
+          </effectiveTime>
+        </encounter>
+      </entry>
+    <% end %>
+  </section>
+</component>

@@ -1,0 +1,32 @@
+ErxController = function() {
+  this.initialize = function() {
+    var erxMainController = new ErxMainController();
+    erxMainController.initialize();
+  }
+}
+
+ErxMainController = function() {
+  this.initialize = function() {
+    if(dosespot_patient_id_present) {
+      $('iframe#erx-iframe').attr('src', dosespot_url);
+      setTimeout(function(){$('iframe#erx-iframe').attr('src', dosespot_patient_detail_url);}, 3000);
+    }
+    else {
+      if(dosespot_valid_url) {
+        $('#erx-registration').click(function() {
+          $.ajax({
+            url: '<%= Rails.application.routes.url_helpers.registrate_patient_treatments_path %>',
+            data: {
+              dosespot_id: dosespot_id
+            }
+          }).done(function(url) {
+            $('iframe#erx-iframe').attr('src', dosespot_url);
+            setTimeout(function(){$('iframe#erx-iframe').attr('src', url);}, 3000);
+            $('#erx-registration').remove();
+            repositionModal($('#modal-patient-main'), false);
+          });
+        });
+      }
+    }
+  }
+}

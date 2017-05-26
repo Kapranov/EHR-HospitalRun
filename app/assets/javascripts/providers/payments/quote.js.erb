@@ -1,0 +1,18 @@
+$(document).ready(function() {
+  ValidationController = function() {
+    var agreement, next_button;
+
+    this.initialize = function() {
+      agreement = $('#accept_agreement');
+      next_button = $('.controls-bottom .btn-default');
+
+      switchControlState(next_button, false);
+      agreement.change(function(e) {
+        switchControlState(next_button, agreement.is(':checked'));
+      })
+    }
+  }
+
+  var validationController = new ValidationController();
+  validationController.initialize();
+});

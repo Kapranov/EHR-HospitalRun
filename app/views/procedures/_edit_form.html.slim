@@ -1,0 +1,45 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title Procedure Details
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @procedure, html: { autocomplete: 'off' }, remote: true do |f|
+      = f.input_field :patient_id, as: :hidden, value: @patient.id
+      = f.input_field :encounter_id, as: :hidden
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-12
+                .form-group
+                  = f.input_field :procedure_code_id, as: :hidden
+                  .input-group
+                    = select_tag :procedure_code, options_for_select([[@procedure.procedure_code.try(:to_label)], [@procedure.procedure_code.try(:to_label)]]), class: 'select2', data: { theme: 'white-light', arrow: '2x', padding: '3x', font: '1x', placeholder: 'Procedure Code' }
+                    span.input-group-addon.input-group-addon-search#procedure_code_button
+            .row
+              .col-lg-3.col-md-3.col-sm-3
+                .form-group
+                  = f.input_field :tooth_table_id, as: :select, collection: @procedure.tooth_table.patient.tooth_tables.map{ |procedure| [procedure.tooth_num, procedure.id] }, class: 'select2', data: { theme: 'white-light', arrow: '2x', padding: '3x', font: '1x', placeholder: 'Tooth #' }
+              - if @procedure.surface.get_all_true_fields.present?
+                .col-lg-9.col-md-9.col-sm-9
+                  .form-group
+                    = text_field_tag :surfaces, @procedure.surface.get_all_true_fields, class: 'form-control', placeholder: 'Surface(s)', readonly: true, tabindex: '-1'
+            .row
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  = text_field_tag :provider, "#{current_user.provider.first_name} #{current_user.provider.last_name}", class: 'form-control', placeholder: 'Provider', readonly: true, tabindex: '-1'
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  = f.input_field :status, as: :select, collection: Procedure.statuses, selected: @procedure.status, class: 'select2', data: { theme: 'green-dark', arrow: '2x', padding: '3x', font: '1x', placeholder: 'Status' }
+            .row
+              .col-lg-6.col-md-6.col-sm-6
+                - if policy(Encounter).create?
+                  = link_to 'Add to Encounter Note', form_encounters_path(patient_id: @patient.id), remote: true, id: 'add_to_encounter_note_button', class: 'btn btn-default btn-modal', data: { target: '#modal-patient-add-encounter' }
+              .col-lg-6.col-md-6.col-sm-6.col-xs-6#date_of_service_container class="#{'hidden' if @procedure.status!='Completed'}"
+                = f.input_field :date_of_service, as: :hidden
+                = text_field_tag :date_of_service_date, '', class: 'form-control', readonly: true, placeholder: 'Date of Service', tabindex: '-1'
+      .modal-footer
+        .controls
+          = f.submit 'Save', class: 'btn btn-default btn-padding-md'
+          a.btn.btn-default.btn-padding-sm data-dismiss="modal" Cancel

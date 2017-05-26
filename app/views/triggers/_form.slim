@@ -1,0 +1,51 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title 
+        = "#{@trigger.persisted? ? 'View' : 'Add new'} trigger"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @trigger do |f|
+      = f.input_field :alert_id, as: :hidden, value: @alert_id
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Category*
+                  = f.input_field :trigger_category_id, as: :select, collection: @trigger_categories, selected: 0, include_blank: true, class: 'select2', data: { placeholder: 'Only one category must be selected', theme: 'green-lighter', arrow: '2x', padding: '1-5x', font: '0-5x', 'font-weight': 'bold' }
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Code System*
+                  = f.input_field :system, as: :select, collection: @systems, selected: 0, include_blank: true, class: 'select2', data: { placeholder: 'Select Code system to search', theme: 'green-lighter', arrow: '2x', padding: '1-5x', font: '0-5x', 'font-weight': 'bold' }
+            .row
+              .col-lg-12
+                .form-group
+                  = f.input_field :code, as: :hidden
+                  p.title Code*
+                  .row
+                    .col-lg-9.col-md-9.col-sm-9
+                      .form-group
+                        .input-group.input-group-green
+                        = select_tag :trigger_code_select, nil, class: 'select2', data: { theme: 'green-lighter', arrow: 'none', padding: '1-5x', font: '0-5x', 'font-weight': 'bold' }
+                    .col-lg-3.col-md-3.col-sm-3
+                      .form-group
+                        a.btn.btn-default.btn-padding-md#trigger_code_search_button Search Now
+            .row.fade.collapse#row-triggers
+              .col-lg-12
+                .form-group
+                  .panel#panel-triggers
+                    .panel-body
+                      .table-responsive
+                        table.table
+                          tbody
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Description*
+                  = f.input_field :description, as: :text, readonly: true, class: 'form-control form-control-green textarea-resize-vertical'
+        .modal-footer
+          .controls
+            = f.submit 'Add trigger', class: 'btn btn-default'

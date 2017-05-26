@@ -1,0 +1,263 @@
+#signup-wrapper
+  = simple_form_for resource, as: resource_name, url: registration_path(resource_name) do |f|
+    = f.simple_fields_for :provider, Provider.new do |p|
+      #signup-index.fade.in
+        .authorization-signup-wrapper
+          .authorization-top
+            .string
+              .string-top
+                .image-center
+                  = image_tag 'ehr.svg', width: 232, height: 88, alt: 'EHR1 Logo'
+              .container
+                .string-top-container
+                  = link_to root_path, class: 'string-top-home-link'
+                    = image_tag 'num-top.svg', width: 146, height: 248, alt: 'EHR1 One Num Logo'
+          .authorization-content.authorization-steps
+            .content-top
+              .container
+                .row
+                  div class="#{flash[:errors].present? ? 'col-lg-6 col-lg-6 col-lg-6' : 'col-lg-12'}"
+                    .main-title
+                      h1 SIGN UP FOR A PRACTITIONER ACCOUNT
+                      p
+                        'Already have an account?
+                        |
+                        = link_to 'Sign in here', new_user_session_path
+                  - if flash[:errors].present?
+                    .col-lg-6.col-md-4.col-sm-4
+                      .main-title.alerts-signup#error_explanation
+                        h2
+                          = flash[:errors]
+                  = devise_error_messages_signup!
+            .content
+              .container
+                .row
+                  #collapse-parent
+                    #signup-personalinfo.col-lg-10.left-block.collapse.fade.in aria-expanded="true" data-target="#personalinfo"
+                      .secondary-title.authorization-people-icon
+                        p Personal Information
+                      .row
+                        .col-lg-12
+                          p.category-title YOUR NAME
+                          .row
+                            .col-lg-2.col-md-2.col-sm-2
+                              .form-group
+                                = p.input_field :title, as: :select, collection: Provider.titles.map { |title| [title.to_s.titleize, title] }, class: 'select2', data: { placeholder: 'Title', theme: 'white-light', arrow: '2x', padding: '2-5x', font: '1x' }
+                            .col-lg-3.col-md-3.col-sm-3
+                              .form-group
+                                = p.input_field :first_name, placeholder: 'First Name', class: 'form-control form-control-white'
+                            .col-lg-3.col-md-3.col-sm-3
+                              .form-group
+                                = p.input_field :middle_name, placeholder: 'Middle Name', class: 'form-control form-control-white'
+                            .col-lg-4.col-md-4.col-sm-4
+                              .form-group
+                                = p.input_field :last_name, placeholder: 'Last Name', class: 'form-control form-control-white'
+                      .row
+                        .col-lg-12
+                          p.category-title BUSINESS NAME
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = p.input_field :business_name, placeholder: 'Business Name', class: 'form-control form-control-white'
+                      .row
+                        .col-lg-4.col-md-4.col-sm-4
+                          p.category-title DEGREE
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = p.input_field :degree, as: :select, collection: Provider.degrees.map { |degree| ["#{degree.to_s.titleize == 'N/A Degree' ? 'N/A' : degree.to_s.titleize.upcase}",degree] }, class: 'select2', data: { placeholder: 'Degree', theme: 'white-light', arrow: '2x', padding: '2-5x', font: '1x' }
+                        .col-lg-8.col-md-8.col-sm-8
+                          p.category-title SPECIALITY
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = p.input_field :speciality, as: :select, collection: Provider.specialities.map { |speciality| ["#{speciality.to_s.titleize == 'N/A Speciality' ? 'N/A' : speciality.to_s.titleize}",speciality] }, class: 'select2', data: { placeholder: 'Speciality', theme: 'white-light', arrow: '2x', padding: '2-5x', font: '1x' }
+                      .row
+                        .col-lg-12
+                          .controls
+                            a.btn.btn-default.button-switch.button-next.disabled data-target="#signup-contactinfo" NEXT STEP
+                    #signup-contactinfo.col-lg-10.left-block.collapse.fade data-target="#contactinfo"
+                      = p.input_field :practice_street_address, as: :hidden, class: 'validate'
+                      = p.input_field :practice_city, as: :hidden, class: 'validate'
+                      = p.input_field :practice_state, as: :hidden, class: 'validate'
+                      = p.input_field :practice_zip, as: :hidden, class: 'validate'
+                      = p.input_field :street_address, as: :hidden, class: 'validate'
+                      = p.input_field :suit_apt_number, as: :hidden
+                      = p.input_field :city, as: :hidden, class: 'validate'
+                      = p.input_field :state, as: :hidden, class: 'validate'
+                      = p.input_field :zip, as: :hidden, class: 'validate'
+                      .secondary-title.authorization-people-icon
+                        p Contact Information
+                      .row
+                        .col-lg-12
+                          p.category-title PRACTICE ADDRESS
+                          .row
+                            .col-lg-7.col-md-7.col-sm-6
+                              .form-group
+                                = text_field_tag :full_address, nil, class: 'form-control form-control-white', placeholder: 'Enter full address here (including suite number)'
+                            .col-lg-3.col-md-3.col-sm-3
+                              .form-group
+                                = p.input_field :practice_suit_apt_number, class: 'form-control form-control-white', placeholder: 'Suite/Apt Number'
+                            .col-lg-2.col-md-2.col-sm-3
+                              .form-group
+                                = link_to 'VERIFY', registration_addresses_street_addresses_path(full_street_line: '', suit_apt_number: ''), class: 'btn btn-default btn-padding-lg disabled', data: { target: '#modal-street-addresses' }, id: 'btn_verify', remote: true
+                      .row
+                        .col-lg-4.col-md-4.col-sm-4
+                          p.category-title PRIMARY PHONE NUMBER
+                          .row
+                            .col-lg-12
+                              .form-group
+                                .input-group.input-group-phone
+                                  = p.input_field :primary_phone_code, as: :select, collection: (Rails.env.development? ? AreaCode.all.map { |code| [code.code.to_s, code.code.to_s] } : []), selected: "#{'415' if Rails.env.development?}", class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'white-light', arrow: 'none', padding: '1x', font: '1x', width: '70px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                                  = p.input_field :primary_phone_tel, as: :tel, placeholder: '123-4567', value: "#{'488-5324' if Rails.env.development?}", class: 'form-control form-control-white input-phone'
+                        .col-lg-4.col-md-4.col-sm-4
+                          p.category-title MOBILE PHONE NUMBER
+                          .row
+                            .col-lg-12
+                              .form-group
+                                .input-group.input-group-phone
+                                  = p.input_field :mobile_phone_code, as: :select, collection: (Rails.env.development? ? AreaCode.all.map { |code| [code.code.to_s, code.code.to_s] } : []), selected: "#{'650' if Rails.env.development?}", class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'white-light', arrow: 'none', padding: '1x', font: '1x', width: '70px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                                  = p.input_field :mobile_phone_tel, as: :tel, placeholder: '123-4567', value: "#{'605-8385' if Rails.env.development?}", class: 'form-control form-control-white input-phone'
+                      .row
+                        .col-lg-12
+                          .controls
+                            a.btn.btn-default.button-switch.button-back data-target="#signup-personalinfo" PREV. STEP
+                            a.btn.btn-default.button-switch.button-next data-target="#signup-additionalinfo" NEXT STEP
+                    #signup-additionalinfo.col-lg-10.left-block.collapse.fade data-target="#additionalinfo"
+                      .secondary-title.authorization-people-icon
+                        p Account Information
+                      .row
+                        .col-lg-5.col-md-5.col-sm-5
+                          p.category-title PRIMARY EMAIL ADDRESS
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = f.input_field :email, as: :email, placeholder: 'Email Address', class: 'form-control form-control-white input-email'
+                        .col-lg-5.col-md-5.col-sm-5
+                          p.category-title ALT. EMAIL ADDRESS
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = p.input_field :alt_email, as: :email, placeholder: 'Email Address', class: 'form-control form-control-white input-email'
+                      .row
+                        .col-lg-5.col-md-5.col-sm-5
+                          p.category-title
+                            | PASSWORD
+                            - if @minimum_password_length
+                              span.password-length-title
+                                | (
+                                = @minimum_password_length
+                                |  characters minimum)
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = f.password_field :password, class: 'form-control form-control-white input-password-heavy', placeholder: 'Password'
+                        .col-lg-5.col-md-5.col-sm-5
+                          p.category-title CONFIRM PASSWORD
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = f.password_field :password_confirmation, class: 'form-control form-control-white input-password-heavy', placeholder: 'Confirm Password'
+                      .row
+                        .col-lg-12
+                          p.category-title
+                            | PLEASE SELECT WHICH VERSION OF EHR YOU’RE REGISTERING FOR
+                            sup
+                              small
+                                | *
+                          .row
+                            .col-lg-5
+                              .radiobutton-custom
+                                = p.radio_button :trial, 0, checked: true
+                                label for="user_provider_trial_0"
+                                  span.radio-icon
+                                  span.radio-label PURCHASE THE COMPLETE EHR1 SOFTWARE
+                            .col-lg-5
+                              .radiobutton-custom
+                                = p.radio_button :trial, 1
+                                label for="user_provider_trial_1"
+                                  span.radio-icon
+                                  span.radio-label 
+                                    | 30-Day Trial version of EHR1
+                                    sup
+                                      small
+                                        | 1
+                          .row
+                            .col-lg-12
+                              .form-group
+                                p.small-text
+                                  span 1 -
+                                  | &nbsp;30-Day Trial Version of EHR1 includes limited access to its features
+                          .row
+                            .col-lg-12
+                              .form-group
+                                .checkbox-custom
+                                  = p.check_box :notify, class: 'checkbox'
+                                  label[for="user_provider_notify"]
+                                    span.checkbox-icon-container
+                                      span.checkbox-icon
+                                    span.checkbox-label NOTIFY ME OF ALL UPCOMING SERVICE OUTTAGES AND PLANNED SERVICE UPGRADES
+                      .row
+                        .col-lg-12
+                          .controls
+                            a.btn.btn-default.button-switch.button-back data-target="#signup-contactinfo" PREV. STEP
+                            = f.submit 'COMPLETE REGISTRATION', class: 'btn btn-default button-next btn-padding-lg'
+                  .col-lg-2.md-hidden.sm-hidden.xs-hidden.right-block
+                    .category-buttons.hidden-md.hidden-sm.hidden-xs
+                      #personalinfo.button-cat class="#{Rails.env.development? ? 'button-cat-development' : ''}" data-target="#signup-personalinfo"
+                        .item-1.active
+                          .dots-container
+                            span.dots
+                              span
+                              span
+                              span
+                          .performed-container
+                            span.performed-icon
+                          span.title
+                            p 
+                              | PERSONAL
+                              br
+                              | INFO
+                      #contactinfo.button-cat class="#{Rails.env.development? ? 'button-cat-development' : ''}" data-target="#signup-contactinfo"
+                        .item-2
+                          .dots-container
+                            span.dots
+                              span
+                              span
+                              span
+                          .performed-container
+                            span.performed-icon
+                          span.title
+                            p 
+                              | CONTACT
+                              br
+                              | INFO
+                      #additionalinfo.button-cat class="#{Rails.env.development? ? 'button-cat-development' : ''}" data-target="#signup-additionalinfo"
+                        .item-3
+                          .dots-container
+                            span.dots
+                              span
+                              span
+                              span
+                          .performed-container
+                            span.performed-icon
+                          span.title
+                            p 
+                              | ADDITIONAL
+                              br
+                              | INFO
+                      #complete
+                        .item-4
+                          .dots-container
+                            span.dots
+                              span
+                              span
+                              span
+                          .performed-container
+                            span.performed-icon
+                          span.title
+                            p 
+                              | SIGN UP
+                              br
+                              | COMPLETE
+#modal-street-addresses-registration-addresses.modal.modal-provider.animated.fadeIn

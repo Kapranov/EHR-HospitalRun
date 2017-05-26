@@ -1,0 +1,10 @@
+$('#modal-image-results').html('<%= escape_javascript(render 'form') %>');
+
+initPickers('#modal-image-results');
+initSelect2('#modal-image-results');
+initModalFadeInOut('#modal-image-results');
+
+$('#modal-image-results').modal('show');
+
+var labsImaging_ImagingAttachmentsController = new LabsImaging_ImagingAttachmentsController();
+labsImaging_ImagingAttachmentsController.initialize();

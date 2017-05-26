@@ -1,0 +1,34 @@
+<component>
+  <section>
+    <templateId root="2.16.840.1.113883.10.20.22.2.17"/>
+    <code code="29762-2" codeSystem="2.16.840.1.113883.6.1" displayName="Social History"/>
+    <title>Social History</title>
+    <text>
+      <table width="95%" border="1">
+        <thead>
+          <tr>
+            <th>Major events</th>
+            <th>Ongoing_problems</th>
+            <th>Preventitive care</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= history.major_events %></td>
+            <td><%= history.ongoing_problems %></td>
+            <td><%= history.preventitive_care %></td>
+          </tr>
+        </tbody>
+      </table>
+    </text>
+    <entry typeCode="DRIV">
+      <observation classCode="OBS" moodCode="EVN">
+        <templateId root="2.16.840.1.113883.10.20.22.4.78"/>
+        <code code="ASSERTION" codeSystem="2.16.840.1.113883.5.4" xsi:type="CE"/>
+        <statusCode code="completed"/>
+        <effectiveTime nullFlavor="NI"/>
+        <value xsi:type="CD" nullFlavor="NI"/>
+      </observation>
+    </entry>
+  </section>
+</component>

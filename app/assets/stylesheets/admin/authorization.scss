@@ -1,0 +1,26 @@
+@import 'application';
+@import 'ui/main';
+
+#authorization-admin-signin-wrapper {
+  border: 1px solid #000;
+  background-color: $green_leftnav;
+  padding-top: calc(50vh - 151px);
+  padding-bottom: calc(50vh - 151px);
+  .row .row:last-child div[class*='col-'] .form-group {
+    margin-bottom: 0;
+  }
+  .top-logo-container {
+    text-align: center;
+    .top-logo {
+      margin-bottom: 20px;
+    }
+  }
+  .content {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #000;
+  }
+  .controls {
+    text-align: center;
+  }
+}

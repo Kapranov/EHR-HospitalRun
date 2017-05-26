@@ -1,0 +1,106 @@
+source 'https://rubygems.org'
+
+ruby File.read('.ruby-version').strip
+
+gem 'rails',                            '4.2.7'
+gem 'therubyracer'
+gem 'sass-rails',                       '~> 5.0'
+gem 'uglifier',                         '~> 3.0'
+gem 'jquery-rails'
+gem 'jbuilder',                         '~> 2.4'
+gem 'nobrainer'
+gem 'rethinkdb'
+gem 'devise',                           '3.5.10'
+gem 'devise-nobrainer'
+gem 'figaro'
+gem 'pundit'
+gem 'simple_form'
+gem 'foreman'
+gem 'slim-rails'
+gem 'lograge'
+gem 'country-select'
+gem 'phony_rails'
+gem 'email_validator'
+gem 'nested_attributes_uniqueness',     '~> 0.1'
+gem 'kaminari-nobrainer'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
+gem 'paleta'
+gem 'local_time'
+gem 'twilio-ruby'
+gem 'jquery-minicolors-rails'
+gem 'prawn'
+gem 'prawn-table'
+gem 'carrierwave',                      git: 'https://github.com/carrierwaveuploader/carrierwave.git'
+gem 'carrierwave-nobrainer',            git: 'https://github.com/katafrakt/carrierwave-nobrainer.git'
+gem 'savon',                            '~> 2.11'
+gem 'nokogiri'
+gem 'any_login'
+gem 'stripe'
+gem 'gibbon'
+gem 'actionmailer_inline_css'
+gem 'rqrcode'
+gem 'auto-session-timeout'
+gem 'thin'
+
+group :development do
+  gem 'subcontractor'
+  gem 'brakeman',                       :require => false
+  gem 'better_errors'
+  gem 'guard',                          :require => false
+  gem 'guard-minitest',                 :require => false
+  gem 'guard-bundler'
+  gem 'guard-rails'
+  gem 'guard-rspec'
+  gem 'guard-livereload',               :require => false
+  gem 'rack-livereload'
+  gem 'quiet_assets'
+  gem 'rails_layout'
+  gem 'rb-fchange',                     :require => false
+  gem 'rb-fsevent',                     :require => false
+  gem 'rb-inotify',                     :require => false
+  gem 'spring'
+  gem 'terminal-notifier',              :require => false
+  gem 'terminal-notifier-guard',        :require => false
+  gem 'web-console',                    '~> 3.3'
+end
+
+group :test do
+  gem 'cucumber-rails',                 :require => false
+  gem 'minitest-rails-capybara'
+  gem 'minitest-reporters'
+  gem 'minitest-focus'
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'launchy'
+  gem 'connection_pool'
+  gem 'mocha'
+  gem 'poltergeist'
+  gem 'selenium-webdriver'
+  gem 'chromedriver-helper'
+  gem 'webmock'
+  gem 'shoulda-matchers', '~> 3.1'
+end
+
+group :production do
+  gem 'sendgrid'
+  gem 'unicorn'
+end
+
+group :development, :test do
+  gem 'byebug'
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'pry-nav'
+  gem 'pry-rescue'
+  gem 'rspec-rails',                    '~> 3.4'
+  gem 'faker'
+  gem 'ffaker'
+  gem 'fake_person'
+  gem 'seed_dump'
+  gem 'factory_girl'
+  gem 'factory_girl_rails',             '~> 4.7'
+  # gem 'logster'
+  # gem 'thin'
+  gem 'mailcatcher'
+end

@@ -1,0 +1,11 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title 
+        = "#{@title}"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    .modal-body
+      .scrollable-container
+        .content
+          iframe#iframe-info src="#{@link}"

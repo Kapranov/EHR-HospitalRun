@@ -1,0 +1,226 @@
+#settings-practice-container {
+  .row-container:not(.practice-settings) {
+    padding: 20px;
+  }
+
+  div[class*="-content"] {
+    .table-responsive {
+      border: 0;
+      margin: 0;
+      table {
+        margin: 0;
+        overflow: hidden;
+        p, a {
+          color: $graytextdark;
+          font-size: 16px;
+          margin: 0;
+        }
+        tr,
+        tr th,
+        tr td {
+          border: 0;
+          padding: 0;
+          white-space: nowrap
+        }
+        thead {
+          min-height: 50px;
+          border: 0;
+          background-color: #F7F7F7;
+          th {
+            vertical-align: middle;
+            &:last-child {
+              padding-right: 20px;
+            }
+            p {
+              padding: 14px 20px;
+              font-weight: normal;
+            }
+          }
+        }
+        tbody {
+          tr td {
+            padding-bottom: 0 !important;
+            &:first-child {
+              border-left: 40px solid #fff;
+            }
+            &:last-child {
+              border-right: 40px solid #fff;
+            }
+            p,
+            a:not(.avatar-container) {
+              line-height: 40px;
+            }
+            a {
+              display: block;
+              &:hover,
+              &:active,
+              &:focus {
+                color: $graytext;
+              }
+            }
+          }
+          tr:not(:last-of-type) {
+            border-bottom: 1px solid $green;
+          }
+          tr:first-child td p,
+          tr:first-child td a:not(.avatar-container):not(.status-state) {
+            margin-top: 10px;
+          }
+          tr:last-child td p {
+            padding-bottom: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  .practice-locations .practice-locations-content {
+    table {
+      thead {
+        tr th:nth-child(2),
+        tr th:nth-child(3) {
+          p {
+            text-align: center;
+          }
+        }
+      }
+      tbody {
+        tr td:not(:first-child):not(:last-child) {
+          padding-left: 20px !important;
+        }
+        tr td:nth-child(4) p {
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  .users {
+    .category-header {
+      div[class*='col-']:nth-child(2) .title {
+        float: left;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: relative;
+      }
+      @media(max-width: 769px) {
+        div[class*='col-']:last-child {
+          width: 100%;
+        }
+      }
+    }
+    .users-content {
+      table {
+        thead {
+          tr th {
+            &:nth-child(5),
+            &:nth-child(6) {
+              p {
+                text-align: center;
+              }
+            }
+            &:nth-child(6) {
+              width: 130px;
+              white-space: normal;
+              p {
+                padding: 0 0 0 5px;
+              }
+            }
+          }
+        }
+        tbody {
+          tr td {
+            .avatar {
+              width: 30px;
+              height: 30px;
+              transition: opacity 0.2s;
+              &:hover,
+              &:active,
+              &:focus {
+                opacity: 0.75;
+              }
+            }
+            &:first-child {
+              width: 40px;
+            }
+            &:last-child {
+              .checkbox-custom {
+                text-align: center;
+                label {
+                  display: inline-block;
+                  vertical-align: initial;
+                  max-width: 25px;
+                  min-width: 25px;
+                }
+              }
+            }
+            &:nth-child(6) {
+              padding-top: 2px !important;
+              text-align: center;
+            }
+            &:not(:first-child):not(:last-child) {
+              padding-left: 20px !important;
+            }
+            .status-state {
+              width: 100px;
+              height: 35px;
+              line-height: 35px !important;
+              font-size: 15px;
+              display: inline-block;
+              color: #fff !important;
+              border-radius: 3px;
+              margin-top: 2px;
+              margin-bottom: 2px;
+              cursor: default;
+              &:hover,
+              &:focus,
+              &:active {
+                cursor: pointer;
+                opacity: 0.75;
+                transition: opacity 0.2s;
+              }
+              &.active {
+                background-color: $confirmed;
+              }
+              &.inactive {
+                background-color: $unconfirmed;
+              }
+            }
+            .checkbox-custom {
+              margin-top: 7px;
+              label {
+                min-width: 100px;
+                height: auto;
+                .checkbox-icon {
+                  float: left;
+                }
+                .checkbox-label {
+                  position: inherit;
+                  font-size: 16px;
+                  text-transform: none;
+                }
+              }
+            }
+          }
+          tr:not(:first-child) td:first-child {
+            padding-top: 5px !important;
+          }
+          tr:first-child {
+            td:first-child {
+              padding-top: 15px !important;
+            }
+            td:nth-child(5),
+            td:nth-child(6),
+            td:nth-child(7) {
+              padding-top: 10px !important;
+            }
+          }
+          td:last-child {
+            padding-left: 0 !important;
+          }
+        }
+      }
+    }
+  }
+}

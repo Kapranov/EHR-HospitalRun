@@ -1,0 +1,82 @@
+$(document).ready(function() {
+  AuditLogsSearchController = function() {
+    var audit_container;
+    var from_date_input, to_date_input, provider_input, patient_input, search_btn;
+    var export_input;
+
+    var temp_from_date, temp_to_date, temp_provider, temp_patient;
+
+    this.initialize = function() {
+      audit_container = $('#settings-audit-container');
+
+      initSearch();
+      initExport();
+    }
+
+    var initSearch = function() {
+      from_date_input = audit_container.find('#audit_filter_date_from');
+      to_date_input =   audit_container.find('#audit_filter_date_to');
+      provider_input =  audit_container.find('#audit_filter_user');
+      patient_input =   audit_container.find('#audit_find_patient');
+      export_input =    audit_container.find('#audit_export');
+      search_btn =      audit_container.find('#audit_search_btn');
+
+      from_date_input.val(temp_from_date ? temp_from_date : '').trigger('change');
+      to_date_input.val(temp_to_date ? temp_to_date : '').trigger('change');
+      provider_input.val(temp_provider ? temp_provider : '').trigger('change');
+      patient_input.val(temp_patient ? temp_patient : '').trigger('change');
+
+      search_btn.change(searchHandler);
+      to_date_input.change(searchHandler);
+      provider_input.change(searchHandler);
+      patient_input.change(searchHandler);
+      search_btn.click(searchHandler);
+    }
+
+    var searchHandler = function() {
+      if(from_date_input.val() && to_date_input.val()) {
+        temp_from_date = from_date_input.val();
+        temp_to_date = to_date_input.val();
+        temp_provider = provider_input.val();
+        temp_patient = patient_input.val();
+
+        $.ajax({
+          url: '<%= Rails.application.routes.url_helpers.search_audit_logs_path %>',
+          data: {
+            created_at_from: moment(new Date(from_date_input.val())).format('DD/MM/YYYY'),
+            created_at_to: moment(new Date(to_date_input.val())).format('DD/MM/YYYY'),
+            provider_id: provider_input.val(),
+            patient_part: patient_input.val()
+          }
+        }).success(function(partial) {
+          audit_container.html(partial);
+
+          var container_id = '#'+audit_container.attr('id');
+          initPickers(container_id);
+          initSelect2(container_id);
+          initSearch();
+        });
+      }
+    }
+
+    var initExport = function() {
+      export_input.change(function() {
+        var value = $(this).val();
+        if(value) {
+          switch (value) {
+            case '0':
+              window.location = '<%= Rails.application.routes.url_helpers.download_csv_audit_logs_path %>';
+              break;
+            case '1':
+              window.print();
+              break;
+          }
+          export_input.val('').trigger('change');
+        }
+      });
+    }
+  }
+
+  var auditLogsSearchController = new AuditLogsSearchController();
+  auditLogsSearchController.initialize();
+});

@@ -1,0 +1,243 @@
+.content
+  .panel
+    .panel-header
+      p.title Your contact details
+    .panel-body
+      .row
+        .col-lg-6.col-md-6
+          .row
+            .col-lg-4.col-md-4
+              .form-group
+                p.title
+                  | First Name
+                  sup *
+            .col-lg-8.col-md-8
+              .form-group
+                = text_field_tag :first_name, @provider.first_name, readonly: true, class: 'form-control'
+        .col-lg-6.col-md-6
+          .row
+            .col-lg-4.col-md-4
+              .form-group
+                p.title
+                  | Last Name
+                  sup *
+            .col-lg-8.col-md-8
+              .form-group
+                = text_field_tag :last_name, @provider.last_name, readonly: true, class: 'form-control'
+      .row
+        .col-lg-6.col-md-6
+          .row
+            .col-lg-4.col-md-4
+              .form-group
+                p.title
+                  | Email
+                  sup *
+            .col-lg-8.col-md-8
+              .form-group
+                = email_field_tag :email, @provider.user.email, readonly: true, class: 'form-control'
+        .col-lg-6.col-md-6
+          .row
+            .col-lg-4.col-md-4
+              .form-group
+                p.title
+                  | Phone
+                  sup *
+            .col-lg-8.col-md-8
+              .form-group
+                = phone_field_tag :phone, @provider.primary_phone, readonly: true, class: 'form-control'
+    .panel-footer
+      hr
+  .panel
+    .panel-header
+      p.title
+        | Your company
+        sup.help.disabled
+          a.icon.icon-very-xs.icon-circle.icon-ic-help href="#"
+    .panel-body
+      .row
+        .col-lg-2.col-md-2
+          .form-group
+            p.title
+              | Company Name
+              sup.required *
+        .col-lg-10.col-md-10
+          .form-group
+            = text_field_tag :company_name, @provider.business_name, readonly: true, class: 'form-control'
+      - if @provider.locations.any?
+          .row
+            - index = 1
+            - @provider.locations.each_slice(2) do |locations|
+              - locations.each do |location|
+                .col-lg-6.col-md-6
+                  .row
+                    .col-lg-4.col-md-4
+                      .form-group
+                        p.title
+                          | Address line #{index}
+                          sup.required *
+                    .col-lg-8.col-md-8
+                      .form-group
+                        = text_field_tag location.id, location.to_label, readonly: true, class: 'form-control'
+                - index+=1
+      .row
+        .col-lg-6.col-md-6
+          .row
+            .col-lg-4.col-md-4
+              .form-group
+                p.title
+                  | City
+                  sup.required *
+            .col-lg-8.col-md-8
+              .form-group
+                = text_field_tag :city, @provider.city, readonly: true, class: 'form-control'
+        .col-lg-6.col-md-6
+          .row
+            .col-lg-6
+              .row
+                .col-lg-8.col-md-4
+                  .form-group
+                    p.title
+                      | State
+                      sup.required *
+                .col-lg-4.col-md-8
+                  .form-group
+                    = text_field_tag :state, @provider.state, readonly: true, class: 'form-control'
+            .col-lg-6
+              .row
+                .col-lg-4.col-md-4
+                  .form-group
+                    p.title
+                      | Zip
+                      sup.required *
+                .col-lg-8.col-md-8
+                  .form-group
+                    = text_field_tag :zip, @provider.zip, readonly: true, class: 'form-control'
+    .panel-footer
+      hr
+  = simple_form_for @ehr_subscription, url: payments_update_subscribtion_path do |f|
+    .panel
+      .panel-body
+        .row
+          .col-lg-10.col-md-10.col-lg-offset-2
+            .form-group
+              .checkbox-custom
+                = f.check_box :billing, checked: true
+                label for="ehr_subscription_billing"
+                  span.checkbox-icon-container
+                    span.checkbox-icon
+                  div.checkbox-label
+                    span.checkbox-label-main
+                      | Add a separate billing contact
+                      sup.help.disabled
+                        a.icon.icon-very-xs.icon-circle.icon-ic-help href="#"
+                    span.checkbox-label-secondary By default, you are set as a billing contact.
+        .row
+          .col-lg-6.col-md-6
+            .row
+              .col-lg-4.col-md-4
+                .form-group
+                  p.title
+                    | First Name
+                    sup.required *
+              .col-lg-8.col-md-8
+                .form-group
+                  = f.input_field :billing_first_name, class: 'form-control'
+          .col-lg-6.col-md-6
+            .row
+              .col-lg-4.col-md-4
+                .form-group
+                  p.title
+                    | Last Name
+                    sup.required *
+              .col-lg-8.col-md-8
+                .form-group
+                  = f.input_field :billing_last_name, class: 'form-control'
+        .row
+          .col-lg-6.col-md-6
+            .row
+              .col-lg-4.col-md-4
+                .form-group
+                  p.title
+                    | Email
+                    sup.required *
+              .col-lg-8.col-md-8
+                .form-group
+                  = f.input_field :billing_email, as: :email, class: 'form-control'
+          .col-lg-6.col-md-6
+            .row
+              .col-lg-4.col-md-4
+                .form-group
+                  p.title
+                    | Phone
+                    sup.required *
+              .col-lg-8.col-md-8
+                .form-group
+                  .input-group.input-group-phone
+                    = f.input_field :billing_phone_code, as: :select, collection: ((@ehr_subscription.persisted? && @ehr_subscription.billing_phone_code.present?) ? [@ehr_subscription.billing_phone_code] : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                    = f.input_field :billing_phone_tel, class: 'form-control input-phone'
+      .panel-footer
+        hr
+    .panel
+      .panel-body
+        .row
+          .col-lg-10.col-md-10.col-lg-offset-2
+            .form-group
+              .checkbox-custom
+                = f.check_box :technical, checked: true
+                label for="ehr_subscription_technical"
+                  span.checkbox-icon-container
+                    span.checkbox-icon
+                  div.checkbox-label
+                    span.checkbox-label-main
+                      | Add a separate technical contact
+                      sup.help.disabled
+                        a.icon.icon-very-xs.icon-circle.icon-ic-help href="#"
+                    span.checkbox-label-secondary By default, you are set as a technical contact.
+        .row
+          .col-lg-6.col-md-6
+            .row
+              .col-lg-4.col-md-4
+                .form-group
+                  p.title
+                    | First Name
+                    sup.required *
+              .col-lg-8.col-md-8
+                .form-group
+                  = f.input_field :technical_first_name, class: 'form-control'
+          .col-lg-6.col-md-6
+            .row
+              .col-lg-4.col-md-4
+                .form-group
+                  p.title
+                    | Last Name
+                    sup.required *
+              .col-lg-8.col-md-8
+                .form-group
+                  = f.input_field :technical_last_name, class: 'form-control'
+        .row
+          .col-lg-6.col-md-6
+            .row
+              .col-lg-4.col-md-4
+                .form-group
+                  p.title
+                    | Email
+                    sup.required *
+              .col-lg-8.col-md-8
+                .form-group
+                  = f.input_field :technical_email, as: :email, class: 'form-control'
+          .col-lg-6.col-md-6
+            .row
+              .col-lg-4.col-md-4
+                .form-group
+                  p.title
+                    | Phone
+                    sup.required *
+              .col-lg-8.col-md-8
+                .form-group
+                  .input-group.input-group-phone
+                    = f.input_field :technical_phone_code, as: :select, collection: ((@ehr_subscription.persisted? && @ehr_subscription.technical_phone_code.present?) ? [@ehr_subscription.technical_phone_code] : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                    = f.input_field :technical_phone_tel, class: 'form-control input-phone'
+      .panel-footer
+        hr
+    .controls
+        = f.submit 'Continue', class: 'btn btn-default'

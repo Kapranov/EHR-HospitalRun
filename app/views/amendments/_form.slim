@@ -1,0 +1,98 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title
+        = "#{@amendment.persisted? ? 'Edit' : 'New'} Amendment"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @amendment do |f|
+      = f.input_field :patient_id, as: :hidden, value: @patient.id
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Date Requested:
+                  .row
+                    .col-lg-7.col-md-7.col-sm-7
+                      .form-group
+                        .input-group.input-group-green
+                          = f.input_field :requested_at_date, class: 'form-control date-picker', placeholder: 'mm/dd/yyyy'
+                          span.input-group-addon.input-group-addon-calendar
+                    .col-lg-5.col-md-5.col-sm-5
+                      .form-group
+                        a.btn.btn-default.btn-today href="#" Today
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Date Accepted/Denied:
+                  .row
+                    .col-lg-7.col-md-7.col-sm-7
+                      .form-group
+                        .input-group.input-group-green
+                          = f.input_field :accepted_at_date, value: @amendment.persisted? ? @amendment.accepted_at_date : nil, class: 'form-control date-picker', placeholder: 'mm/dd/yyyy'
+                          span.input-group-addon.input-group-addon-calendar
+                    .col-lg-5.col-md-5.col-sm-5
+                      .form-group
+                        a.btn.btn-default.btn-today href="#" Today
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Date Appended:
+                  .row
+                    .col-lg-7.col-md-7.col-sm-7
+                      .form-group
+                        .input-group.input-group-green
+                          = f.input_field :appended_at_date, value: @amendment.persisted? ? @amendment.appended_at_date : nil, class: 'form-control date-picker', placeholder: 'mm/dd/yyyy'
+                          span.input-group-addon.input-group-addon-calendar
+                    .col-lg-5.col-md-5.col-sm-5
+                      .form-group
+                        a.btn.btn-default.btn-today href="#" Today
+            .row
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  p.title Status:
+                  = f.input_field :status, as: :select, collection: @statuses, class: 'select2', data: { placeholder: 'Please Select', theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x' }
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  p.title Source:
+                  = f.input_field :source, as: :select, collection: @sources, class: 'select2', data: { placeholder: 'Please Select', theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x' }
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Description/Location:
+                  = f.input_field :description, class: 'form-control form-control-green'
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Notes:
+                  = f.input_field :note, as: :text, class: 'form-control form-control-green'
+            - if @amendment.persisted? || (@attachments.present? && @attachments.any?)
+              .row
+                .col-lg-12
+                  .form-group
+                    .panel
+                      .panel-heading
+                        .controls
+                          .row
+                            .col-xs-8
+                              p.title Attachments:
+                            .col-xs-4
+                              - if @amendment.persisted?
+                                = link_to new_attachment_path(amendment_id: @amendment.id, patient_id: @patient.id), class: 'btn btn-default btn-plus btn-modal pull-right', data: { target: '#modal-attachment' }, remote: true
+                                  span.glyphicon.glyphicon-plus
+                      .panel-body.attachments-content
+                        - if @attachments.present? && @attachments.any?
+                          ul
+                            - @attachments.each do |attachment|
+                              li
+                                p
+                                  = attachment.basename
+                                  = link_to '', attachment_path(attachment, amendment_id: @amendment.id, patient_id: @patient.id), method: :delete, remote: true, class: 'icon icon-delete'
+      .modal-footer
+        .controls
+          - if @amendment.persisted?
+            = link_to 'Delete', amendment_path(@amendment, patient_id: @patient.id), method: :delete, class: 'btn btn-danger pull-left'
+          = f.submit 'Ok', class: 'btn btn-default btn-padding-md'
+          a.btn.btn-default data-dismiss="modal" Cancel

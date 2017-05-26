@@ -1,0 +1,61 @@
+$('#modal-patient-add-procedure').html('<%= escape_javascript(render 'new_form') %>');
+$('#modal-patient-add-procedure').modal('show');
+
+initSelect2('#modal-patient-add-procedure');
+
+ProcedureCodesSearchController = function() {
+  var input, input_id, button, link;
+
+  this.initialize = function(_input, _input_id, _button, _link) {
+    input = $(_input)
+    input_id = $(_input_id);
+    button = $(_button);
+    link = _link;
+    
+    input.select2({
+      width: '100%',
+      placeholder: 'Procedure Code',
+      ajax: {
+        url: link,
+        processResults: processResults,
+        data: function (params) {
+          return {
+            part: params.term
+          };
+        },
+        cache: true
+      },
+      escapeMarkup: function (markup) { return markup; },
+      minimumInputLength: 1,
+      templateResult: templateResult,
+      templateSelection: templateSelection
+    });
+
+    button.click(function(e) {
+      input.select2('open');
+    });
+  }
+
+  function processResults(data, params) {
+    return {
+      results: data
+    };
+  }
+
+  function templateResult(procedure) {
+    if (procedure.loading) return procedure.text;
+    return '<span>'+procedure.full_name+'</span>';
+  }
+
+  function templateSelection(procedure) {
+    if(procedure.full_name) {
+      input_id.val(procedure['id']).trigger('change');
+      return procedure.full_name;
+    }
+    else
+      return procedure.text;
+  }
+};
+
+var procedureCodesSearchController = new ProcedureCodesSearchController();
+procedureCodesSearchController.initialize('#modal-patient-add-procedure #procedure_code', '#modal-patient-add-procedure #procedure_procedure_code_id', '#modal-patient-add-procedure #procedure_code_button', '<%= Rails.application.routes.url_helpers.procedure_codes_procedures_path %>');

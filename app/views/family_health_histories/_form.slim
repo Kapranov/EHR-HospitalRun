@@ -1,0 +1,174 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title 
+        = "#{@family_health_history.persisted? ? 'Edit' : 'Add'} Family Health History"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @family_health_history, remote: true do |f|
+      = f.input_field :past_medical_history_id, as: :hidden, class: 'validate', value: @past_medical_history.id
+      .modal-body
+        .scrollable-container
+          .content
+            .row.top-block
+              .col-lg-2.col-md-2.left-block
+                .form-group
+                  p.title-bold Relative
+                .relative-icon
+                  = f.input_field :age, class: 'form-control disabled', tabindex: -1
+              .col-lg-10.col-md-10.right-block
+                .row
+                  .col-lg-5.col-md-5
+                    p.title First Name:
+                    .row
+                      .col-lg-12
+                        .form-group
+                          = f.input_field :first_name, class: 'form-control form-control-green'
+                  .col-lg-7.col-md-7
+                    p.title Last Name:
+                    .row
+                      .col-lg-12
+                        .form-group
+                          = f.input_field :last_name, class: 'form-control form-control-green'
+                .row
+                  .col-lg-4.col-md-4
+                    .form-group
+                      p.title-bold Relationship
+                  .col-lg-8.col-md-8
+                    .form-group
+                      .form-group
+                        = f.input_field :relationship, as: :select, collection: @relationships, class: 'select2', data: { placeholder: '', theme: 'green-lighter', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: true
+                .row
+                  .col-lg-4.col-md-4
+                    .form-group
+                      p.title-bold Birthdate
+                  .col-lg-8.col-md-8
+                    .row
+                      .col-lg-6.col-md-6
+                        .form-group
+                          = f.input_field :birth_at_date, class: 'form-control form-control-green date-picker'
+                      .col-lg-6.col-md-6
+                        .form-group
+                          .checkbox-custom.checkbox-custom-green.pull-right
+                            = f.check_box :deceased, class: 'checkbox'
+                            label for="family_health_history_deceased"
+                              span.checkbox-icon-container
+                                span.checkbox-icon.checkbox-icon-green
+                              span.checkbox-label Deceased
+            .row.content-block
+              .col-lg-12
+                .row
+                  .col-lg-12
+                    .form-group
+                      p.title-bold Diagnosis
+                      .row
+                        .col-lg-12
+                          ul#diagnosis_list
+                            - if @family_health_history.persisted? && @dxes.any?
+                              - @dxes.each_with_index do |dx, index|
+                                li data-index="#{index + 1}"
+                                  .row
+                                    .col-lg-10.col-md-10
+                                      p
+                                        = dx.to_label
+                                    .col-lg-2.col-md-2
+                                      = link_to '', destroy_dx_family_health_history_path(@family_health_history, past_medical_history_id: @past_medical_history.id, dx_id: dx.id), class: 'icon icon-sm icon-circle icon-ic-delete pull-right'
+                            - else
+                              li
+                                p no existing Dx(s)
+                .row
+                  .col-lg-12
+                    .panel
+                      .panel-heading
+                        = link_to 'Add Dx', '#add_diagnosis_block', data: { toggle: :collapse }, 'aria-expanded': "#{Rails.env.development? ? true : false}", class: 'title'
+                      .panel-body.collapse#add_diagnosis_block class="#{Rails.env.development? ? 'in' : ''}"
+                        .row
+                          .col-lg-8.col-md-8
+                            .form-group
+                              .input-group.input-group-green
+                                = select_tag :find_snomed, options_for_select([]), class: 'select2', data: { placeholder: '', theme: 'green-lighter', arrow: 'none', padding: '1-5x', font: '1x', 'font-weight': 'bold' }
+                                span.input-group-addon.input-group-addon-search.find-snomed-btn
+                          .col-lg-4.col-md-4
+                            .form-group
+                              = link_to 'Search', '#', class: 'btn btn-default btn-padding-md find-snomed-btn'
+                        .row
+                          .col-lg-4.col-md-4
+                            p.title-bold Onset Dx Date
+                          .col-lg-4.col-md-4
+                            .form-group
+                              = text_field_tag :onset_at, Time.now.to_date.to_s(:frontend_date), class: 'form-control form-control-green form-control-bold date-picker'
+                          .col-lg-4.col-md-4
+                            .form-group
+                              = link_to 'Add Dx', '#', class: 'btn btn-default btn-padding-md', id: 'add_diagnosis', data: { count: "#{(@family_health_history.persisted? && @dxes.any?) ? @dxes.count.to_i : 0}" }
+                .row
+                  .col-lg-12
+                    p.title Notes:
+                    .row
+                      .col-lg-12
+                        .form-group
+                          = f.input_field :notes, as: :text, class: 'form-control form-control-green'
+      .modal-footer
+        .controls
+          = link_to 'Delete', '#', class: 'btn btn-danger btn-padding-lg pull-left disabled'
+          = f.submit "#{@family_health_history.persisted? ? 'Save' : 'Add'}", class: 'btn btn-default btn-padding-lg'
+          = link_to 'Cancel', '#', 'data-dismiss': :modal, class: 'btn btn-default btn-padding-lg'
+/ = flash[:error]
+/ = simple_form_for @family_health_history do |f|
+/   = f.input :past_medical_history_id, as: :hidden, input_html: { value: @past_medical_history.id }
+/   = f.input :first_name,  input_html: { placeholder: 'First name' }
+/   = f.input :last_name,   input_html: { placeholder: 'Last name' }
+/   = f.input :relationship, as: :select, collection: @relationships, include_blank: false
+/   = f.input :birth_at,    input_html: { value: Time.now }
+/   = f.input :age,         input_html: { placeholder: 'Age' }
+/   = f.check_box :deceased
+/   .dx_container
+/   = text_field_tag :part, ''
+/   = link_to 'Search', '#', id: 'search_snomed'
+/   = text_field_tag :code, ''
+/   = text_field_tag :term, ''
+/   = text_field_tag :onset_at, '', data: { id: '' }
+/   = link_to 'Add',    '#', id: 'add_snomed', data: { count: 0 }
+/   - if @family_health_history.persisted? && @dxes.any?
+/     - @dxes.each do |dx|
+/       = dx.to_label
+/       = link_to 'Delete', destroy_dx_family_health_history_path(@family_health_history, past_medical_history_id: @past_medical_history.id, dx_id: dx.id), method: :delete, remote: true
+/   = f.input :notes,       input_html: { placeholder: 'Notes' }
+/   = f.submit
+
+/ javascript:
+/   $(function () {
+/     $('#add_snomed').click(function () {
+/       var button = $(this);
+/       var container = $('.dx_container');
+/       var next_new_id = button.data('count') + 1;
+/       var onset_at = $('#onset_at');
+/       var snomed_id = onset_at.data('id');
+/       var onset_at_val = onset_at.val();
+/       container.append('<input class="string optional" type="text" value="' + onset_at_val + '" name="family_health_history[dx[new][' + next_new_id + ']][onset_at]" id="family_health_history_dxes_new_' + next_new_id + '__onset_at">');
+/       container.append('<input class="string optional" type="text" value="' + snomed_id + '" name="family_health_history[dx[new][' + next_new_id + ']][snomed_id]" id="family_health_history_dxes_new_' + next_new_id + '__snomed_at">');
+/       button.data('count', next_new_id);
+/     });
+
+/     $('#search_snomed').click(function () {
+/       var part = $('#part').val();
+
+/       var code = $('#code');
+/       var term = $('#term');
+/       var onset_at = $('#onset_at');
+
+/       if(part.length > 3) {
+/         $.ajax({
+/           url: '#{snomed_snomeds_path}',
+/           data: {
+/             part: part
+/           }
+/         }).done(function (snomeds) {
+/           // id: snomed.id, defaultTerm: snomed.try(:defaultTerm), concept_id: snomed.try(:conceptId)
+/           console.log(snomeds);
+/           code.val(snomeds[0]['concept_id']);
+/           term.val(snomeds[0]['defaultTerm']);
+/           onset_at.data('id', snomeds[0]['id']);
+/         });
+/       }
+/     });
+/   });

@@ -1,0 +1,6 @@
+$('#modal-patient-allergy').html('<%= escape_javascript(render 'form') %>');
+
+initPickers('#modal-patient-allergy');
+initSelect2('#modal-patient-allergy');
+
+$('#modal-patient-allergy').modal('show');

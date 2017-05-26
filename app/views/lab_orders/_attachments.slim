@@ -1,0 +1,15 @@
+.panel.panel-attachments
+  .panel-heading
+    p.title Attachments:
+    = link_to new_attachment_lab_order_path(lab_order), class: 'btn-small btn-modal', data: { target: '#modal-lab-order-attachment' }, remote: true
+      i.fa.fa-plus
+  - if attachments.any?
+    .panel-body
+      ul
+        - attachments.each do |attachment|
+          li data-id="#{attachment.id}" data-order-id="#{lab_order.id}"
+            p 
+              span.separator -
+              span.title
+                = attachment.basename
+              = link_to '', file_path(attachment, lab_order_id: lab_order.id, model: :LabOrder), method: :delete, class: 'icon icon-sm icon-circle icon-ic-delete pull-right attachment-delete', remote: true

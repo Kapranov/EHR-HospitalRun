@@ -1,0 +1,29 @@
+#modal-attachment,
+#modal-education-attachment,
+#modal-lab-order-attachment,
+#modal-image-order-attachment {
+  .modal-dialog,
+  .modal-dialog, .modal-content {
+    max-width: 484px;
+  }
+  .modal-dialog {
+    .modal-content {
+      .modal-header {
+        .title {
+          padding-left: 20px;
+        }
+        .close-btn {
+          right: 10px;
+        }
+      }
+      .modal-body {
+        .btn {
+          width: auto;
+        }
+      }
+      .modal-footer {
+        padding: 0 18px 18px 18px;
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header.modal-header-md
+      .row
+        .col-xs-4
+          p.title Frequently Used Dx
+        .col-xs-8
+          .row
+            p.title Record Diagnosis Dx
+    .modal-body
+      .scrollable-container
+        .content
+          .row
+            .col-xs-4.left-block
+              - if @patient.diagnoses.any?
+                ul
+                  - @patient.diagnoses.each do |diagnosis|
+                    li
+                      = link_to diagnosis.snomed.try(:defaultTerm) || '', form_diagnoses_path(id: diagnosis.id, patient_id: @patient.id), class: 'btn-modal', data: { 'target': '#modal-patient-add-diagnoses' }, remote: true
+            .col-xs-8.right-block
+              .row
+                .col-xs-12
+                  .scrollable-input-group-container
+                    .input-group
+                      = text_field_tag :search_diagnoses, '', class: 'form-control', placeholder: 'Search Diagnosis'
+                      span.input-group-addon.input-group-addon-search#search_diagnoses_button
+                    .scrollable-padding-container.collapse
+                      .scrollable#search_diagnoses_list
+    .modal-footer
+      .row
+        .col-xs-4.left-block
+        .col-xs-8.right-block
+          .controls
+            = link_to 'Add Custom Dx', form_diagnoses_path(patient_id: @patient.id), remote: true, class: 'btn btn-default btn-modal pull-left', data: { 'target': '#modal-patient-add-diagnoses' }, id: 'add-custom-diagnosis-button'
+            a.btn.btn-default.btn-padding-sm data-dismiss="modal" Cancel

@@ -1,0 +1,185 @@
+$(document).ready(function() {
+  var labsImaging_LabsOrdersController = new LabsImagingOrdersController();
+  labsImaging_LabsOrdersController.initialize(
+    '#labs_filter_provider',
+    '#labs_filter_type',
+    '#labs_filter_status',
+    '#labs_filter_search',
+    '#labs_filter_search_btn',
+    '#labs_new_orders',
+    '#all_tabs_container',
+    '<%= Rails.application.routes.url_helpers.search_lab_orders_path %>',
+    '<%= Rails.application.routes.url_helpers.new_lab_order_path %>',
+    '<%= Rails.application.routes.url_helpers.search_by_lab_order_lab_results_path %>'
+  );
+
+  ShowViewResultsSearchController = function() {
+    var patient_id,
+        patient_sex,
+        patient_age,
+        patient_date_of_birth,
+        patient_primary_phone,
+        patient_search_input,
+        patient_search_btn,
+        url;
+
+    this.initialize = function() {
+      patient_id =            $('#lab_result_patient_id');
+      patient_sex =           $('#lab_result_patient_sex');
+      patient_age =           $('#lab_result_patient_age');
+      patient_date_of_birth = $('#lab_result_patient_date_of_birth');
+      patient_primary_phone = $('#lab_result_patient_primary_phone');
+      patient_search_input =  $('#lab_result_find_patient');
+      patient_search_btn =    $('#lab_result_find_patient_btn');
+      url =                   '<%= Rails.application.routes.url_helpers.patient_info_lab_orders_path %>';
+
+      initPatientSearch();
+      initPhones();
+    }
+
+    var initPatientSearch = function() {
+      patient_search_input.select2({
+        width: '100%',
+        ajax: {
+          url: url,
+          processResults: processResults,
+          data: function (params) {
+            return {
+              part: params.term
+            };
+          },
+          cache: true
+        },
+        escapeMarkup: function (markup) { return markup; },
+        minimumInputLength: 1,
+        templateResult: templateResult,
+        templateSelection: templateSelection
+      });
+
+      function processResults(data, params) {
+        return {
+          results: data
+        };
+      }
+
+      function templateResult(patient) {
+        if (patient.loading) return patient.text;
+        return '<span>'+patient.full_name+'</span>';
+      }
+
+      function templateSelection(patient) {
+        if(patient.id && patient.full_name) {
+          patient_id.val(patient.id).trigger('keyup');
+          patient_sex.val(patient.sex).trigger('keyup');
+          patient_age.val(patient.age).trigger('keyup');
+          patient_date_of_birth.val(patient.dob).trigger('keyup');
+          patient_primary_phone.val(patient.primary_phone).trigger('keyup');
+          repositionModal($('#modal-lab-results'), false);
+          return patient.full_name;
+        }
+        else
+          return patient.text;
+      }
+
+      patient_search_btn.click(function(e) {
+        e.preventDefault();
+        patient_search_input.select2('open');
+      })
+    }
+
+
+    var initPhones = function() {
+      patient_primary_phone.inputmask({
+        mask: '(999)999-9999'
+      });
+    }
+  }
+
+  TimeAmPmController = function() {
+    var input_time_12_hour, input_time_24_hour, btn_am, btn_pm;
+
+    this.initialize = function(_input_time_12_hour, _input_time_24_hour, _btn_am, _btn_pm) {
+      input_time_12_hour = $(_input_time_12_hour);
+      input_time_24_hour = $(_input_time_24_hour);
+      btn_am =             $(_btn_am);
+      btn_pm =             $(_btn_pm);
+      initTime();
+      init12Hour();
+    }
+
+    var init12Hour = function() {
+      if(input_time_24_hour.val()) {
+        var hour = Number(input_time_24_hour.val().substring(0, 2));
+        var minutes = Number(input_time_24_hour.val().substring(3, 5));
+
+        if((hour <= 23 && hour >= 0 && hour != 'NaN') && (minutes <= 59 && minutes >= 0 && minutes != 'NaN')) {   
+          var time = convertTimeTo12Hour(hour, minutes);
+          if(time['am']) {
+            input_time_12_hour.data('time', 'am');
+            btn_am.addClass('active');
+            btn_pm.removeClass('active');
+          }
+          else {
+            input_time_12_hour.data('time', 'pm');
+            btn_am.removeClass('active');
+            btn_pm.addClass('active');
+          }
+          input_time_12_hour.val(time['time']);
+        }
+      }
+    }
+
+    var init24Hour = function() {
+      if(input_time_12_hour.val()) {
+        var hour = Number(input_time_12_hour.val().substring(0, 2));
+        var minutes = Number(input_time_12_hour.val().substring(3, 5));
+
+        if((hour <= 12 && hour >= 0 && hour != 'NaN') && (minutes <= 59 && minutes >= 0 && minutes != 'NaN'))
+          input_time_24_hour.val(convertTimeTo24Hour(hour, minutes, input_time_12_hour.data('time')));
+        else {
+          input_time_12_hour.val('').trigger('keyup');
+        }
+      }
+    }
+
+    var convertTimeTo24Hour = function(hour, minutes, ampm) {
+      return moment((hour + ':' + minutes +' '+ ampm), ["h:mm A"]).format("HH:mm");
+    }
+
+    var convertTimeTo12Hour = function(hour, minutes) {
+      var convertedTime = moment((hour + ':' + minutes), ["HH:mm"]).format("h:mm A");
+      var am = convertedTime.indexOf('AM') > -1 ? true : false;
+      convertedTime = convertedTime.substring(0, 5).replace(' ', '');
+      convertedTime = convertedTime.replace(':', '').length == 3 ? '0' + convertedTime : convertedTime;
+      
+      return {'time': convertedTime, 'am': am};
+    }
+
+    var amPmBtnHandler = function(e) {
+      e.preventDefault();
+      btn_am.removeClass('active');
+      btn_pm.removeClass('active');
+      $(this).addClass('active');
+      input_time_12_hour.data('time', $(this).data('time'));
+      init24Hour();
+    }
+
+    var initTime = function() {
+      btn_am.click(amPmBtnHandler);
+      btn_pm.click(amPmBtnHandler);
+
+      input_time_12_hour.inputmask({
+        mask: '99:99'
+      });
+
+      input_time_12_hour.keyup(function(e) {
+        if(input_time_12_hour.val().length == 0)
+          input_time_24_hour.val('').trigger('keyup');
+      })
+
+      input_time_12_hour.blur(function(e) {
+        init24Hour();
+      })
+    }
+  }
+})

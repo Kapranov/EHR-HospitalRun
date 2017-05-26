@@ -1,0 +1,72 @@
+$(document).ready(function() {
+  var AlertsStatusesConroller = function() {
+    var container, allStatus;
+
+    this.initialize = function() {
+      container = $('#settings-cds-container');
+      allStatus = container.find('.row-main .btn-group a.btn');
+      allAlertsContainer = container.find('.row-alerts');
+      allAlerts = container.find('.row-alerts .panel-alert');
+      allAlertsStatus = allAlerts.find('.btn-group a.btn')
+
+      allStatus.click(function(e) {
+        e.preventDefault();
+
+        allStatus.removeClass('active');
+        $(this).addClass('active');
+
+        var active = $(this).data('active');
+
+        if(active) {
+          allAlertsContainer.collapse('show');
+          allAlertsStatus.removeClass('active');
+          allAlerts.find('.btn-group a.btn[data-active="true"]').addClass('active');
+          allAlerts.find('a[data-toggle=collapse]').removeClass('disabled');
+        }
+        else {
+          allAlerts.collapse('hide');
+          allAlertsContainer.collapse('hide');
+          allAlertsStatus.removeClass('active');
+          allAlerts.find('.btn-group a.btn[data-active="false"]').addClass('active');
+          allAlerts.find('a[data-toggle=collapse]').addClass('disabled');
+        }
+
+        $.ajax({
+          url: '<%= Rails.application.routes.url_helpers.activate_all_alerts_path %>',
+          data: { active: active }
+        });
+      });
+
+      allAlertsStatus.click(function(e) {
+        e.preventDefault();
+        var statusButtons = $(this).parent().find('.btn');
+        var panel = $(this).closest('.panel-alert');
+        var panelLink = panel.find('a[data-toggle=collapse]');
+        var panelCollapse = panel.find('.panel-collapse.collapse')
+
+        statusButtons.removeClass('active');
+        $(this).addClass('active');
+
+        var id = $(this).data('id');
+        var active = $(this).data('active');
+
+        if(active) {
+          panelCollapse.collapse('show');
+          panelLink.removeClass('disabled');
+        }
+        else {
+          panelCollapse.collapse('hide');
+          panelLink.addClass('disabled');
+        }
+
+        $.ajax({
+          url: '<%= Rails.application.routes.url_helpers.activate_alerts_path %>',
+          data: { id: id, active: active }
+        });
+      });
+    };
+  }
+
+  var alertsStatusesConroller = new AlertsStatusesConroller();
+  alertsStatusesConroller.initialize();
+})

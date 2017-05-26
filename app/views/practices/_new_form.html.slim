@@ -1,0 +1,40 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title Add New User
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @user, html: { autocomplete: 'off' }, url: practices_path, class: 'form-horizontal', role: 'form', remote: true do |u|
+      .modal-body
+        .scrollable-container
+          .content
+            .row-container
+              = u.simple_fields_for :provider, @provider do |p|
+                .row
+                  .col-lg-12
+                    .form-group
+                      .input-group
+                        span.input-group-addon First Name
+                        = p.input_field :first_name, class: 'form-control'
+                .row
+                  .col-lg-12
+                    .form-group
+                      .input-group
+                        span.input-group-addon Last Name
+                        = p.input_field :last_name, class: 'form-control'
+                .row
+                  .col-lg-12
+                    .form-group
+                      .input-group
+                        span.input-group-addon Email
+                        = u.input_field :email, class: 'form-control'
+                .row
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = p.input_field :practice_role, as: :select, collection: Provider.practice_roles_without_provider, selected: '', class: 'select2', data: { placeholder: 'User Role', theme: 'gray-dark', arrow: '3x', padding: '3x', font: '2x' }, include_blank: true
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = p.input_field :active, as: :select, collection: enables_collection, selected: '', class: 'select2', data: { placeholder: 'Status', theme: 'gray-dark', arrow: '3x', padding: '3x', font: '2x' }, include_blank: true
+      .modal-footer
+        .controls
+          = u.submit 'Add', id: 'button_submit_new_user_practice', class: 'btn btn-default btn-padding-md'

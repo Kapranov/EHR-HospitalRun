@@ -1,0 +1,40 @@
+- if @patients.present? && @patients.any?
+  .row
+    .col-lg-12
+      .table-responsive
+        table.table
+          thead
+            tr
+              td First
+              td Last
+              td Pt ID
+              td Rx Allergy
+              td Severity
+              td Onset
+              td Start
+              td Reactions
+              td Status
+              td Added
+          tbody
+            - @patients.each do |patient|
+              tr
+                td
+                  = patient.first_name
+                td
+                  = patient.last_name
+                td
+                  = patient.id
+                td
+                  = patient.allergies.map(&:allergen_type).join(', ')
+                td
+                  = patient.allergies.map(&:severity_level).join(', ')
+                td
+                  = patient.allergies.map(&:onset_at).join(', ')
+                td
+                  = patient.allergies.map{ |allergy| allergy.start_date.try(:strftime, Date::DATE_FORMATS[:dosespot]) }.join(', ')
+                td
+                  = patient.allergies.map(&:note).join(', ')
+                td
+                  = patient.allergies.map(&:active).join(', ')
+                td
+                  = patient.created_at.strftime(Date::DATE_FORMATS[:dosespot])

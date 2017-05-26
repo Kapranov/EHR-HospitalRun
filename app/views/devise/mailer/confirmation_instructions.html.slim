@@ -1,0 +1,27 @@
+= render 'styles', file: __FILE__
+table.mailer-wrapper.mailer-confirmation-instructions
+  = render 'devise/mailer/mailer_header'
+  tbody
+    tr
+      td
+        p 
+          = "Welcome, #{@provider.try(:title)}. #{@provider.try(:last_name)}"
+    tr
+      td
+        p To complete registration of your EHR1 User Account, please verify your email address:
+    tr
+      td
+        = link_to 'Verify Now', confirmation_url(@resource, confirmation_token: @token), class: "btn btn-default"
+    tr
+      td
+        p Sincerely,
+    tr
+      td
+        p EHR1 Team
+    tr
+      td
+        p If you canot see the button above, please click or copy and paste the following link into your web browser:
+    tr
+      td
+        = link_to "#{confirmation_url(@resource, confirmation_token: @token)}", confirmation_url(@resource, confirmation_token: @token)
+    = render 'devise/mailer/mailer_footer'

@@ -1,0 +1,13 @@
+//= require_tree .
+
+$(function(){
+  $('#actions').change(function() {
+    switch($(this).val()) {
+      case '0': window.print();
+      break;
+      case '1':
+        window.location = '<%= Rails.application.routes.url_helpers.download_csv_calendars_path %>' + '?current_date=' + $("#calendar").fullCalendar('getDate')._d;
+      break;
+    }
+  });
+});

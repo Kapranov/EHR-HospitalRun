@@ -1,0 +1,8 @@
+$("#modal-patient-show-authorized-representative").html("<%= escape_javascript(render 'form', type: 'View') %>")
+$("#modal-patient-show-authorized-representative").modal("show")
+
+initPickers('#modal-patient-show-authorized-representative');
+initSelect2('#modal-patient-show-authorized-representative');
+
+$('#modal-patient-show-authorized-representative input, #modal-patient-show-authorized-representative select').attr('disabled', true);
+$('#modal-patient-show-authorized-representative .input-group-addon').addClass('disabled');

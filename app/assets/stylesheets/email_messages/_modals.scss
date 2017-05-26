@@ -1,0 +1,395 @@
+#modal-message-new,
+#modal-reply-to-message-in-practice-contacts,
+#modal-forward-message-from-patient {
+  overflow-y: hidden;
+  overflow-x: auto;
+  .modal-dialog {
+    vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
+    .modal-content {
+      box-shadow: none;
+      .modal-body {
+        background: #fff;
+        .content {
+          min-height: 0;
+        }
+        .scrollable-container {
+          min-height: 75px;
+        }
+        .form-control {
+          font-size: 15px;
+        }
+        .form-group {
+          margin-bottom: 25px;
+        }
+      }
+      .modal-header {
+        .title {
+          padding-left: 20px;
+        }
+      }
+      .modal-footer {
+        background-color: #fff;
+        border-radius: 0 0 3px 3px;
+        border-top: 0;
+        border-bottom: 0;
+        .buttons {
+          input[type="submit"] {
+            padding: 0;
+          }
+          input[type="submit"], a {
+            display: inline-block;
+            margin-top: 0;
+            margin-bottom: 0;
+          }
+          a.modal-close {
+            width: auto;
+            padding-left: 6px;
+            padding-right: 6px;
+          }
+        }
+      }
+    }
+  }
+}
+
+#modal-messages-new-message-to-patient,
+#modal-reply-to-message-from-patient,
+#modal-forward-message-from-patient,
+#modal-messages-new-message-in-practice,
+#modal-forward-to-message-in-practice-contacts,
+#modal-reply-to-message-in-practice-contacts,
+#modal-open-message,
+#modal-contacts-new-contact,
+#modal-message-new {
+  .modal-dialog, 
+  .modal-dialog .modal-content {
+    max-width: 750px;
+  }
+  #subjects-container {
+    width: calc(100% - 92px);
+  }
+  .input-group {
+    background-color: transparent;
+    .input-group-addon:first-child {
+      min-width: 92px;
+      padding-left: 0;
+      padding-right: 9px;
+      border: 0;
+      font-size: 16px;
+      background-color: transparent;
+      color: $green;
+      text-align: left;
+    }
+    .form-control:not(:first-child),
+    .select2-container:not(:first-child) .select2-selection--single {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+    }
+    .select2-container .select2-selection--single .select2-selection__arrow b {
+      color: $green;
+    }
+    .dropdown-menu {
+      li a {
+        font-size: 15px;
+      }
+    }
+  }
+  .modal-dialog {
+    .modal-content {
+      .modal-header {
+        .title {
+          padding-left: 20px;
+        }
+      }
+      .modal-body {
+        padding: 10px 0 25px 0;
+        .select2-choice {
+          color: $graytext !important;
+          .select2-arrow {
+            color: $green !important;
+          }
+        }
+        .form-group {
+          margin-bottom: 10px;
+        }
+        .form-group-large {
+          margin-top: 15px;
+          margin-bottom: 25px;
+        }
+        .content {
+          padding: 0 20px;
+        }
+        .slimScrollDiv .content {
+          padding-right: 30px;
+        }
+        textarea.form-control {
+          height: 309px !important;
+          resize: none;
+        }
+      }
+      .modal-footer {
+        padding: 0;
+        border-top: 1px solid $green;
+        margin-left: 20px;
+        margin-right: 20px;
+        .controls {
+          padding: 15px 0;
+          margin: -7px;
+          .checkbox-custom.checkbox-urgent {
+            margin-left: 7px;
+            margin-top: 8px;
+            display: inline-block;
+            float: left;
+            .checkbox-label {
+              position: relative;
+              top: 2px;
+              left: 15px;
+              font-size: 16px;
+              text-transform: none;
+            }
+          }
+          .btn {
+            display: inline-block;
+            margin: 7px;
+          }
+        }
+      }
+    }
+  }
+}
+
+ #modal-reply-to-message-from-patient,
+ #modal-forward-message-from-patient,
+ #modal-reply-to-message-in-practice-contacts,
+ #modal-forward-to-message-in-practice-contacts,
+ #modal-open-message {
+  .modal-dialog, 
+  .modal-dialog .modal-content {
+    max-width: 750px;
+  }
+  .modal-dialog {
+    .modal-content {
+      .modal-body {
+        .form-control,
+        .select2-selection__rendered {
+          color: $graytextdark !important;
+        }
+        #subjects-list {
+          li {
+            &:hover,
+            &:active,
+            &:focus,
+            &.active {
+              .form-control {
+                color: #fff !important;
+              }
+            }
+            .form-control {
+              color: $graymedium !important;
+            }
+          }
+        }
+        .text-areas {
+          height: 309px;
+          padding: 0;
+          .text .form-control {
+            border-top: 0 !important;
+          }
+          .form-control {
+            height: 153px !important;
+            color: $graytext;
+            border: 0;
+            &:last-child {
+              border-top: 1px solid $green;
+              border-top-left-radius: 0;
+              border-top-right-radius: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#modal-forward-to-message-in-practice-contacts,
+#modal-reply-to-message-in-practice-contacts {
+  .modal-dialog {
+    .modal-content {
+      .modal-body {
+        .form-group-large {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}
+
+#modal-contacts-new-contact {
+  .modal-dialog {
+    width: 750px;
+    .modal-content {
+      .modal-body {
+        .dropdown {
+          .dropdown-menu li a {
+            font-size: 15px;
+          }
+          &.dropup .dropdown-menu {
+            margin-bottom: 3px !important;
+          }
+        }
+        .dropdown-custom {
+          .dropdown-menu {
+            width: 100%;
+            left: 0;
+          }
+        }
+      }
+      .modal-footer {
+        .controls {
+          padding: 30px 0;
+        }
+        .checkbox-heart {
+          display: inline-block;
+          margin-top: 17px;
+          margin-left: 8px;
+          input[type="checkbox"] {
+            display: none;
+          }
+          label {
+            margin: 0;
+            cursor: pointer;
+            .checkbox-icon {
+              &:after {
+                content: '\f08a';
+                color: #CC4E49;
+                font-family: 'FontAwesome';
+                font-size: 28px;
+              }
+            }
+            .checkbox-label {
+              color: #CC4E49;
+              position: relative;
+              top: -4px;
+              left: 13px;
+              font-size: 16px;
+              font-weight: normal;
+            }
+          }
+          input[type="checkbox"]:checked + label .checkbox-icon:after {
+            content: '\f004';
+          }
+        }
+      }
+    }
+  }
+}
+
+#modal-open-message {
+  .modal-dialog {
+    .modal-content {
+      .modal-body {
+        .select2-container--disabled {
+          opacity: 1;
+        }
+        textarea.form-control {
+          height: 155px !important;
+        }
+      }
+    }
+  }
+}
+
+#modal-message-new{
+  .col-urgent {
+    padding-left:9px;
+  }
+  .modal-dialog{
+    .modal-content{
+      .modal-body{
+        .row{
+          &:first-child {
+            .dropdown-custom .dropdown-menu {
+              width: calc(100% - 92px);
+              margin-left: 92px;
+            }
+          }
+          p{
+            margin-bottom:0px;
+            padding-top:10px;
+            color: $green;
+          }
+          hr{
+            margin-left:17px;
+            margin-right:20px;
+          }
+          .form-group{
+            .input-group{
+              width:100%;
+              .input-group-addon{
+                right:0;
+              }
+              .input-group-addon{
+                border-top-left-radius: 0px !important;
+                border-bottom-left-radius: 0px !important;
+                height: 43px;
+              }
+            }
+            .input-group-search {
+              .form-control {
+                border-radius: 3px 0 0 3px;
+              }
+            }
+          }
+          &.row-message{
+            .form-group{
+              textarea{
+                height:310px !important;
+                resize: none;
+                color: #7D7D7D;
+              }
+            }
+          }
+        }
+      }
+      .modal-footer{
+        margin: 0 20px 0 17px;
+        padding: 15px 0;
+        font-size: 16px;
+        .checkbox-custom{
+          &:hover{
+            border-color: #CC4E49;
+          }
+          label.custom-label{
+            padding-left:0px;
+          }
+          .custom-label{
+            color: #CC4E49;
+            padding-left:10px;
+            text-transform: none;
+            padding-top:2px;
+            &:hover{
+              border-color: #CC4E49;
+            }
+          }
+          .checkbox-icon{
+            &{
+              border-color: #CC4E49;
+            }
+          }
+        }
+        .col-buttons{
+          padding-right:5px;
+
+          .btn{
+            display: inline-block;
+            width: 75px;
+            margin-left: 5px;
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+  }
+}

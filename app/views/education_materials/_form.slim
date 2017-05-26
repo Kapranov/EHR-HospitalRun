@@ -1,0 +1,69 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title 
+        = "#{@education_material.persisted? ? 'View' : 'Add'} Patient Education Material"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @education_material do |f|
+      .modal-body
+        .scrollable-container
+          .content
+            .education-content
+              .row
+                .col-lg-12
+                  .form-group
+                    p.title Name:
+                    = f.input_field :name, readonly: true, class: 'form-control form-control-green form-control-bold'
+              .row
+                .col-lg-12
+                  p.title Code System:
+                  .row
+                    .col-lg-3
+                      .form-group
+                        = f.input_field :code_system, as: :select, collection: @code_systems, class: 'select2', selected: @education_material.persisted? ? @education_material.code_system : 0, include_blank: true, data: { placeholder: 'Please Select', theme: 'green-lighter', arrow: '2x', padding: '1-5x', font: '1x', 'font-weight': 'bold' }
+                    .col-lg-6
+                      .form-group
+                        = f.hidden_field :code_id
+                        .input-group.input-group-green
+                          = f.input_field :code_select, as: :select, collection: @education_material.persisted? ? [@education_material.code_id] : nil, class: 'select2', selected: @education_material.persisted? ? @education_material.code_id : 0, include_blank: true, data: { placeholder: 'Enter Code ID', theme: 'green-lighter', arrow: 'none', padding: '3x', font: '1x', 'font-weight': 'bold' }
+                          a.input-group-addon.input-group-addon-search.search-button href="#"
+                    .col-lg-3
+                      .form-group
+                        a.btn.btn-default.btn-padding-md.search-button.disabled href="#" Search Now
+              .row.fade.collapse#row-codes
+                .col-lg-12
+                  .form-group
+                    .panel#panel-codes
+                      .panel-body
+                        .table-responsive
+                          table.table
+                            tbody
+              .row
+                .col-lg-12
+                  .form-group
+                    p.title Resource Notes:
+                    = f.input_field :note, as: :text, class: 'form-control form-control-green'
+              .row
+                .col-lg-12
+                  .form-group
+                    .panel.panel-attachments#attachment_container
+                      = f.simple_fields_for 'attachments' do |a|
+                        = a.file_field :file_name, multipart: true, style: 'display: none'
+                      .panel-heading
+                        p.title Attachments:
+                        = link_to '#', id: 'add_attachment', class: 'btn-small', data: { num: "#{(@education_material.persisted? && @education_material.all_attachments.any?) ? @education_material.all_attachments.length : 0}" }
+                          i.fa.fa-plus
+                      .panel-body.collapse.fade class="#{'in' if @education_material.persisted? && @education_material.all_attachments.any?}"
+                        ul
+                          - if @education_material.persisted? && @education_material.all_attachments.any?
+                            - @education_material.all_attachments.each_with_index do |attachment, index|
+                              li
+                                p.attachment
+                                  span.separator -
+                                  span.title href="#"
+                                    = attachment.basename
+                                  = link_to '', education_attachment_path(id: attachment.id, education_material_id: @education_material.id), method: :delete, class: 'icon icon-sm icon-circle icon-ic-delete pull-right attachment-delete', remote: true
+      .modal-footer
+        .controls
+          = f.submit 'Save', class: 'btn btn-default'

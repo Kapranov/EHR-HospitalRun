@@ -1,0 +1,7 @@
+$('#modal-ammendment').html('<%= escape_javascript(render 'form') %>');
+
+initPickers('#modal-ammendment');
+initSelect2('#modal-ammendment');
+initModalFadeInOut('#modal-ammendment');
+
+$('#modal-ammendment').modal('show');

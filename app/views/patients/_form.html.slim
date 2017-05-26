@@ -1,0 +1,69 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-sm
+      p.title Add a New Patient
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    - if params[:from_patients_index].present?
+      - @from_patients_index = true
+    - else
+      - @from_patients_index = false
+    = simple_form_for @user, url: patients_path(from_patients_index: @from_patients_index), html: { autocomplete: 'off' }, remote: true do |u|
+      = u.simple_fields_for :patient, Patient.new do |q|
+        .modal-body
+          .scrollable-container
+            .content
+              .row
+                .col-lg-4.col-md-4.col-sm-4
+                  .form-group
+                    = q.input_field :first_name, class: 'form-control placeholder-hide', placeholder: 'First Name'
+                .col-lg-2.col-md-2.col-sm-2
+                  .form-group
+                    = q.input_field :middle_name, class: 'form-control placeholder-hide', placeholder: 'M.I.'
+                .col-lg-6.col-md-6.col-sm-6
+                  .form-group
+                    = q.input_field :last_name, class: 'form-control placeholder-hide', placeholder: 'Last Name'
+              .row
+                .col-lg-6.col-md-6.col-sm-6
+                  .form-group
+                    .input-group
+                      = q.input_field :birth_date, class: 'form-control date-picker', placeholder: 'DOB (mm/dd/yyyy)'
+                      span.input-group-addon.input-group-addon-calendar
+                .col-lg-6.col-md-6.col-sm-6
+                  .form-group
+                    p.sex-radio-buttons-title Sex:
+                    .sex-radio-buttons
+                      - Patient.genders.each do |k|
+                        .radiobutton-custom
+                          = q.radio_button :gender, k
+                          label for="user_patient_gender_#{k.to_s.downcase}"
+                            span.radio-icon
+                            span.radio-label
+                              = k.to_s
+              .row
+                .col-lg-6.col-md-6.col-sm-6
+                  .form-group
+                    .input-group.input-group-phone
+                      = q.input_field :mobile_phone_code, as: :select, collection: [], class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                      = q.input_field :mobile_phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Mobile Phone'
+                .col-lg-6.col-md-6.col-sm-6
+                  .form-group
+                    .input-group.input-group-phone
+                      = q.input_field :primary_phone_code, as: :select, collection: [], class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                      = q.input_field :primary_phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Primary Phone'
+              .row
+                .col-lg-6.col-md-6.col-sm-6
+                  .form-group
+                    = u.input_field :email, as: :email, class: 'form-control input-email', placeholder: 'Email Address', id: 'patient_email'
+                .col-lg-6.col-md-6.col-sm-6
+                  .form-group
+                    .checkbox-custom.checkbox-patient-doesnt-have-email
+                      = u.check_box :no_email, class: 'checkbox', id: 'patient_doesnt_have_email', checked: true
+                      label for="patient_doesnt_have_email"
+                        span.checkbox-icon-container
+                          span.checkbox-icon
+                        span.checkbox-label Patient does not have an email address
+        .modal-footer
+          .controls
+            = u.button :submit, 'Save', class: 'btn btn-default btn-modal modal-add-patient-save', data: { target: '#modal-add-patient-invite-to-portal' }
+            a.btn.btn-default.btn-padding-sm data-dismiss="modal" Cancel

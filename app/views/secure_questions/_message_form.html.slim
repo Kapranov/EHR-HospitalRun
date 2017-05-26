@@ -1,0 +1,26 @@
+.modal-dialog class="#{'modal-alert' if type == 'Not Verified'}"
+  .modal-content
+    .modal-header.modal-header-md
+      p.title 
+        = "SECURITY QUESTION #{params[:type]}"
+    .modal-body
+      .scrollable-container
+        .content
+          .row
+            .col-lg-12
+              .form-group
+                p 
+                  = "THANK YOU, #{params[:message]}"
+          .row
+            div class="#{type != 'Not Verified' ? 'col-lg-3 col-md-3 col-sm-3' : 'col-lg-4 col-md-4 col-sm-4'}"
+            div class="#{type != 'Not Verified' ? 'col-lg-6 col-md-6 col-sm-6' : 'col-lg-4 col-md-4 col-sm-4'}"
+              .form-group
+                - if type != 'Not Verified'
+                  = link_to 'PROCEED TO PATIENT PORTAL', patients_path, class: 'btn btn-default btn-padding-md'
+                - else
+                  = link_to 'TRY AGAIN', secure_questions_path, class: 'btn btn-default btn-padding-md'
+            div class="#{type != 'Not Verified' ? 'col-lg-3 col-md-3 col-sm-3' : 'col-lg-4 col-md-4 col-sm-4'}"
+          - if type == 'Not Verified'
+            .row
+              .col-lg-12
+                a href="#" PROCEDURE TO RESET YOUR SECURITY QUESTION

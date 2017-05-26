@@ -1,0 +1,171 @@
+@import 'modals';
+@import 'attachment/main';
+
+.labs-wrapper,
+.imaging-wrapper {
+  .content {
+    min-height: calc(100vh - 158px) !important;
+  }
+  .labs-imaging-container {
+    padding: 70px 0 90px 0;
+    .nav-tabs.styled {
+      border-bottom-color: white;
+      li {
+        &:not(:first-child) {
+          a {
+            margin-left: -3px;
+          }
+        }
+        &.active {
+          pointer-events: none;
+        }
+        a {
+          min-width: 100px;
+          text-align: center;
+          border: 1px solid $green;
+          border-bottom: 0;
+        }
+      }
+    }
+    .labs-content {
+      border: 1px solid $green;
+      border-radius: 0 3px 3px 3px;
+      .controls.top-block {
+        background-color: $green;
+        padding: 15px 20px 0 25px;
+        .input-group {
+          .input-group-addon-search {
+            width: 50px;
+          }
+          .form-control, .input-group-addon {
+            border-color: #DEDEDE;
+          }
+        }
+        .select2-container {
+          &:hover,
+          &:focus,
+          &:active,
+          &.select2-container--open,
+          &.select2-container--focus {
+            .select2-selection {
+              border-color: white;
+            }
+          }
+        }
+        .add-container {
+          padding-left: 30px;
+          .select2-container {
+            &:hover,
+            &:focus,
+            &:active,
+            &.select2-container--focus,
+            &.select2-container--open {
+              .select2-selection__rendered {
+                .select2-selection__placeholder {
+                  color: white;
+                }
+              }
+            }
+            .select2-selection__rendered {
+              text-align: left;
+              .select2-selection__placeholder {
+                position: relative;
+                top: 6px;
+                color: $green;
+                font: normal normal normal 14px/1 FontAwesome;
+                font-size: 1.75em;
+                text-rendering: auto;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+              }
+            }
+          }
+        }
+      }
+      .bottom-block {
+        .table {
+          margin-bottom: 0;
+          thead {
+            tr {
+              td {
+                padding: 16px 20px;
+                background-color: rgba(65, 182, 166, 0.20);
+                border-top: 1px solid white;
+                &:not(:last-child) {
+                  border-right: 1px solid white;
+                }
+                p {
+                  margin: 0;
+                  color: $green;
+                  font-size: 16px;
+                  text-align: center;
+                }
+              }
+            }
+          }
+          tbody {
+            tr {
+              &:hover,
+              &:focus,
+              &:active {
+                background-color: $greenlighter2;
+                transition: background-color .2s;
+              }
+              td {
+                border-top: 0;
+                vertical-align: middle;
+                &:not(:last-child) {
+                  border-right: 1px solid $green;
+                }
+                &:nth-child(1),
+                &:nth-child(3),
+                &:nth-child(4),
+                &:nth-child(5),
+                &:nth-child(6),
+                &:nth-child(7) {
+                  text-align: center;
+                }
+                &:nth-child(1) {
+                  padding: 6px 40px;
+                }
+                &:nth-child(2) {
+                  padding: 6px 30px;
+                }
+                &:nth-child(3) {
+                  padding: 6px 10px;
+                }
+                &:nth-child(4) {
+                  padding: 6px 4px;
+                }
+                &:nth-child(5) {
+                  padding: 6px 26px;
+                }
+                &:nth-child(6) {
+                  padding: 6px 28px;
+                }
+                &:nth-child(6) {
+                  padding: 6px 12px;
+                }
+                p, a {
+                  color: $graytextdark;
+                  font-size: 15px;
+                }
+                a {
+                  transition: opacity .2s;
+                  &:hover,
+                  &:focus,
+                  &:active {
+                    opacity: .75;
+                  }
+                }
+                p {
+                  margin: 0;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+#settings-access-permissions-container {
+  .access-permissions {
+    .controls {
+      .btn {
+        margin: 10px 10px 10px auto;
+      }
+    }
+    .table-responsive {
+      margin: 0;
+      table {
+        &.table {
+          margin: 0;
+        }
+        tbody {
+          tr {
+            &.header-main,
+            &.header-title {
+              height: 50px;
+            }
+            &.header-main {
+              background-color: rgba(236, 235, 236, 0.47);
+              td {
+                height: 50px;
+                padding: 0 14px;
+                vertical-align: middle;
+                &:not(:nth-child(1)):not(:nth-child(2)) {
+                  background-color: #FD8F25;
+                }
+                &:nth-child(2) {
+                  background-color: $unconfirmed;
+                }
+                p {
+                  white-space: nowrap;
+                  color: #fff;
+                  font-family: 'SF UI Text Medium';
+                  font-size: 15px;
+                  text-align: center;
+                  text-decoration: underline;
+                }
+              }
+            }
+            &.header-title {
+              background-color: #ECEBEC;
+              td p {
+                font-family: 'SF UI Text Bold';
+                font-size: 15px;
+                text-decoration: underline;
+              }
+            }
+            td {
+              vertical-align: middle;
+              padding: 5px 0;
+              min-height: 35px;
+              border: 0;
+              &:first-child {
+                padding: 0 20px;
+              }
+              p {
+                color: $graytextdark;
+                font-size: 15px;
+                margin: 0;
+                span {
+                  font-style: italic;
+                }
+              }
+              .checkbox-custom {
+                .checkbox-icon-container,
+                label {
+                  display: block;
+                }
+                .checkbox-icon {
+                  margin: 0 auto;
+                }
+                label {
+                  height: auto;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

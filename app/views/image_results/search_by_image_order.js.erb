@@ -1,0 +1,19 @@
+$('#modal-image-result-search-by-image-order').html('<%= escape_javascript(render 'form_search_by_image_order') %>');
+
+initPickers('#modal-image-result-search-by-image-order');
+initSelect2('#modal-image-result-search-by-image-order');
+initModalFadeInOut('#modal-image-result-search-by-image-order');
+
+$('#modal-image-result-search-by-image-order').modal('show');
+
+var searchByOrderNumberController = new SearchByOrderNumberController();
+searchByOrderNumberController.initialize(
+  '#search_by_image_order_find_image_order',
+  '#search_by_image_order_find_image_order_btn',
+  '#search_by_image_order_result_btn',
+  '#search_by_image_order_search_results_btn',
+  '#search_by_image_order_id',
+  '<%= Rails.application.routes.url_helpers.search_by_order_num_image_orders_path %>',
+  '<%= Rails.application.routes.url_helpers.results_search_by_image_order_image_results_path %>',
+  'Image'
+);

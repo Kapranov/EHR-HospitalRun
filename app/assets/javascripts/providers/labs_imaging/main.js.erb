@@ -1,0 +1,405 @@
+$(document).ready(function() {
+  LabsImagingOrdersController = function() {
+    var filter_provider_id,
+        filter_type_id,
+        filter_status_id,
+        filter_search_id,
+        filter_search_btn_id,
+        new_orders_id,
+        all_tabs_container_id,
+        url,
+        url_new_orders,
+        url_new_results;
+
+    var filter_provider,
+        filter_type,
+        filter_status,
+        filter_search,
+        filter_search_btn,
+        new_orders,
+        all_tabs_container;
+
+    var filter_provider_val,
+        filter_type_val,
+        filter_status_val,
+        filter_search_val,
+        filter_search_focused;
+
+    this.initialize = function(
+      _filter_provider_id,
+      _filter_type_id,
+      _filter_status_id,
+      _filter_search_id,
+      _filter_search_btn_id,
+      _new_orders_id,
+      _all_tabs_container_id,
+      _url,
+      _url_new_orders,
+      _url_new_results
+    ) {
+      filter_search_focused = false;
+      filter_provider_id = _filter_provider_id;
+      filter_type_id = _filter_type_id;
+      filter_status_id = _filter_status_id;
+      filter_search_id = _filter_search_id;
+      filter_search_btn_id = _filter_search_btn_id;
+      new_orders_id = _new_orders_id;
+      all_tabs_container_id = _all_tabs_container_id;
+      url = _url;
+      url_new_orders = _url_new_orders;
+      url_new_results = _url_new_results;
+      init();
+    }
+
+    var init = function() {
+      initVars();
+      initFilters();
+      initSelects();
+    }
+
+    var initVars = function() {
+      filter_provider =    $(filter_provider_id);
+      filter_type =        $(filter_type_id);
+      filter_status =      $(filter_status_id);
+      filter_search =      $(filter_search_id);
+      filter_search_btn =  $(filter_search_btn_id);
+      new_orders  =        $(new_orders_id);
+      all_tabs_container = $(all_tabs_container_id);
+      filter_provider.val(filter_provider_val ? filter_provider_val : '');
+      filter_type.val(filter_type_val ? filter_type_val : '');
+      filter_status.val(filter_status_val ? filter_status_val : '');
+      filter_search.val(filter_search_val ? filter_search_val : '');
+      if(filter_search_focused)
+        filter_search.trigger('focus');
+    }
+
+    var searchHandler = function(e) {
+      filter_provider_val = filter_provider.val();
+      filter_type_val     = filter_type.val();
+      filter_status_val   = filter_status.val();
+      filter_search_val   = filter_search.val();
+      if(e!= null && $(e.target).is(filter_search))
+        filter_search_focused = true;
+
+      if(filter_provider_val && filter_type_val && filter_status_val) {
+        $.ajax({
+          url: url,
+          data: {
+            provider_id: filter_provider_val,
+            order_type: filter_type_val,
+            status: filter_status_val,
+            part: filter_search_val
+          }
+        }).success(function(partial) {
+          all_tabs_container.html(partial);
+          init();
+        });
+      }
+    }
+
+    var initFilters = function() {
+      filter_provider.change(searchHandler);
+      filter_type.change(searchHandler);
+      filter_status.change(searchHandler);
+      filter_search.change(searchHandler);
+      filter_search.keypress(function(e) {
+        if (e.which == 13)
+          searchHandler
+      });
+      filter_search_btn.click(function(e) {
+        e.preventDefault();
+        searchHandler();
+      });
+    }
+
+    var initSelects = function() {
+      initSelect2('#all_tabs_container');
+      new_orders.select2({
+        escapeMarkup: function(markup) { 
+          return markup; 
+        }
+      })
+      new_orders.change(function(e) {
+        switch($(this).val()) {
+          case '0':
+            callModal(url_new_orders);
+          break;
+          case '1':
+            callModal(url_new_results);
+          break;
+        }
+      });
+    }
+
+    var callModal = function(url) {
+      $.ajax({
+        url: url
+      });
+      new_orders.val('').trigger('change');
+    }
+  }
+
+  ShowViewOrdersSearchController = function() {
+    var patient_id,
+        patient_sex,
+        patient_age,
+        patient_date_of_birth,
+        patient_primary_phone,
+        patient_search_input,
+        patient_search_btn,
+        patient_primary_phone_container,
+        patient_show_images_btn,
+        patient_show_images_container,
+        url;
+
+    this.initialize = function(
+      _modal,
+      _patient_id,
+      _patient_sex,
+      _patient_age,
+      _patient_date_of_birth,
+      _patient_primary_phone,
+      _patient_search_input,
+      _patient_search_btn,
+      _patient_primary_phone_container,
+      _patient_show_image_btn,
+      _patient_show_images_container,
+      _url
+    ) {
+      modal =                           $(_modal),
+      patient_id =                      modal.find(_patient_id);
+      patient_sex =                     modal.find(_patient_sex);
+      patient_age =                     modal.find(_patient_age);
+      patient_date_of_birth =           modal.find(_patient_date_of_birth);
+      patient_primary_phone =           modal.find(_patient_primary_phone);
+      patient_search_input =            modal.find(_patient_search_input);
+      patient_search_btn =              modal.find(_patient_search_btn);
+      patient_primary_phone_container = modal.find(_patient_primary_phone_container);
+      patient_show_images_btn =         modal.find(_patient_show_image_btn);
+      patient_show_images_container =   modal.find(_patient_show_images_container);
+      url =                             _url;
+
+      initPatientSearch();
+      initPhones();
+    }
+
+    var initPatientSearch = function() {
+      patient_search_input.select2({
+        width: '100%',
+        ajax: {
+          url: url,
+          processResults: processResults,
+          data: function (params) {
+            return {
+              part: params.term
+            };
+          },
+          cache: true
+        },
+        escapeMarkup: function (markup) { return markup; },
+        minimumInputLength: 1,
+        templateResult: templateResult,
+        templateSelection: templateSelection
+      });
+
+      function processResults(data, params) {
+        return {
+          results: data
+        };
+      }
+
+      function templateResult(patient) {
+        if (patient.loading) return patient.text;
+        return '<span>'+patient.full_name+'</span>';
+      }
+
+      function templateSelection(patient) {
+        if(patient.id && patient.full_name) {
+          patient_id.val(patient.id).trigger('keyup');
+          patient_sex.val(patient.sex).trigger('keyup');
+          patient_age.val(patient.age).trigger('keyup');
+          patient_date_of_birth.val(patient.dob).trigger('keyup');
+          patient_primary_phone.val(patient.primary_phone).trigger('keyup');
+          if(patient.primary_phone)
+            patient_primary_phone_container.addClass('in');
+          patient_show_images_btn.attr('href', '/image_results/imaging?patient_id=' + patient.id);
+          patient_show_images_container.addClass('in');
+          repositionModal(modal, false);
+          return patient.full_name;
+        }
+        else
+          return patient.text;
+      }
+
+      patient_search_btn.click(function(e) {
+        e.preventDefault();
+        patient_search_input.select2('open');
+      })
+    }
+
+    var initPhones = function() {
+      patient_primary_phone.inputmask({
+        mask: '(999)999-9999'
+      });
+    }
+  }
+
+  ShowViewOrdersTestsController = function() {
+    var tests_container,
+        tests_add,
+        tests_remove,
+        type,
+        url;
+
+    this.initialize = function(_modal, _tests_container, _tests_add, _tests_remove, _type) {
+      modal =           $(_modal);
+      tests_container = modal.find(_tests_container);
+      tests_add =       modal.find(_tests_add);
+      tests_remove =    modal.find(_tests_remove);
+      type =            _type;
+
+      initTestsActions();
+      initSearchOnChange($('input.test-order-code'));
+    }
+
+    var initTestsActions = function() {
+      if(tests_container.data('count') == 1)
+        tests_remove.addClass('disabled');
+
+      tests_add.click(function(e) {
+        e.preventDefault();
+        var number = tests_container.data('count') + 1;
+        var container_row = $('<tr/>');
+
+        container_row.attr('data-number', number);
+        container_row.append('<td><input class="string optional form-control form-control-green test-order-code" type="text" name="' + type + '_order[test_orders[new][' + number + ']][code]" id="'+type+'_test_orders_new_' + number + '__code"></td>');
+        container_row.append('<td colspan="2"><input class="string optional form-control form-control-green test-order-test" type="text" name="' + type + '_order[test_orders[new][' + number + ']][test]" id="' + type + '_test_orders_new_' + number + '__test"></td>');
+        tests_container.append(container_row);
+        tests_container.data('count', number);
+        if(number > 1)
+          tests_remove.removeClass('disabled');
+        repositionModal(modal, false);
+        initSearchOnChange(container_row.find('input.test-order-code'));
+      });
+
+      tests_remove.click(function(e) {
+        e.preventDefault();
+        var number = tests_container.data('count');
+        var row = tests_container.find('tr[data-number='+tests_container.data('count')+']');
+
+        var removeRowHandler = function() {
+          var number_next = tests_container.data('count') - 1;
+          tests_container.find('tr[data-number='+tests_container.data('count')+']').remove();
+          tests_container.data('count', number_next);
+          repositionModal(modal, false);
+          if(number_next == 1)
+            tests_remove.addClass('disabled');
+        }
+        
+        if(number > 1) {
+          if(row.data('destroy-url')) {
+            $.ajax({
+              url: row.data('destroy-url'),
+              type: 'delete',
+              success: function() {
+                removeRowHandler();
+              }
+            })
+          }
+          else
+            removeRowHandler();
+        }
+      })
+    }
+
+    var initSearchOnChange = function(control) {
+      control.change(function() {
+        var code = $(this);
+        var test = $(this).closest('tr').find('.test-order-test');
+
+        var part = $(this).val();
+        if(part.length > 3) {
+          $.ajax({
+            url: '<%= Rails.application.routes.url_helpers.loinc_search_search_path %>',
+            data: { part: part }
+          }).done(function(loincs) {
+            if(loincs[0]) {
+              code.val(loincs[0]['loinc_num']).trigger('keyup');
+              test.val(loincs[0]['description']).trigger('keyup');
+            }
+            else
+              $(this).val('').trigger('keyup');
+          });
+        }
+      });
+    }
+  }
+
+  SearchByOrderNumberController = function() {
+    var order_search_input, order_search_btn, order_result_btn, order_search_results_btn, order_id, url, result_finded_url, order_type;
+
+    this.initialize = function(_order_search_input, _order_search_btn, _order_result_btn, _order_search_results_btn, _order_id, _url, _result_finded_url, _order_type) {
+      order_search_input =       $(_order_search_input);
+      order_search_btn =         $(_order_search_btn);
+      order_result_btn =         $(_order_result_btn);
+      order_search_results_btn = $(_order_search_results_btn);
+      order_id =                 $(_order_id);
+      url =                      _url;
+      result_finded_url =        _result_finded_url;
+      order_type =               _order_type;
+
+      initOrderSearch();
+    }
+
+    var initOrderSearch = function() {
+      order_search_results_btn.addClass('disabled');
+      order_search_input.select2({
+        width: '100%',
+        ajax: {
+          url: url,
+          processResults: processResults,
+          data: function (params) {
+            return {
+              order_num: params.term
+            };
+          },
+          cache: true
+        },
+        escapeMarkup: function (markup) { return markup; },
+        minimumInputLength: 1,
+        templateResult: templateResult,
+        templateSelection: templateSelection
+      });
+
+      function processResults(data, params) {
+        return {
+          results: data
+        };
+      }
+
+      function templateResult(order) {
+        if (order.loading) return order.text;
+        return '<span>'+order.order_num+'</span>';
+      }
+
+      function templateSelection(order) {
+        if(order.id) {
+          order_id.val(order.id).trigger('keyup');
+          order_result_btn.text('Add ' + order_type + ' Results Only');
+          order_search_results_btn.attr('href', result_finded_url+'?id='+order_id.val());
+          order_search_results_btn.removeClass('disabled');
+          return order.order_num;
+        }
+        else {
+          order_result_btn.text('Don’t have ' + order_type + ' Order #, manual entry');
+          return order.text;
+        }
+      }
+
+      order_search_btn.click(function(e) {
+        e.preventDefault();
+        order_search_input.select2('open');
+      })
+    }
+  }
+})

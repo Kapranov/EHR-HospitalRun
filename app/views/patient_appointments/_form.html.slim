@@ -1,0 +1,50 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header
+      button.modal-close.close type="button" data-dismiss="modal" &times;
+      h4 Make an Appointment
+    = simple_form_for PatientAppointment.new, html: { autocomplete: 'off' } do |f|
+      .modal-body
+        .scrollable-container
+          .content
+            = f.input_field :patient_id, as: :hidden, value: current_user.patient.id
+            = f.input_field :date, as: :hidden
+            .row
+              .col-lg-6
+                .form-group
+                  = f.input_field :datetime_date, class: 'form-control date-picker', placeholder: 'Date'
+              .col-lg-6
+                .form-group
+                  = f.input_field :provider_id, as: :select, collection: @providers, class: 'select2', data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }, include_blank: false
+            .row
+              .col-lg-6
+                .form-group
+                  = f.input_field :datetime_time, class: 'form-control time-picker', placeholder: 'Time'
+              .col-lg-6
+                .form-group
+                  = f.input_field :location, as: :select, collection: [["Location", nil]], class: 'select2', data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }, include_blank: false
+            .row
+              .col-lg-12
+                .form-group
+                  = f.input_field :appointment_type, as: :select, collection:  PatientAppointment.appointment_types.map {|type| [type, type]}, class: 'select2', data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }, include_blank: false
+            .row
+              .col-lg-12
+                .form-group
+                  = f.input_field :note, as: 'text', class: 'form-control', rows: 4, placeholder: 'Notes'
+            .row
+              .col-lg-6
+                .form-group
+                  .input-group.input-group-phone
+                    = f.input_field :phone_code, as: :select, collection: [], class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                    = f.input_field :phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Phone'
+              .col-lg-6
+                .form-group
+                  = f.input_field :email, as: 'email', class: 'form-control input-email', placeholder: 'Email'
+      .modal-footer
+        .row
+          .col-lg-12
+            .buttons
+              .btn-group
+                a.btn.btn-default.btn-medium data-dismiss="modal" Cancel
+              .btn-group
+                = f.submit 'Submit', class: 'btn btn-default btn-medium'

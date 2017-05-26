@@ -1,0 +1,1 @@
+STATIC_TABLES_LIST = %w(area_codes diagnosis_codes languages loincs loinc_comments nobrainer_index_meta procedure_codes snomeds v20160301 vaccines)

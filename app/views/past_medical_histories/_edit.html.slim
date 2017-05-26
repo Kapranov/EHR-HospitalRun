@@ -1,0 +1,65 @@
+.modal-dialog.modal-md
+  .modal-content
+    .modal-header.modal-header-md
+      p.title Record Past Medical History
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @past_medical_history, remote: true do |f|
+      .modal-body
+        .scrollable-container
+          .content
+            = hidden_field_tag :patient_id, @patient.id
+            .row
+              .col-lg-12
+                p.title Major Events:
+                .row
+                  .col-lg-12
+                    .form-group
+                      = f.input_field :major_events, as: :text, class: 'form-control form-control-green', rows: 4
+            .row
+              .col-lg-12
+                p.title Ongoing Medical Problems:
+                .row
+                  .col-lg-12
+                    .form-group
+                      = f.input_field :ongoing_problems, as: :text, class: 'form-control form-control-green', rows: 4
+            .row
+              .col-lg-12
+                .form-group
+                  .panel.panel-family-health-history
+                    .panel-heading
+                      p.title Family Health History:
+                      = link_to new_family_health_history_path(past_medical_history_id: @past_medical_history.id), class: 'btn-small btn-modal', data: { target: '#modal-family-history' }, remote: true
+                        i.fa.fa-plus
+                    - if @family_health_histories.any?
+                      .panel-body
+                        ul
+                          - @family_health_histories.each do |history|
+                            li
+                              = link_to edit_family_health_history_path(history, past_medical_history_id: @past_medical_history.id), class: 'btn-modal', data: { target: '#modal-family-history' }, remote: true
+                                span
+                                  = "#{history.first_name} #{history.last_name}, " 
+                                = history.relationship
+                              - if history.dxes?
+                                ul
+                                  - history.all_dxes.each do |dx|
+                                    li
+                                      = dx.to_label
+            .row
+              .col-lg-12
+                p.title Preventitive Care:
+                .row
+                  .col-lg-12
+                    .form-group
+                      = f.input_field :preventitive_care, as: :text, class: 'form-control form-control-green', rows: 4
+            .row
+              .col-lg-12
+                p.title Nutrition History:
+                .row
+                  .col-lg-12
+                    .form-group
+                      = f.input_field :nutrition_history, as: :text, class: 'form-control form-control-green', rows: 4
+      .modal-footer
+        .controls
+          = f.submit 'Save', class: 'btn btn-default btn-padding-lg'
+          a.btn.btn-default.btn-padding-lg data-dismiss="modal" Cancel

@@ -1,0 +1,127 @@
+.content
+  = simple_form_for @payment, url: payments_update_path do |f|
+    = f.input_field :card, as: :hidden, class: :validate
+    .row
+      .col-lg-6.col-md-6
+        .left-block
+          .panel.panel-main
+            .panel-header
+              p.title Pay by Credit Card
+            .panel-body
+              .row
+                .col-lg-6.col-md-12.col-sm-12
+                  .row
+                    .col-lg-5.col-xs-5
+                      p.title
+                        | Card Number
+                        sup *
+                    .col-lg-7.col-xs-7
+                      - if @cards.any?
+                        .cards
+                          - @cards.each_with_index do |card, index|
+                            a.card-logo href="#" data-name="#{card}" class="card-#{card.to_s.gsub(' ', '')}-logo #{'active' if card == @payment.card}"
+                  .row
+                    .col-lg-12
+                      .form-group
+                        = f.input_field :card_num, class: 'form-control billing-card-number'
+                .col-lg-6.col-md-12.col-sm-12
+                  p.title
+                   | Expiry date
+                   sup *
+                  .row
+                    .col-lg-6.col-md-12.col-sm-12
+                      .form-group
+                        = f.input_field :expiration_at_month, as: :select, collection: @months, class: 'select2', data: { placeholder: 'MM', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '4x' }
+                    .col-lg-6.col-md-12.col-sm-12
+                      .form-group
+                        = f.input_field :expiration_at_year, as: :select, collection: @years, class: 'select2', data: { placeholder: 'YY', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '4x' }
+              .row
+                .col-lg-12
+                  p.title
+                    | Name on Card
+                    sup *
+                  .row
+                    .col-lg-12
+                      .form-group
+                        = f.input_field :card_name, class: 'form-control'
+              .row
+                .col-lg-4.col-md-4
+                  p.title
+                    | Security Code
+                    sup *
+                  .row
+                    .col-lg-9.col-md-9
+                      .form-group
+                        = f.input_field :cvc, class: 'form-control billing-cvc-code'
+            .panel-footer
+              hr
+          .panel.panel-summary
+            .panel-body
+              .row
+                .col-lg-12
+                  .summary-content
+                    p.summary-title
+                      | TOTAL PRICE
+                    p.summary-price
+                      | $&nbsp;
+                      = @ehr_subscription.total
+            .panel-footer
+              hr
+          .controls
+            = f.submit 'Continue', class: 'btn btn-default'
+      .col-lg-6.col-md-6
+        .right-block
+          .panel.panel-explanation.panel-top
+            .panel-body
+              .row
+                .col-lg-12
+                  .icon.icon-xs.icon-circle.icon-ic-explanation
+                  p
+                    | Not ready to buy?&nbsp;
+                    = link_to 'Save this price quote for later', payments_quote_price_path
+          .panel.panel-main.disabled
+            .panel-header
+              p.title 
+                | Additional Details&nbsp;
+                span (Optional)
+            .panel-body
+              .row
+                .col-lg-12
+                  .form-group
+                    .checkbox-custom
+                      = check_box_tag :add_po_number, checked: true
+                      label for="add_po_number"
+                        span.checkbox-icon-container
+                          span.checkbox-icon
+                        span.checkbox-label Add a PO number
+              .row
+                .col-lg-12
+                  .form-group
+                    input.form-control type="text"
+              .row
+                .col-lg-12
+                  .form-group
+                    .checkbox-custom
+                      = check_box_tag :add_notes, checked: true
+                      label for="add_notes"
+                        span.checkbox-icon-container
+                          span.checkbox-icon
+                        span.checkbox-label Add notes to your order
+              .row
+                .col-lg-12
+                  .form-group
+                    = text_area_tag :notes, nil, class: 'form-control'
+          .panel.panel-explanation.panel-bottom.disabled
+            .panel-body
+              .row
+                .col-lg-12
+                  .icon.icon-xs.icon-circle.icon-ic-explanation
+                  p
+                    | Any notes you provide here will not appear on your quote/invoice and will be used purely for administrative purposes to assist with processing your order. Your notes will not override any terms of the&nbsp;
+                    a href="#" Customer Agreement.
+                    br
+                    br
+                    | Please be aware that by checking this box, your order will be manually reviewed by a customer advocate and processed within the next 1 to 3 business days.
+                    br
+                    br
+                    | Purchase orders are not accepted as a form of payment and we cannot accept any conflicting terms and conditions associated with the purchase order.

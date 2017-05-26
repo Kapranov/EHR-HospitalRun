@@ -1,0 +1,51 @@
+.modal-dialog.modal-md
+  .modal-content
+    .modal-header.modal-header-md
+      p.title New Message
+    = simple_form_for EmailMessage.new, html: { autocomplete: 'off' }, url: create_from_patient_to_practice_email_messages_path do |f|
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-12
+                .form-group
+                  = hidden_field_tag :to_id
+                  .input-group
+                    span.input-group-addon To:
+                    = select_tag :find_message_practice_staff, options_for_select([['']]), class: "select2", data: { placeholder: 'Search Practice Staff', theme: 'gray-lighter', arrow: '1x', padding: '3x', font: '1x' }
+                    span#find_message_practice_staff_button.input-group-addon.input-group-addon-search
+            .row
+              .col-lg-12
+                .form-group
+                  .input-group.input-group-custom.input-group-addon-search
+                    span.input-group-addon From:
+                    = text_field_tag :from, current_user.patient.full_name, readonly: 'readonly', tabindex: '-1', class: 'form-control', placeholder: ''
+            .row
+              .col-lg-12
+                .form-group
+                  = f.input_field :subject_id, as: :hidden
+                  .input-group.input-group-custom.input-group-subject
+                    span.input-group-addon Subject:
+                    a.form-control#subject-button href="#"
+                    #subjects-container
+                      ul.dropdown-menu#subjects-list
+                      .controls
+                        input.form-control#subject-add-input type="text" placeholder="Add New Subject"
+                        a.btn.btn-default#subject-add-button href="#" Add
+            .row.row-message
+              .col-lg-12
+                = f.input_field :body, as: :text, class: 'form-control', rows: 4, placeholder: 'Message:'
+      .modal-footer
+        .row
+          .col-lg-4.col-urgent
+            .checkbox-custom.checkbox-custom-danger
+              = f.check_box :urgent, class: 'checkbox'
+              label.custom-label for="email_message_urgent"
+                span.checkbox-icon-container
+                  span.checkbox-icon
+                span.checkbox-label.custom-label.text-16 Urgent
+          .col-lg-8.col-buttons
+            = f.submit 'Send', class: 'btn btn-default'
+            = f.submit 'Save', class: 'btn btn-default'
+            a.btn.btn-default.text-16 type="button" data-dismiss="modal" Cancel
+= stylesheet_link_tag 'email_messages/main', media: 'all'

@@ -1,0 +1,203 @@
+@import 'modals';
+@import 'attachment/main';
+
+#settings-education-materials-container {
+  .settings-education-materials-content {
+    padding: 20px 20px;
+    p {
+      margin-bottom: 0;
+    }
+    .title.title-empty {
+      margin: 0;
+      font-size: 16px;
+      color: $graytextdark;
+      text-align: center;
+    }
+    .btn-group {
+      .btn {
+        width: 80px;
+        height: 40px;
+        line-height: 40px;
+        color: $graytext;
+        &:last-child:not(:first-child) {
+          border-left-color: white;
+        }
+        &:hover,
+        &:focus,
+        &:active,
+        &.active {
+          color: white;
+        }
+      }
+      &.collapse {
+        display: none;
+      }
+    }
+    .icon {
+      &.icon-ic-collapse {
+        background-color: $green;
+        &:before {
+          display: block;
+          content: '';
+          width: 0;
+          height: 0;
+          position: relative;
+          top: 6px;
+          left: 5px;
+        }
+      }
+    }
+    .panel-group-education-materials {
+      margin: 5px 0;
+      border: 1px solid $green;
+      border-radius: 3px;
+      .panel-collapse {
+        width: 100%;
+      }
+      .panel-education-material {
+        margin-top: 0;
+        border: 0;
+        border-radius: 0;
+        &:not(:first-child) {
+          border-top: 1px solid $green;
+        }
+        &[aria-expanded="false"] {
+          .panel-heading {
+            min-height: 50px;
+            background-color: rgba(65, 182, 166, .10);
+            .panel-heading-link {
+              padding: 15px 10px;
+            }
+          }
+        }
+        &[aria-expanded="true"] {
+          .panel-heading {
+            min-height: 40px;
+            .panel-heading-link {
+              .title {
+                text-transform: uppercase;
+              }
+            }
+            .btn-group {
+              display: inline-block;
+            }
+          }
+        }
+        .panel-heading {
+          border-radius: 0;
+          padding: 0;
+          text-align: right;
+          .panel-heading-link {
+            text-align: left;
+            padding: 10px;
+            a {
+              display: block;
+            }
+            a[data-toggle="collapse"] {
+              white-space: nowrap;
+              text-align: left;
+              .title {
+                color: $graytextdark;
+                margin-left: 30px;
+                margin-right: 20px;
+                margin-bottom: 0;
+                font-size: 15px;
+                font-family: 'SF UI Text Bold';
+              }
+              &[aria-expanded="true"] .icon.icon-ic-collapse:before {
+                border-top: 10px solid white;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+              }
+              &[aria-expanded="false"] .icon.icon-ic-collapse:before {
+                border-left: 10px solid white;
+                border-top: 5px solid transparent;
+                border-bottom: 5px solid transparent;
+                top: 5px;
+                left: 6px;
+              }
+            }
+          }
+          .btn-group {
+            margin: 0;
+            top: 10px;
+            right: 10px;
+            .btn {
+              color: $graytextdark;
+              background-color: #fff;
+              border-color: $green;
+              &:hover,
+              &:focus,
+              &:active,
+              &.active {
+                color: white;
+                background-color: $green;
+              }
+            }
+          }
+          @media(max-width: 768px) {
+            .btn-group {
+              position: relative;
+              right: 0;
+              margin: 5px 12px 10px 12px;
+            }
+          }
+        }
+        .panel-body {
+          padding: 0 20px 15px 60px;
+          border-top: 0;
+          p {
+            color: $graytextdark;
+            font-size: 15px;
+            margin-bottom: 0;
+          }
+          .title {
+            font-family: 'SF UI Text Bold';
+          }
+          .form-group {
+            margin-bottom: 5px !important;
+          }
+          ul {
+            list-style-type: none;
+            li {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              p {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+              }
+              span {
+                color: $graytextdark;
+                margin-right: 6px;
+                font-size: 15px;
+                font-family: 'SF UI Text Bold';
+              }
+              a {
+                color: $green;
+                text-decoration: underline !important;
+                transition: opacity .2s;
+                &:hover,
+                &:focus,
+                &:active {
+                  opacity: .75;
+                }
+              }
+            }
+          }
+        }
+        .panel-footer {
+          background-color: transparent;
+          padding: 5px 23px 20px 23px;
+          .controls {
+            text-align: right;
+            .btn {
+              display: inline-block;
+              width: 100px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

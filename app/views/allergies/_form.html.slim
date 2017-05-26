@@ -1,0 +1,47 @@
+.modal-dialog.modal-lg
+  = render_messages
+  = simple_form_for @allergy, html: { autocomplete: 'off' }, remote: true do |a|
+    = a.input_field :id, as: :hidden, value: @allergy.id if @allergy.present?
+    = a.input_field :patient_id, as: :hidden, value: @patient.id
+    .modal-content
+      .modal-header.modal-header-md
+        p.title Record Allergy
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-12.col-md-12.col-sm-12
+                .form-group
+                  = a.input_field :allergen_type, as: :select, collection: Allergy.allergen_types.to_a, include_blank: false, class: 'select2', data: { theme: 'white-light', arrow: '1x', padding: '3x', font: '1x', placeholder: 'Allergen Type' }
+            .row
+              .col-lg-12.col-md-12.col-sm-12
+                .form-group
+                  = a.input_field :severity_level, as: :select, collection: Allergy.severity_levels.to_a, include_blank: false, class: 'select2', data: { theme: 'white-light', arrow: '1x', padding: '3x', font: '1x', placeholder: 'Severity Level' }
+            .row
+              .col-lg-4.col-md-4.col-sm-4
+                .form-group
+                  = a.input_field :onset_at, as: :select, collection: Allergy.onset_ats.to_a, include_blank: false, class: 'select2', data: { theme: 'white-light', arrow: '1x', padding: '3x', font: '1x', placeholder: 'Onset At' }
+              .col-lg-5.col-md-5.col-sm-5
+                .form-group
+                  .input-group
+                    = a.input_field :start_date_date, label: false, class: 'form-control date-picker', placeholder: 'Start Date'
+                    span.input-group-addon.input-group-addon-calendar
+              .col-lg-3.col-md-3.col-sm-3
+                .form-group
+                  a.btn.btn-default.btn-today Today
+            .row
+              .col-lg-12.col-md-12.col-sm-12
+                .form-group
+                  .checkbox-custom
+                    = a.check_box :active, id: 'patients_record_allergy_active'
+                    label for="patients_record_allergy_active"
+                      span.checkbox-icon-container
+                        span.checkbox-icon
+                      span.checkbox-label Active
+            .row
+              .col-lg-12.col-md-12.col-sm-12
+                = a.input_field :note, as: :text, label: false, rows: 4, placeholder: 'Notes', class: 'form-control'
+      .modal-footer
+        .controls
+          = a.submit 'Save', class: 'btn btn-default btn-padding-lg'
+          .btn.btn-default.btn-padding-sm data-dismiss="modal" Cancel

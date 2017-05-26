@@ -1,0 +1,22 @@
+.slimScrollDiv--admin-black-white {
+  .slimScrollBar {
+    width: 20px;
+    border: 1px solid  #000;
+    box-shadow: none;
+    border-radius: 2px;
+    background: #eee;
+  }
+
+  .slimScrollRail {
+    width: 10px;
+    border-radius: 2px;
+    box-shadow: none;
+    background-color: #fff;
+    border: 1px solid #000;
+    .slimRailTop {
+      width: 8px;
+      border-radius: 2px;
+      background-color: #000;
+    }
+  }
+}

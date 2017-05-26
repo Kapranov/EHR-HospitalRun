@@ -1,0 +1,119 @@
+#settings-audit-container {
+  .bordered-container {
+    .category-header {
+      .select2-container {
+        float: right;
+        margin-top: 3px;
+      }
+    }
+    .audit-content {
+      .title-empty {
+        padding: 0;
+        margin: 10px 0;
+        text-align: center;
+        color: $graytextdark;
+        font-size: 15px;
+      }
+      .top-block {
+        padding: 12px 20px;
+        .form-group {
+          margin-bottom: 15px !important;
+        }
+        .form-control {
+          color: $green;
+          padding: 0 10px;
+          font-size: 15px;
+          &::-webkit-input-placeholder {
+            color: $green !important;
+          }
+          &::-moz-placeholder {
+            color: $green !important;
+          }
+          &:-moz-placeholder {
+            color: $green !important;
+          }
+          &:-ms-input-placeholder {
+            color: $green !important;
+          }
+        }
+        .input-group-audit-date-from {
+          &:after {
+            content: '-';
+            position: absolute;
+            top: -5px;
+            right: -24px;
+            font-size: 36px;
+            font-family: 'SF UI Text Bold';
+            @media (max-width: 991px) {
+              display: none;
+            }
+          }
+        }
+      }
+      .table-audit {
+        margin: 0;
+        thead {
+          tr {
+            td {
+              padding: 0;
+              &:not(:last-child) {
+                border-right: 1px solid $green;
+              }
+              p {
+                margin: 0;
+              }
+              &.filter {
+                .select2-container {
+                  .select2-selection__rendered,
+                  .select2-selection__placeholder {
+                    text-align: center;
+                  }
+                }
+              }
+              &:not(.filter) {
+                p {
+                  font-size: 16px;
+                  padding: 14px 22px;
+                }
+              }
+            }
+          }
+        }
+        tbody {
+          tr {
+            td {
+              padding: 0;
+              border-top: 0;
+              margin-right: -1px;
+              &:not(:last-child) {
+                border-right: 1px solid $green;
+              }
+              p {
+                width: 100%;
+                padding: 14px;
+                margin: 0;
+                color: $graytextdark;
+                font-size: 15px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .bottom-block {
+    .controls {
+      padding: 10px 0;
+      margin: -10px -5px;
+      text-align: right;
+      .pagination {
+        margin: 10px 5px;
+        position: relative;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+    }
+  }
+}

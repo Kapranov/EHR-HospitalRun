@@ -1,0 +1,7 @@
+$('#modal-admin-activated-user').html('<%= escape_javascript(render 'activated') %>');
+repositionModal($('#modal-admin-activated-user'), false);
+$('#modal-admin-activated-user').modal('show');
+
+$('#modal-admin-activated-user').on('hidden.bs.modal', function() {
+  $('#modal-admin-activate-user').modal('hide');
+})

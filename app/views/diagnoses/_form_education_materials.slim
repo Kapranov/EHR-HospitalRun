@@ -1,0 +1,83 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header.modal-header-md
+      - if @education_material.present?
+        p.title
+          = "#{@education_material.try(:code_id)} - #{@education_material.try(:name)}"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    - if @education_material.present?
+      .modal-body
+        .hidden.print
+          .print-patient
+            .row
+              .col-lg-4.col-md-4.col-sm-4.col-xs-4
+                p.patient-name
+                  = "#{@patient.try(:last_name)}, #{@patient.try(:first_name)}"
+                p.patient-phone
+                  = @patient.try(:primary_phone)
+              .col-lg-4.col-md-4.col-sm-4.col-xs-4
+                p.patient-id
+                  = @patient.try(:id)
+                p.patient-email
+                  = @patient.try(:email)
+              .col-lg-4.col-md-4.col-sm-4.col-xs-4
+                p.patient-birth
+                  = @patient.try(:birth_date)
+          .print-provider
+            .row
+              .col-lg-6.col-md-6.col-sm-6.col-xs-6
+                p.provider-business-name
+                  = @current_user.provider.try(:business_name)
+              .col-lg-6.col-md-6.col-sm-6.col-xs-6
+                p.provider-name
+                  = "#{@current_user.provider.try(:last_name)}, #{@current_user.provider.try(:first_name)}"
+          .print-diagnosis
+            .row
+              .col-lg-12
+                p.diagnosis-title
+                  = @education_material.try(:name)
+        .scrollable-container
+          .content
+            .row
+              .col-lg-4.col-md-4.col-sm-4.col-xs-4
+                p.title CODE:
+              .col-lg-8.col-md-8.col-sm-8.col-xs-8
+                ul
+                  li
+                    p
+                      = "#{@education_material.try(:code_id)} (#{@education_material.try(:code_system)})"
+            - if @education_attachment.try(:note).present?
+              .row
+                .col-lg-4.col-md-4.col-sm-4.col-xs-4
+                  p.title Resource Notes:
+                .col-lg-8.col-md-8.col-sm-8.col-xs-8
+                  ul
+                    li
+                      p
+                        = @education_attachment.try(:note)
+            - if @education_material.education_attachments.any?
+              .row
+                .col-lg-4.col-md-4.col-sm-4.col-xs-4
+                  p.title Attachments:
+                .col-lg-8.col-md-8.col-sm-8.col-xs-8
+                  ul.list-atachments
+                    - @education_material.education_attachments.each do |attachment|
+                      li
+                        span
+                          | -
+                        = link_to attachment.basename, attachment.file_name.url, target: '_blank'
+      .modal-footer
+        .controls
+          = link_to 'Send to Patient Portal', '#', class: 'btn btn-default btn-padding-md disabled'
+          = link_to 'Print', '#', class: 'btn btn-default btn-print'
+    - else
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-12
+                .icon.icon-ic-material-not-found
+            .row
+              .col-lg-12
+                p No Patient Education Material Available for this Diagnosis Code

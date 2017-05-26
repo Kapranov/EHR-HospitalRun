@@ -1,0 +1,19 @@
+$('#modal-lab-result-search-by-lab-order').html('<%= escape_javascript(render 'form_search_by_lab_order') %>');
+
+initPickers('#modal-lab-result-search-by-lab-order');
+initSelect2('#modal-lab-result-search-by-lab-order');
+initModalFadeInOut('#modal-lab-result-search-by-lab-order');
+
+$('#modal-lab-result-search-by-lab-order').modal('show');
+
+var searchByOrderNumberController = new SearchByOrderNumberController();
+searchByOrderNumberController.initialize(
+  '#search_by_lab_order_find_lab_order',
+  '#search_by_lab_order_find_lab_order_btn',
+  '#search_by_lab_order_result_btn',
+  '#search_by_lab_order_search_results_btn',
+  '#search_by_lab_order_id',
+  '<%= Rails.application.routes.url_helpers.search_by_order_num_lab_orders_path %>',
+  '<%= Rails.application.routes.url_helpers.results_search_by_lab_order_lab_results_path %>',
+  'Lab'
+);

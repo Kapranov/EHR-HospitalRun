@@ -1,0 +1,163 @@
+$('#modal-patient-main').html('<%= escape_javascript(render 'patient') %>');
+
+initPickers('#modal-patient-main');
+initSelect2('#modal-patient-main');
+initModalFadeInOut('#modal-patient-main');
+$('#modal-patient-main .modal-header .input-phone-header').inputmask('remove');
+$('#modal-patient-main .modal-header .input-phone-header').inputmask("(999)999-9999");
+
+$('#modal-patient-main').modal('show');
+$('#modal-patient-perio-data-entry').modal('hide');
+$('#modal-patient-full-perio').modal('hide');
+$('#modal-patient-add-encounter').modal('hide');
+$('#modal-patient-add-procedure').modal('hide');
+$('#modal-patient-add-insurance').modal('hide');
+$('#modal-patient-add-advanced-directives').modal('hide');
+$('#modal-patient-add-medical-history').modal('hide');
+$('#modal-patient-smoking').modal('hide');
+$('#modal-patient-add-message').modal('hide');
+$('#modal-patient-allergy').modal('hide');
+$('#modal-patient-add-diagnoses').modal('hide');
+$('#modal-patient-diagnoses').modal('hide');
+$('#modal-patient-show-procedure').modal('hide');
+$('#modal-patient-immunization-vaccine').modal('hide');
+$('#modal-patient-immunizations').modal('hide');
+
+TabsController = function() {
+  var modal, tabs, tabs_btns, tabs_btns_container, tab_pane, controls_container;
+
+  this.initialize = function() {
+    modal =               $('#modal-patient-main');
+    tabs_btns_container = modal.find('ul.nav-tabs-main');
+    tabs_btns =           modal.find('ul.nav-tabs-main li a.tab-control');
+    tab_panes =           modal.find('.tab-content .tab-pane');
+    controlsContainer =   modal.find('.controls-container');
+    initTabs();
+  }
+
+  var initTabs = function() {
+    tabs_btns.click(function(e) {
+      e.preventDefault();
+      var container = $($(this).attr('href'));
+      var container_id = $(this).attr('href');
+      var link = $(this).data('link');
+
+      callTab($(e.target), container, container_id, link);
+    });
+
+    tabs_btns.on('show.bs.tab', function(e) {
+      e.preventDefault();
+
+      var tab_btn = $(e.target);
+      var tab_id = tab_btn.attr('href');
+      var tab = $(tab_id);
+
+      tabs_btns_container.find('li').removeClass('active');
+      tab_btn.parent().addClass('active');
+
+      tabs_btns.attr('aria-expanded', false);
+      tab_btn.attr('aria-expanded', true);
+
+      tab.addClass('active in');
+
+      tab_panes.not(tab).html('');
+
+      controlsContainer.find('.controls').css('display', 'none');
+      controlsContainer.find('.controls').removeClass('active');
+      controlsContainer.find('.controls[data-target="'+$(this).attr('href')+'"]').css('display', 'block');
+      controlsContainer.find('.controls[data-target="'+$(this).attr('href')+'"]').addClass('active');
+
+      initPickers('#modal-patient-main');
+      initSelect2('#modal-patient-main');
+      initModalFadeInOut('#modal-patient-main');
+      repositionModal(modal, false);
+      switch(tab_id) {
+        case '#patientChartTab':
+          var chartController = new ChartController();
+          chartController.initialize();
+          break;
+        case '#patientDentalChartTab':
+          var dentalChartController = new DentalChartController();
+          dentalChartController.initialize();
+          break;
+        case '#patientPerioChartTab':
+          var perioChartController = new PerioChartController();
+          perioChartController.initialize();
+          break;
+        case '#patientProfileTab':
+          var profileController = new ProfileController();
+          profileController.initialize();
+          controlsContainer.find('.controls[data-target="'+tab_id+'"] .btn-save').click(function() {
+            tab.find('form.edit_user').first().submit();
+          });
+          break;
+        case '#patientInsuranceTab':
+          var insuranceController = new InsuranceController();
+          insuranceController.initialize();
+          controlsContainer.find('.controls[data-target="'+tab_id+'"] .btn-save').click(function() {
+            tab.find('form.edit_guarantor').first().submit();
+          });
+          break;
+        case '#patientErxTab':
+          var erxController = new ErxController();
+          erxController.initialize();
+          break;
+      }
+
+    });
+
+    tabs_btns.on('hide.bs.tab', function(e) {
+      e.preventDefault();
+    });
+
+    tabs_btns.on('hidden.bs.tab', function(e) {
+      e.preventDefault();
+    });
+    
+    var chart_btn = $(tabs_btns_container.find('a[href="#patientChartTab"]'));
+    callTab(
+      chart_btn,
+      $(chart_btn.attr('href')),
+      chart_btn.attr('href'),
+      chart_btn.data('link')
+    );
+  }
+
+  var callTab = function(tab_control, container, container_id, link) {
+    var callTabAjax = function() {
+      $.ajax({
+        url: link,
+        async: true,
+        data: {
+          id: '<%= params[:id] %>'
+        }
+      }).success(function(partial) {
+        container.html(partial);
+        tab_control.tab('show');
+        tab_panes.not(container_id).removeClass('active in');
+      });
+    }
+
+    switch(tab_control.attr('href')) {
+      case '#patientChartTab':
+        var syncWithDosespotController = new SyncWithDosespotController();
+            syncWithDosespotController.initialize(
+          [ 
+            "<%= Rails.application.routes.url_helpers.dosespot_sync_medications_path %>",
+            "<%= Rails.application.routes.url_helpers.dosespot_sync_allergies_path %>"
+          ],
+          '<%= @patient.id %>',
+          function() {
+            callTabAjax();
+          }
+        );
+      break;
+      default:
+        callTabAjax();
+      break;
+    }
+  }
+}
+
+var tabsController = new TabsController();
+    tabsController.initialize();

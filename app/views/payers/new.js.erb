@@ -1,0 +1,15 @@
+$("#modal-patient-add-payer").html("<%= escape_javascript(render 'new') %>");
+
+initPickers('#modal-patient-add-payer');
+initSelect2('#modal-patient-add-payer');
+
+$("#modal-patient-add-payer").modal("show");
+
+var zipcodePayerController = new ZipcodeController();
+zipcodePayerController.initialize(
+  '#payer_claim_street_address1',
+  '#payer_claim_city',
+  '#payer_claim_state',
+  '#payer_claim_zip',
+  false
+);

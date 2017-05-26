@@ -1,0 +1,49 @@
+.row-main
+  = simple_form_for @report do |r|
+    = r.simple_fields_for :query, nil do |f|
+      .row
+        .col-lg-2.col-md-3
+          .form-group
+            = r.input_field :criteria, as: :select, collection: @criterias, id: 'criteria', class: 'select2', data: { placeholder: 'Select Criteria', theme: 'green-lighter', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: true
+        .col-lg-8.col-md-8
+          .row
+            .col-lg-2.col-md-4
+              .form-group
+                = select_tag :is, options_for_select([['is', 0]]), selected: 0, class: 'select2', data: { theme: 'green-lighter', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: false
+            .col-lg-3.col-md-4
+              .form-group
+                = r.input_field '', as: :select, collection: Patient.ethnicities, selected: @report.query[0], class: 'select2', data: { placeholder: 'Select', theme: 'green-lighter', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: true
+      .row
+        .col-lg-6
+          .row
+            .col-lg-4.col-md-4
+              .form-group
+                = select_tag :added_between, options_for_select([['Added Between', 0]]), selected: 0, class: 'select2', data: { theme: 'green-lighter', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: false
+              span.divider
+                | :
+            .col-lg-4.col-md-4
+              .form-group
+                .input-group.input-group-green
+                  = f.input_field '', value: @report.query[1], placeholder: 'mm/dd/yyyy', class: 'form-control date-picker'
+                  span.input-group-addon.input-group-addon-calendar
+                span.divider
+                  | -
+            .col-lg-4.col-md-4
+              .form-group
+                .input-group.input-group-green
+                  = f.input_field '', value: @report.query[2], placeholder: 'mm/dd/yyyy', class: 'form-control date-picker'
+                  span.input-group-addon.input-group-addon-calendar
+        .col-lg-2.col-md-12.col-lg-offset-4
+          .form-group.pull-right
+            = r.submit 'Filter', class: 'btn btn-default btn-padding-md'
+/ = simple_form_for @report do |r|
+/   = r.input :criteria, as: :select, collection: @criterias, include_blank: false, input_html: { id: 'criteria' }
+/   = r.simple_fields_for :query, nil do |f|
+/     label is
+/     = f.input '', as: :select, collection: Patient.ethnicities, selected: @report.query[0], include_blank: false
+/     label Added between
+/     = f.input '', input_html: { placeholder: 'mm/dd/yyyy', value: @report.query[1] }
+/     = f.input '', input_html: { placeholder: 'mm/dd/yyyy', value: @report.query[2] }
+
+/     = r.submit 'Filter'
+/     = r.submit 'Import CSV', name: 'import'

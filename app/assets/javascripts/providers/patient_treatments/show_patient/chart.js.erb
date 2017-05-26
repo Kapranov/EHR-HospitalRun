@@ -1,0 +1,18 @@
+ChartController = function() {
+  this.initialize = function() {
+    var chartMedicationsController = new ChartMedicationsController();
+    chartMedicationsController.initialize();
+  }
+}
+
+var ChartMedicationsController = function() {
+  var medications_btn;
+
+  this.initialize = function() {
+    medications_btn = $('#show_erx_tab_btn');
+    medications_btn.on('click', function(e) {
+      e.preventDefault();
+      $('a[href="' + $(this).data('target') + '"]').trigger('click');
+    })
+  }
+}

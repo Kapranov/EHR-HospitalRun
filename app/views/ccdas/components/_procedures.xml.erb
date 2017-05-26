@@ -1,0 +1,39 @@
+<component>
+  <section>
+    <templateId root="2.16.840.1.113883.10.20.22.2.7.1"/>
+    <code code="47519-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Procedures"/>
+    <title>Procedures</title>
+    <text>
+      <table width="95%" border="1">
+        <thead>
+          <tr>
+            <th>Procedure</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% procedures.each do |procedure| %>
+            <tr>
+              <td><%= procedure.to_label %></td>
+              <td><%= procedure.date_of_service.try(:strftime, Date::DATE_FORMATS[:custom]) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </text>
+    <% procedures.each do |procedure| %>
+      <entry typeCode="DRIV">
+        <procedure classCode="PROC" moodCode="EVN">
+          <templateId root="2.16.840.1.113883.10.20.22.4.14"/>
+          <id root="2.16.840.1.113883.3.3388.1.1.1.573798.3.138736163.1.9"/>
+          <code xsi:type="CE" nullFlavor="NI"/>
+          <statusCode code="completed"/>
+          <effectiveTime <%= value_or_null_flavor(procedure.date_of_service) %>/>
+          <priorityCode nullFlavor="NI"/>
+          <methodCode nullFlavor="NI"/>
+          <targetSiteCode nullFlavor="NI"/>
+        </procedure>
+      </entry>
+    <% end %>
+  </section>
+</component>

@@ -1,0 +1,48 @@
+.modal-dialog.modal-md
+  .modal-content
+    .modal-header.modal-header-md
+      p.title New Message (To Patient)
+    = render_messages
+    = simple_form_for EmailMessage.new, url: email_messages_path, html: { autocomplete: 'off' }, remote: true do |t|
+      = t.input_field :patient_id, as: :hidden, value: @patient.id
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-12
+                .form-group
+                  .input-group.disabled
+                    span.input-group-addon To Patient:
+                    = text_field_tag :patient_full_name, @patient.full_name, class: 'form-control', tabindex: '-1'
+            .row
+              .col-lg-12
+                .form-group
+                  .input-group.disabled
+                    span.input-group-addon From:
+                    = text_field_tag :provider_full_name, "#{current_user.provider.title}. #{current_user.provider.full_name}, #{current_user.provider.degree}", class: 'form-control', tabindex: '-1'
+            .row
+              .col-lg-12
+                .form-group
+                  = t.input_field :subject_id, as: :hidden
+                  .input-group.input-group-custom.input-group-subject
+                    span.input-group-addon Subject:
+                    a.form-control#subject-button href="#"
+                    #subjects-container
+                      ul.dropdown-menu#subjects-list
+                      .controls
+                        input.form-control#subject-add-input type="text" placeholder="Add New Subject"
+                        a.btn.btn-default#subject-add-button href="#" Add
+            .row
+              .col-lg-12
+                = t.input_field :body, as: :text, class: 'form-control', rows: 4, placeholder: 'Message:'
+      .modal-footer
+        .controls
+          .checkbox-custom
+            = t.check_box :urgent, class: 'checkbox'
+            label for="email_message_urgent"
+              span.checkbox-icon-container
+                span.checkbox-icon
+              span.checkbox-label Urgent
+          = t.submit 'Send', class: 'btn btn-default btn-padding-sm'
+          = t.submit 'Save', class: 'btn btn-default btn-padding-sm'
+          a.btn.btn-default.btn-padding-sm data-dismiss="modal" Cancel

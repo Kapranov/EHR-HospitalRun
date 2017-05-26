@@ -1,0 +1,63 @@
+p.main-title Electronic Health Record (EHR) Subscription
+#tabs
+  .controls.controls-top
+    hr
+    .row
+      .col-lg-4.col-md-4.col-sm-4
+        a.cloud-btn aria-expanded="true" Cloud (we host)
+      .col-lg-4.col-md-4.col-sm-4
+        a.server-btn.disabled Server (you host, coming soon)
+    .arrow-down
+    hr
+  = simple_form_for @ehr_subscription, url: payments_create_subscribtion_path do |f|
+    .tab.collapse.fade.in#tab-cloud
+      .row.row-container
+        .col-lg-12
+          p.title 1. Select subscription term:
+          .row.radiobuttion-group
+            .col-lg-3
+              .radiobutton-custom
+                = radio_button_tag :annual, false, checked: true
+                label for="annual_false"
+                  span.radio-icon-container
+                    span.radio-icon
+                  span.radio-label Monthly recurring subscription
+            .col-lg-3
+              .radiobutton-custom
+                = radio_button_tag :annual, true
+                label for="annual_true"
+                  span.radio-icon-container
+                    span.radio-icon
+                  span.radio-label Annual subscription
+      hr
+      .row.row-container
+        .col-lg-12
+          p.title 2. Choose desired number of doctors in your practice:
+          .row
+            .col-lg-4
+              = f.input_field :doctors, as: :select, collection: [], class: 'select2', data: { placeholder: 'Choose Number of Doctors', theme: 'payments', arrow: '3x', padding: '3x', font: '2x' }
+            .col-lg-8
+              p.sub-title
+                | 2 Auxiliary staff members and&nbsp;
+                span unlimited
+                | &nbsp;locations included with this plan
+      hr
+      .row.row-container
+        .col-lg-12
+          p.title 3. Choose optional addons
+          .bordered-container
+            .row
+              .col-lg-4
+                .checkbox-custom
+                  = f.check_box :additional_staff, checked: true
+                  label for="ehr_subscription_additional_staff"
+                    span.checkbox-icon-container
+                      span.checkbox-icon
+                    span.checkbox-label Additional auxiliary staff members
+              .col-lg-8
+                = f.input_field :staff, as: :select, collection: [], class: 'select2', data: { placeholder: 'Choose Aux. Staff Members', theme: 'payments', arrow: '3x', padding: '3x', font: '2x' }
+      hr
+      .controls.controls-bottom
+        = f.submit 'ADD TO CART', class: 'btn btn-default'
+      .summary-container.collapse.fade
+  .tab.collapse.fade#tab-server

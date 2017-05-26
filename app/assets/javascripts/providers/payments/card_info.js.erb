@@ -1,0 +1,138 @@
+$(document).ready(function(e) {
+  CardsController = function() {
+    var card_number, expiry_month, expiry_year, cvc_code, cardsController, select_card;
+
+    this.initialize = function(_form) {
+      card_number = $(_form).find('#payment_card_num');
+      expiry_month = $(_form).find('#payment_expiration_at_month');
+      expiry_year = $(_form).find('#payment_expiration_at_year');
+      cvc_code = $(_form).find('#payment_cvc');
+      cards = $(_form).find('a.card-logo');
+      select_card = $(_form).find('#payment_card');
+      initMasks();
+      initCopyingData();
+    }
+
+    var initMasks = function() {
+      card_number.inputmask({
+        mask: '9999 9999 9999 9999',
+        removeMaskOnSubmit: true
+      });
+      cvc_code.inputmask({ mask: '999' });
+      select_card.keyup(function(e) {
+        if($(this).val() === 'american express')
+          cvc_code.inputmask({ mask: '9999' });
+        else
+          cvc_code.inputmask({ mask: '999' });
+      });
+    }
+
+    var initCopyingData = function() {
+      cards.click(function(e) {
+        e.preventDefault();
+        cards.removeClass('active');
+        $(this).addClass('active');
+        select_card.val($(this).attr('data-name')).trigger('keyup');
+      });
+    }
+  }
+
+  var cardsController = new CardsController();
+  cardsController.initialize('form.edit_payment');
+
+  ValidationController = function() {
+    var form;
+
+    this.initialize = function(_form) {
+      form = $(_form);
+
+      form.validate({
+        ignore: ':hidden:not(.select2):not(.validate)',
+        highlight: highlightHandler,
+        unhighlight: unhighlightHandler,
+        onkeyup: formValidationStateChecking,
+        errorPlacement: function(error,element) {
+          return true;
+        },
+        rules: {
+          //Personal Info
+          'payment[card_num]': {
+            required: {
+              required: true
+            }
+          },
+          'payment[expiration_at_month]': {
+            required: {
+              required: true
+            }
+          },
+          'payment[expiration_at_year]': {
+            required: {
+              required: true
+            }
+          },
+          'payment[card_name]': {
+            required: {
+              required: true
+            }
+          },
+          'payment[cvc]': {
+            required: {
+              required: true
+            }
+          },
+          'payment[card]': {
+            required: {
+              required: true
+            }
+          }
+        }
+      });
+
+      formValidationStateChecking(form.find('input').first())
+      form.find('input, select').change(function(e) {
+        formValidationStateChecking($(this));
+      });
+    }
+
+    var formValidationStateChanged = function(isEnable, control) {
+      switchControlState(form.find('input[type=submit]'), isEnable);
+    }
+
+    var highlightHandler = function(element) {
+      $(element).addClass('unvalid');
+      $(element).removeClass('valid');
+      if($(element).hasClass('select2')) {
+        $('.select2-id-'+$(element).attr('id')).addClass('unvalid');
+        $('.select2-id-'+$(element).attr('id')).removeClass('valid');
+      }
+    }
+
+    var unhighlightHandler = function(element) {
+      $(element).removeClass('unvalid');
+      $(element).addClass('valid');
+      if($(element).hasClass('select2')) {
+        $('.select2-id-'+$(element).attr('id')).removeClass('unvalid');
+        $('.select2-id-'+$(element).attr('id')).addClass('valid');
+      }
+    }
+
+    var formValidationStateChecking = function(element) {
+      if(form.valid())
+        formValidHandler(element);
+      else
+        formUnvalidHandler(element);
+    }
+
+    var formValidHandler = function(element) {
+      formValidationStateChanged(true, element);
+    }
+
+    var formUnvalidHandler = function(element) {
+      formValidationStateChanged(false, element);
+    }
+  }
+
+  var validationController = new ValidationController();
+  validationController.initialize('form.edit_payment');
+})

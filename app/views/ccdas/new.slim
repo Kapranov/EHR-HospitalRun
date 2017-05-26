@@ -1,0 +1,122 @@
+= link_to 'Download',     '#', id: 'download_ccda', data: { url: download_ccdas_path(patient_id: @patient.id) }
+= link_to 'Preview XML',  '#', id: 'preview_xml',   data: { url: preview_xml_ccdas_path(patient_id: @patient.id) }
+= link_to 'Preview HTML', '#', id: 'preview_html',  data: { url: preview_html_ccdas_path(patient_id: @patient.id) }
+
+= simple_form_for @ccda, remote: true, html: { id: 'ccda_form' } do |f|
+  = f.input :patient_id, as: :hidden, input_html: { value: @patient.id }
+
+  = f.check_box :identification
+  label Identification
+  br
+
+  = f.check_box :contact_information
+  label Contact information
+  br
+
+  = f.check_box :basic_information
+  label Basic Information
+  br
+
+  = f.check_box :encounter_diagnoses
+  label Encounter diagnoses
+  br
+
+  = f.check_box :immunizations
+  label Immunizations
+  br
+
+  = f.check_box :cognitive_status
+  label Cognitive Status
+  br
+
+  = f.check_box :functional_status
+  label Functional Status
+  br
+
+  = f.check_box :reason_for_referral
+  label Reason For Referral
+  br
+
+  = f.check_box :discharge_instructions
+  label Discharge Instruction
+  br
+
+  = f.check_box :smoking_status
+  label Smoking Status
+  br
+
+  = f.check_box :problems_dx
+  label Problems (Dx)
+  br
+
+  = f.check_box :medications
+  label Medications (Rx)
+  br
+
+  = f.check_box :medication_allergies
+  label Medication Allergies
+  br
+
+  = f.check_box :laboratory
+  label Laboratory Tests & Results
+  br
+
+  = f.check_box :vital
+  label Vital Stats
+  br
+
+  = f.check_box :care_plan
+  label Care Plan - Goals & Instructions
+  br
+
+  = f.check_box :procedures
+  label Procedures
+  br
+
+  = f.check_box :care_team_members
+  label Care Team Members
+  br
+
+#preview
+
+javascript:
+  $(function() {
+    var CcdaController = function() {
+      var ccda_form = $('#ccda_form');
+
+      this.initialize = function() {
+        ClickOnDownload();
+        ClickOnPreviewXml();
+        ClickOnPreviewHtml();
+      };
+
+      var ClickOnDownload = function() {
+        $('#download_ccda').click(function() {
+          window.location = $(this).data('url') + '&' + ccda_form.serialize();
+        });
+      };
+
+      var ClickOnPreviewXml = function() {
+        $('#preview_xml').click(function () {
+          var url  = $(this).data('url');
+          var data = ccda_form.serialize();
+          $.ajax({
+            url: url,
+            data: data,
+            dataType: 'text'
+          }).done(function(xml) {
+            $('#preview').text(xml);
+          });
+        });
+      };
+
+      var ClickOnPreviewHtml = function () {
+        $('#preview_html').click(function() {
+          window.location = $(this).data('url') + '&' + ccda_form.serialize();
+        });
+      };
+    };
+
+    var ccdaController = new CcdaController();
+    ccdaController.initialize();
+  });

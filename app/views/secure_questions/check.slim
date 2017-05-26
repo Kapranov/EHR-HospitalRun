@@ -1,0 +1,58 @@
+#secure-questions-wrapper
+  = render_messages
+  = simple_form_for @secure_question, url: verify_secure_questions_path, html: { autocomplete: 'off' } do |f|
+    #secure-questions-wrapper-check.fade.in
+      .secure-questions-wrapper
+        .secure-questions-top
+          .string
+            .string-top
+              .image-center
+                = image_tag 'ehr.svg', width: 232, height: 88, alt: 'EHR1 Logo'
+            .container
+              .string-top-container
+                = link_to root_path, class: 'string-top-home-link'
+                  = image_tag 'num-top.svg', width: 146, height: 248, alt: 'EHR1 One Num Logo'
+        .container
+          .content
+            .row
+              .col-lg-12
+                .form-group
+                  p 
+                    span Computer Authorization
+                  hr
+            .row
+              .col-lg-12
+                .form-group
+                  p For added security, we require the creation of a security question and answer.
+            .row
+              .col-lg-12
+                .form-group
+                  p 
+                    | This computer isn’t recognized by our system. Please answer your security question to confirm your identity and access your account.&nbsp;
+                    a href="#" What’s this?
+            .row
+              .col-lg-12
+                .form-group
+                  p.title YOUR SECURITY QUESTION:
+                  p 
+                    = @secure_question.question
+            .row
+              .col-lg-12
+                .form-group
+                  p.title YOUR ANSWER
+                  = f.input_field :answer, class: 'form-control', value: ''
+                  a href="#" Forgot your answer?
+            .row
+              .col-lg-12
+                .form-group
+                  .checkbox-custom
+                    = check_box_tag :remember_this_computer, '', true, class: 'checkbox'
+                    label[for="remember_this_computer"]
+                      span.checkbox-icon-container
+                        span.checkbox-icon.checkbox-icon-green
+                      span.checkbox-label Remember this computer
+          .footer
+            .controls
+              = f.submit 'AUTHORIZE', class: 'btn btn-default'
+              = link_to 'Cancel and Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-padding-md'
+#modal-secure-questions-message.modal-provider.modal.animated.fadeIn

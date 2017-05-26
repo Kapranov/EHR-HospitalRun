@@ -1,0 +1,19 @@
+ul.header-controls
+  li
+    = link_to '#', class: 'disabled'
+      i.fa.fa-bell-o
+  li
+    = link_to '#', class: 'disabled'
+      i.fa.fa-envelope-o
+  li
+    = link_to '#', class: 'disabled'
+      i.fa.fa-calendar
+  li
+    = link_to '#', class: 'avatar'
+      .avatar.avatar-blank
+        i.fa.fa-2x.fa-user
+      span
+        = current_user.email
+  li
+    = link_to destroy_user_session_path, method: 'delete'
+      i.fa.fa-sign-out

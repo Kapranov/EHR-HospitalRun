@@ -1,0 +1,992 @@
+.wrapper {
+  .header {
+    .categories-header {
+      min-height: 50px;
+      .row div[class*='col-'] {
+        padding-top: 14px;
+        padding-bottom: 14px;
+      }
+    }
+  }
+  .content {
+    min-height: calc(100vh - 160px);
+    .row-container {
+      padding: 20px 0;
+    }
+    .bordered-container {
+      .category-header {
+        height: auto;
+        min-height: 50px;
+        padding: 15px 20px;
+        margin-bottom: 0;
+        .title {
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}
+
+.agreement-wrapper {
+  .main-container {
+    &,
+    .bordered-container {
+      padding: 20px;
+      &.bordered-container {
+        padding-top: 15px;
+      }
+    }
+    p {
+      margin: 0;
+      text-align: justify;
+      font-size: 13px;
+      line-height: 17px;
+      span {
+        font-size: 14px;
+      }
+    }
+    .row:last-child {
+      margin-bottom: -15px;
+    }
+  }
+  .agreement-agree-container {
+    padding: 25px 20px;
+    background: #F5F5F5;
+    * {
+      font-size: 16px;
+    }
+    .form-control {
+      font-size: 15px;
+    }
+    p {
+      color: graytext;
+      margin-bottom: 7px;
+    }
+    .row:last-child {
+      margin-bottom: -15px;
+    }
+    .checkbox-custom label {
+      .checkbox-icon {
+        border-color: $green;
+        background-color: #F5F5F5;
+      }
+      .checkbox-label {
+        font-size: 16px;
+        padding-left: 5px;
+        text-transform: none;
+        color: $graytext;
+      }
+    }
+  }
+  .controls {
+    text-align: right;
+    padding: 35px 20px 25px 20px;
+    margin: -15px -5px;
+    .btn {
+      width: auto;
+      padding-left: 8px;
+      padding-right: 8px;
+      display: inline-block;
+      margin: 15px 5px;
+      &.btn-cancel {
+        font-family: 'SF UI Text Bold';
+        color: $green;
+      }
+    }
+  }
+}
+
+.membership-wrapper {
+  .bordered-container {
+    .category-header {
+      padding: 0 45px !important;
+      .controls {
+        .btn-group {
+          margin: 8px 0;
+          &.btn-group-shadowed {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.50);
+          }
+          .btn {
+            width: auto;
+            height: 35px;
+            line-height: 35px;
+            color: white;
+            transition: opacity .2s, background-color .2s, color .2s;
+            &.active {
+              font-family: 'SF UI Text Bold';
+            }
+            &:not(.btn-default):not(.active) {
+              &:hover,
+              &:focus,
+              &:active {
+                opacity: .75;
+              }
+            }
+            &.btn-default {
+              color: $green;
+              border-color: white;
+              background-color: white;
+              &:hover,
+              &:focus,
+              &:active,
+              &.active {
+                font-family: 'SF UI Text Regular';
+                background-color: $green;
+                color: white;
+              }
+            }
+          }
+          .btn-badged {
+            .badge {
+              width: 25px;
+              height: 25px;
+              position: absolute;
+              top: -6px;
+              right: -11px;
+              padding: 4px;
+              font-size: 18px;
+              background-color: $unconfirmed;
+              border-radius: 50%;
+            }
+          }
+        }
+        .left-block .btn {
+          padding-left: 34px;
+          padding-right: 34px;
+        }
+        .right-block {
+          .btn {
+            padding-left: 16px;
+            padding-right: 16px;
+          }
+          div[class*="col-"] {
+            text-align: right;
+          }
+          p, a {
+            display: inline-block;
+          }
+        }
+        p, a {
+          font-size: 15px;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+}
+
+.membership-shop-wrapper {
+  .main-container {
+    padding: 30px;
+    margin-bottom: -15px;
+    .panel.category {
+      box-shadow: none;
+      margin-bottom: 30px;
+      .panel-header {
+        .title {
+          color: $graytextdark;
+          font-family: 'SF UI Text Bold';
+          font-size: 20px;
+        }
+      }
+      .panel-body {
+        padding: 0;
+        a {
+          padding: 13px 30px;
+          display: block;
+          border-radius: 3px;
+          border: 1px solid #C5C5C5;
+          transition: background-color 0.2s;
+          &:hover,
+          &:focus,
+          &:active,
+          &.active {
+            background-color: #F4F4F4;
+          }
+          .icon {
+            width: 64px;
+            height: 64px;
+            background-size: 64px 64px;
+            background-repeat: no-repeat;
+            background-position: center;
+          }
+          p {
+            font-size: 15px;
+            color: black;
+          }
+          .arrow-icon {
+            width: 24px;
+            height: 50px;
+            margin: 5px 0 5px auto;
+            background-repeat: no-repeat;
+            background-size: 24px 50px;
+            &.arrow-right {
+              background-image: image_url('arrow_right_icon.svg');
+            }
+          }
+        }
+      }
+      &.category-subscription .panel-body .icon {
+        background-image: image_url('subscription_icon.svg');
+      }
+      &.category-erx-subscription .panel-body .icon {
+        background-image: image_url('erx_subscription_icon.svg');
+      }
+      &.category-labs-and-imaging-subscription .panel-body .icon {
+        background-image: image_url('labs_and_imaging_subscription_icon.svg');
+      }
+      &.category-integrated-billing-subscription .panel-body .icon {
+        background-image: image_url('integrated_billing_subscription_icon.svg');
+      }
+    }
+  }
+}
+
+.membership-order-wrapper {
+  .main-container {
+    padding: 24px 30px;
+    hr {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      border-color: $green;
+    }
+    .main-title {
+      background-image: image_url('subscription_icon.svg');
+      background-size: 32px 39px;
+      background-repeat: no-repeat;
+      padding: 5px 0 5px 52px;
+      color: $graytextdark;
+      font-family: 'SF UI Text Bold';
+      font-size: 20px;
+    }
+    #tabs {
+      .controls-top {
+        a {
+          display: table-cell;
+          padding: 12px 10px 12px 55px;
+          min-height: 45px;
+          background-repeat: no-repeat;
+          background-size: 45px 45px;
+          background-position: left center;
+          font-size: 15px;
+          font-family: 'SF UI Text Bold';
+          color: $graytextdark;
+          &.cloud-btn {
+            background-image: image_url('cloud_icon.svg');
+          }
+          &.server-btn {
+            background-image: image_url('server_icon.svg');
+          }
+          &[aria-expanded="true"] {
+            .arrow-down {
+              opacity: 1;
+            }
+          }
+        }
+        .arrow-down {
+          width: 0;
+          height: 0;
+          position: relative;
+          left: 90px;
+          bottom: -11px;
+          border-left: 20px solid transparent;
+          border-right: 20px solid transparent;
+          border-bottom: 20px solid $green;
+          transition: opacity 0.1s;
+          &:after {
+            content: '';
+            position: absolute;
+            top: 1px;
+            left: -18px;
+            border-left: 18px solid transparent;
+            border-right: 19px solid transparent;
+            border-bottom: 19px solid white;
+          }
+        }
+      }
+      .tab {
+        .row-container {
+          padding-top: 5px;
+          padding-bottom: 10px;
+          .title {
+            font-size: $graytextdark;
+            font-size: 18px;
+            font-family: 'SF UI Text Medium';
+            margin-bottom: 15px;
+          }
+          .radiobuttion-group {
+            padding-left: 30px;
+            .radiobutton-custom {
+              &,
+              .radio-icon-container,
+              .radio-label {
+                vertical-align: middle;
+                display: table-cell;
+              }
+              .radio-icon {
+                display: block;
+              }
+              .radio-label {
+                font-size: 16px;
+                float: none;
+              }
+            }
+          }
+          .checkbox-custom {
+            .checkbox-label {
+              font-size: 18px;
+              padding-left: 20px;
+              text-transform: none;
+            }
+          }
+          p {
+            color: $graytextdark;
+            font-size: 18px;
+            margin-bottom: 0;
+          }
+          .bordered-container {
+            padding: 15px 30px;
+            border-color: #C5C5C5;
+          }
+          .sub-title {
+            padding-top: 12px;
+            span {
+              text-decoration: underline;
+            }
+          }
+        }
+        .controls-bottom {
+          padding: 25px 0 20px 0;
+          .btn {
+            margin: 0 0 0 auto;
+          }
+        }
+        .summary-container {
+          p {
+            font-size: 18px;
+            color: $graytextdark;
+            text-align: right;
+          }
+          ul {
+            margin-top: 10px;
+            list-style-type: none;
+            li {
+              div[class*='col-'] {
+                text-align: right;
+              }
+            }
+          }
+          .summary p {
+            font-family: 'SF UI Text Bold';
+          }
+        }
+      }
+    }
+  }
+}
+
+.membership-cart-wrapper,
+.membership-quote-wrapper {
+  .content {
+    min-height: 0;
+    padding: 30px;
+    .title {
+      color: $graytextdark;
+      font-size: 20px;
+      font-family: 'SF UI Text Bold';
+    }
+    hr {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      border-top: 1px solid $green;
+    }
+    .table {
+      tr td {
+        border-top-color: $green;
+      }
+      p {
+        margin: 0;
+      }
+      thead {
+        tr {
+          td {
+            text-align: center;
+            color: $green;
+            font-size: 15px;
+            font-family: 'SF UI Text Bold';
+          }
+        }
+      }
+      tbody tr td:nth-child(3),
+      tfoot tr.additional-pay td {
+        div[class*='col-'] {
+          text-align: right;
+          &:first-child {
+            padding-right: 5px;
+          }
+          &:last-child {
+            padding-left: 5px;
+          }
+        }
+      }
+      tbody {
+        tr {
+          &.main-subscription td:first-child {
+            background-image: image_url('subscription_icon.svg');
+            background-repeat: no-repeat;
+            background-size: 40px 40px;
+            background-position: 20px center;
+          }
+          td {
+            padding: 32px 20px;
+            vertical-align: middle;
+            &:nth-child(1) {
+              padding-left: 80px;
+            }
+            &:nth-child(2) {
+              text-align: center;
+            }
+            &:nth-child(3) {
+              width: 150px;
+              p {
+                text-align: right;
+              }
+            }
+            &:nth-child(2),
+            &:nth-child(3) {
+              font-size: 18px;
+            }
+            .icon.icon-ic-trash {
+              display: block;
+              position: relative;
+              left: 25px;
+            }
+          }
+        }
+      }
+      tfoot {
+        tr {
+          &.additional-pay {
+            p {
+              font-size: 18px;
+              color: $graytextdark;
+            }
+            td {
+              padding: 20px;
+              &:first-child {
+                text-align: right;
+              }
+            }
+          }
+          &:not(.additional-pay) {
+            td {
+              padding-top: 5px;
+              padding-bottom: 5px;
+              border-top: none;
+              text-align: right;
+              &.summary-title {
+                padding-top: 25px;
+                p {
+                  font-size: 36px;
+                  color: $graytextdark;
+                  text-align: right;
+                }
+              }
+              &.summary-price p {
+                font-family: 'SF UI Text Bold';
+                font-size: 36px;
+                color: $green;
+              }
+            }
+          } 
+          td {
+            padding: 20px;
+          }
+        }
+      }
+    }
+    .controls {
+      padding: 10px 0;
+      margin: 0 0 -20px 0;
+      a:not(.btn) {
+        font-size: 18px;
+        color: $green;
+        text-decoration: underline !important;
+        transition: opacity .2s;
+        &:hover,
+        &:focus,
+        &:active {
+          opacity: .75;
+        }
+      }
+      a {
+        display: block;
+        margin: 20px 0;
+      }
+      .right-block {
+        text-align: right;
+        .btn {
+          margin: 20px 0 20px auto;
+        }
+      }
+    }
+  }
+}
+
+.membership-quote-wrapper {
+  .content {
+    .checkbox-custom {
+      label {
+        .checkbox-icon-container {
+          vertical-align: top;
+        }
+        .checkbox-label {
+          padding-top: 2px;
+          padding-left: 20px;
+          color: $graytextdark;
+          text-transform: none;
+          font-size: 18px;
+          font-family: 'SF UI Text Medium';
+          span, a {
+            display: inline-block;
+          }
+          a {
+            margin: 0;
+            text-decoration: none !important;
+          }
+        }
+      }
+    }
+    table {
+      border-bottom: 1px solid $green;
+    }
+    .bottom-block {
+      .panel {
+        box-shadow: none;
+        margin: 0;
+        .panel-header {
+          .title {
+            color: $green;
+            margin-bottom: 0;
+            .fa {
+              color: $green;
+              margin: 0 10px;
+              font-size: 20px;
+            }
+          }
+        }
+        .panel-body {
+          padding-left: 0;
+          padding-right: 0;
+          &.top-block {
+            .title {
+              margin-bottom: 14px;
+            }
+            ul {
+              min-height: 65px;
+            }
+          }
+          p {
+            margin: 0;
+            font-size: 16px; 
+            color: $graytextdark;
+          }
+          .title {
+            margin-bottom: 4px;
+            color: $green;
+            font-size: 18px;
+            font-family: 'SF UI Text Regular';
+          }
+          ul {
+            list-style-type: none;
+          }
+        }
+      }
+    }
+    @media(max-width: 768px) {
+      .bottom-block {
+        .panel {
+          margin-top: 20px;
+          .top-block {
+            ul {
+              min-height: 0 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.membership-details-wrapper {
+  .content {
+    .panel {
+      margin: 15px 110px 0 30px;
+      box-shadow: none;
+      sup.help {
+        .icon {
+          display: inline-block;
+          margin-left: 5px;
+        }
+      }
+      .panel-header {
+        padding: 15px 80px 5px 80px;
+        .title {
+          margin: 0;
+          color: $graytextdark;
+          font-family: 'SF UI Text Bold';
+          font-size: 20px;
+        }
+      }
+      .panel-body {
+        padding: 15px 0 5px 0;
+        .title {
+          margin: 0;
+          padding: 11px 0;
+          font-size: 16px;
+          color: $graytextdark;
+          text-align: right;
+          sup {
+            top: -.3em;
+            font-size: 100%;
+            margin-left: 5px;
+            color: $green;
+          }
+        }
+        .form-control {
+          font-size: 18px;
+          &[readonly],
+          &[disabled] {
+            font-size: 15px;
+          }
+        }
+        .select2-container--disabled {
+          .select2-selection .select2-selection__rendered {
+            font-size: 15px;
+          }
+        }
+        .checkbox-custom {
+          label {
+            .checkbox-icon-container {
+              vertical-align: top;
+            }
+            .checkbox-label {
+              padding-top: 5px;
+              padding-left: 20px;
+              span[class*='checkbox-label-'] {
+                text-transform: none;
+              }
+              .checkbox-label-main {
+                display: table-row;
+                color: $graytextdark;
+                font-size: 18px;
+                font-family: 'SF UI Text Bold';
+              }
+              .checkbox-label-secondary {
+                color: $graytextdark;
+                font-size: 14px;
+                font-family: 'SF UI Text Light';
+              }
+            }
+          }
+        }
+      }
+      .panel-footer {
+        background-color: transparent;
+        margin-right: -70px;
+        border-top: 0;
+        padding: 5px 0 0 0;
+        hr {
+          margin: 0;
+          border-top-color: $green;
+        }
+      }
+    }
+    .controls {
+      padding: 20px 40px;
+      margin: -10px;
+      .btn {
+        margin: 10px 10px 10px auto;
+      }
+    }
+    @media(max-width: 991px) {
+      .panel {
+        margin-right: 30px;
+        .panel-header {
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+        .panel-body {
+          .title {
+            padding: 0;
+            text-align: left;
+          }
+        }
+        .panel-footer {
+          margin-right: 0;
+        }
+      }
+      .controls {
+        margin: -10px -20px;
+      }
+    }
+  }
+}
+
+.membership-card-info-wrapper,
+.membership-quote-price-wrapper {
+  .content {
+    padding: 0 32px 0 92px;
+    .cards {
+      font-size: 0;
+      text-align: right;
+      margin-top: 3px;
+      .card-logo {
+        display: inline-block;
+        width: 40px;
+        height: 25px;
+        background-repeat: no-repeat;
+        background-size: 35px;
+        background-position: center;
+        opacity: .5;
+        transition: opacity .2s, background-size .2s;
+        &:hover,
+        &:focus,
+        &:active,
+        &.active {
+          opacity: 1;
+        }
+        &.active {
+          background-size: 40px;
+        }
+        &.card-visa-logo {
+          background-image: image_url('card-visa-logo.png');
+        }
+        &.card-mastercard-logo {
+          background-image: image_url('card-mastercard-logo.png');
+        }
+        &.card-americanexpress-logo {
+          background-image: image_url('card-american-express-logo.png');
+        }
+        &.card-discover-logo {
+          background-image: image_url('card-discover-logo.png');
+        }
+      }
+    }
+    .panel.panel-main {
+      margin: 30px 0 0 0;
+      box-shadow: none;
+      sup.help {
+        .icon {
+          display: inline-block;
+          margin-left: 5px;
+        }
+      }
+      .panel-header {
+        padding: 0 0 5px 0;
+        .title {
+          margin: 0;
+          color: $graytextdark;
+          font-family: 'SF UI Text Bold';
+          font-size: 20px;
+        }
+      }
+      .panel-body {
+        padding: 15px 0 5px 0;
+        .title {
+          margin: 0;
+          padding: 5px 0 10px 0;
+          font-size: 16px;
+          color: $graytextdark;
+          sup {
+            top: -.3em;
+            font-size: 100%;
+            margin-left: 5px;
+            color: $green;
+          }
+        }
+        .form-control {
+          font-size: 18px;
+          &[readonly],
+          &[disabled] {
+            font-size: 15px;
+          }
+        }
+        .select2-container--disabled {
+          .select2-selection .select2-selection__rendered {
+            font-size: 15px;
+          }
+        }
+        .checkbox-custom {
+          label {
+            .checkbox-icon-container {
+              vertical-align: top;
+            }
+            .checkbox-label {
+              padding-top: 2px;
+              padding-left: 20px;
+              color: $graytextdark;
+              text-transform: none;
+              font-size: 18px;
+              font-family: 'SF UI Text Medium';
+            }
+          }
+        }
+        textarea.form-control {
+          resize: none;
+          height: 195px;
+        }
+      }
+      .panel-footer {
+        background-color: transparent;
+        border-top: 0;
+        padding: 5px 0 0 0;
+        hr {
+          margin: 0;
+          border-top-color: $green;
+        }
+      }
+    }
+    .panel.panel-summary {
+      margin: 15px 0 0 0;
+      box-shadow: none;
+      .panel-body {
+        padding: 15px 0;
+        .summary-content {
+          p {
+            text-align: right;
+            font-size: 36px;
+          }
+          .summary-title {
+            color: $graytextdark;
+          }
+          .summary-price {
+            font-family: 'SF UI Text Bold';
+            color: $green;
+          }
+        }
+      }
+      .panel-footer {
+        background-color: transparent;
+        border-top: 0;
+        padding: 5px 0 0 0;
+        hr {
+          margin: 0;
+          border-top-color: $green;
+        }
+      }
+    }
+    .panel.panel-explanation {
+      background-color: rgba(80, 190, 175, .20);
+      border: 1px solid $green;
+      border-radius: 6px;
+      .panel-body {
+        .icon-ic-explanation {
+          position: absolute;
+        }
+        p, a {
+          color: $green;
+          font-size: 16px;
+        }
+        p {
+          margin: 0;
+        }
+        a {
+          color: $green;
+          text-decoration: underline !important;
+          transition: opacity .2s;
+          &:hover,
+          &:focus,
+          &:active {
+            opacity: .75;
+          }
+        }
+      }
+    }
+    .panel.panel-explanation.panel-top {
+      margin: 5px 0 0 30px;
+      .panel-body {
+        padding: 12px 14px 12px 50px;
+        .icon-ic-explanation {
+          top: 0px;
+          left: -20px;
+        }
+      }
+    }
+    .panel.panel-explanation.panel-bottom {
+      margin-top: 15px;
+      .panel-body {
+        padding: 14px 17px 17px 60px;
+        .icon-ic-explanation {
+          top: -8px;
+          left: -32px;
+        }
+      }
+    }
+    .right-block {
+      .panel.panel-main {
+        margin-left: 0;
+        margin-right: 0;
+        .panel-header {
+          padding: 0;
+        }
+        .panel-body {
+          padding-top: 0;
+        }
+      }
+    }
+    .controls {
+      padding: 20px 0;
+      margin: -10px;
+      .btn {
+        margin: 10px 10px 10px auto;
+      }
+    }
+  }
+  @media(max-width: 991px) {
+    .content {
+      padding-left: 32px;
+    }
+  }
+}
+
+.membership-quote-price-wrapper {
+  .content {
+    .left-block {
+      .panel {
+        .panel-body {
+          padding-top: 35px;
+        }
+      }
+    }
+  }
+}
+
+.quote-confirmation-wrapper {
+  min-height: calc(100vh - 110px) !important;
+  .container {
+    padding-top: 8vh;
+    padding-bottom: 8vh;
+    .icon-quote-confirmation {
+      width: 290px;
+      height: 40vh;
+      margin: 2vh auto 2vh auto;
+      background-image: image_url('icon-quote-confirmation.svg');
+      background-repeat: no-repeat;
+      background-size: stretch;
+      background-position: center;
+    }
+    p {
+      text-align: center;
+    }
+    .title {
+      color: $green;
+      font-size: 30px;
+      margin-bottom: 30px;
+    }
+    .sub-title {
+      font-size: 16px;
+      color: #5D5D5D;
+    }
+  }
+}

@@ -1,0 +1,62 @@
+@import 'ui/main';
+
+html, body {
+  margin: 0 auto;
+}
+
+html {
+  padding: 50px 0;
+}
+
+body {
+  width: 800px;
+  height: 900px;
+  border: 1px solid $border;
+  border-radius: 18px;
+}
+
+p {
+  font-family: 'Times New Roman';
+  color: #000;
+  font-size: 14px;
+  margin: 0;
+}
+
+.mailer-wrapper {
+  border-collapse: collapse;
+  tr td {
+    border: 0;
+    padding: 0;
+  }
+  thead {
+    tr {
+      td {
+        &.logo {
+          width: 800px;
+          height: 165px;
+          display: table-cell;
+          background: image_url('logo-header-mailer.png') 100% 100% no-repeat;
+          a {
+            width: 160px;
+            height: 140px;
+            display: block;
+            margin: 0 auto;
+          }
+        }
+      }
+    }
+  }
+  tfoot {
+    tr {
+      td {
+        height: 40px;
+        background-color: $green;
+        border-radius: 0 0 16px 16px;
+        padding: 0 60px;
+        p {
+          color: #fff;
+        }
+      }
+    }
+  }
+}

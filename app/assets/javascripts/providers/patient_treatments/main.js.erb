@@ -1,0 +1,101 @@
+//= require ./medical_history
+
+$(function() {
+  initPickers();
+  initModalsReposition();
+
+  FindPatientsController = function() {
+    var patients_input, patients_button, patients_show_inactive, link;
+    var input;
+
+    this.initialize = function(_patients_input, _patients_button, _patients_show_inactive, _link) {
+      patients_input = $(_patients_input)
+      patients_button = $(_patients_button);
+      patients_show_inactive = $(_patients_show_inactive);
+      link = _link;
+      
+      patients_input.select2({
+        width: '100%',
+        placeholder: patients_input.data('placeholder'),
+        ajax: {
+          url: link,
+          processResults: processResults,
+          data: function (params) {
+            return {
+              part: params.term
+            };
+          },
+          cache: false
+        },
+        escapeMarkup: function (markup) { return markup; },
+        minimumInputLength: 1
+      });
+
+      patients_button.click(function(e) {
+        patients_input.select2('open');
+      });
+
+      patients_show_inactive.change(function() {
+        $.ajax({
+          url: '<%= Rails.application.routes.url_helpers.active_patients_patient_treatments_path %>',
+          data: { active: $(this).is(':checked') }
+        }).done(function(partial) {
+          var parent = $('.patients-main-table').parent();
+          parent.find('table').remove();
+          parent.find('.bottom-block').remove();
+          parent.append(partial);
+        });
+      });
+    }
+
+    function processResults(data, params) {
+      var parent = $('.patients-main-table').parent();
+      parent.find('table').remove();
+      parent.find('.bottom-block').remove();
+      parent.append(data);
+      return {
+        results: data
+      };
+    }
+  };
+
+  var findPatientsController = new FindPatientsController();
+  findPatientsController.initialize(
+    '.patients-wrapper #find_patients',
+    '.patients-wrapper #find-patients-button',
+    '.patients-wrapper #patient_show_inactive',
+    '<%= Rails.application.routes.url_helpers.search_patients_patient_treatments_path %>'
+  );
+
+  SyncWithDosespotController = function() {
+    var links, patient_id, callback, count;
+
+    this.initialize = function(_links, _patient_id, _callback) {
+      links = _links;
+      patient_id = _patient_id;
+      callback = _callback;
+      count = 0
+
+      initAll();
+    }
+
+    var initAll = function() {
+      links.forEach(function(link) {
+        callAjax(link);
+      });
+    }
+
+    var callAjax = function(link) {
+      $.ajax({
+        url: link,
+        data: {
+          patient_id: patient_id
+        }
+      }).complete(function() {
+        count++;
+        if(count == links.length)
+          callback();
+      });
+    }
+  }
+});

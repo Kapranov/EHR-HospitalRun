@@ -1,0 +1,40 @@
+- if @patients.present? && @patients.any?
+  .row
+    .col-lg-12
+      .table-responsive
+        table.table
+          thead
+            tr
+              td First
+              td Last
+              td Pt ID
+              td Lab Order #
+              td Test Report
+              td Test
+              td Code
+              td Test performed
+              td Results
+              td Added
+          tbody
+            - @patients.each do |patient|
+              tr
+                td
+                  = patient.first_name
+                td
+                  = patient.last_name
+                td
+                  = patient.id
+                td
+                  = patient.lab_orders.map(&:order_num).join(', ')
+                td
+                  = patient.lab_results.map(&:test_resported_at).join(', ')
+                td
+                  = patient.lab_orders.map{ |order| order.test_orders.map(&:test).join(', ') }.join('; ')
+                td
+                  = patient.lab_orders.map{ |order| order.test_orders.map(&:code).join(', ') }.join('; ')
+                td
+                  = patient.lab_results.map(&:tested_at).join(', ')
+                td
+                  = patient.lab_orders.map(&:lab_status).join(', ')
+                td
+                  = patient.created_at.strftime(Date::DATE_FORMATS[:dosespot])

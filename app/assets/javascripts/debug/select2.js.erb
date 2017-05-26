@@ -1,0 +1,19 @@
+$(document).ready(function(e) {
+  //Select2 Init
+  initSelect2('#debug-wrapper-select2');
+  $('#debug-wrapper-select2 select.select2.valid + .select2-container').addClass('valid');
+  $('#debug-wrapper-select2 select.select2.unvalid + .select2-container').addClass('unvalid');
+  $('#debug-wrapper-select2 .select2.search').select2({
+    width: '100%',
+    minimumInputLength: 1
+  });
+
+  //Collapse Panels Actions
+  $('#debug-wrapper-select2 .panel-collapse').on('show.bs.collapse', function(e) {
+    $('#debug-wrapper-select2 .btn-group a.btn').removeClass('active');
+    $('#debug-wrapper-select2 .btn-group a.btn[href="#'+$(this).attr('id')+'"]').addClass('active');
+  });
+  $('#debug-wrapper-select2 .panel-collapse').on('hide.bs.collapse', function(e) {
+    $('#debug-wrapper-select2 .btn-group a.btn[href="#'+$(this).attr('id')+'"]').removeClass('active');
+  });
+})

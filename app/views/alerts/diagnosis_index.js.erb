@@ -1,0 +1,43 @@
+$('#modal-alert-diagnosis-index').html('<%= escape_javascript(render 'form_diagnosis_index') %>');
+
+initPickers('#modal-alert-diagnosis-index');
+initModalFadeInOut('#modal-alert-diagnosis-index');
+
+$('#modal-alert-diagnosis-index').modal('show');
+$('#modal-alert-diagnosis-index').on('hidden.bs.modal', function() {
+  modalBackward('#modal-alert-diagnosis-index');
+  modalForward('#modal-patient-add-diagnoses');
+})
+modalBackward('#modal-patient-add-diagnoses');
+modalForward('#modal-alert-diagnosis-index');
+
+CollapseStateChangedController = function() {
+  var collapse, more_info;
+
+  this.initialize = function() {
+    collapse = $('.collapse');
+    initCollapses();
+  }
+
+  var initCollapses = function() {
+    collapse.on('hidden.bs.collapse', function(e) {
+      repositionModal($('#modal-alert-diagnosis-index'), false);
+      if($(this).hasClass('panel-additional-info')) {
+        var infoToggle = $(this).parent().find('.toggle-more-info');
+        infoToggle.text('More Info');
+        infoToggle.removeClass('active');
+      }
+    });
+    collapse.on('shown.bs.collapse', function() {
+      repositionModal($('#modal-alert-diagnosis-index'), false);
+      if($(this).hasClass('panel-additional-info')) {
+        var infoToggle = $(this).parent().find('.toggle-more-info');
+        infoToggle.text('Less Info');
+        infoToggle.addClass('active');
+      }
+    });
+  }
+}
+
+var collapseStateChangedController = new CollapseStateChangedController();
+collapseStateChangedController.initialize();

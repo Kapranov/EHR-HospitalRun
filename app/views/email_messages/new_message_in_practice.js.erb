@@ -1,0 +1,81 @@
+$('#modal-messages-new-message-in-practice').html('<%= escape_javascript(render 'new_message_in_practice_form') %>');
+
+initSelect2('#modal-messages-new-message-in-practice');
+
+$('#modal-messages-new-message-in-practice').modal('show')
+
+var smc = new SubjectMenuController();
+smc.initialize('#modal-messages-new-message-in-practice');
+
+SearchController = function() {
+  var input, input_id, button, placeholder, link;
+
+  this.initialize = function(_input, _input_id, _button, _placeholder, _link) {
+    input = $(_input)
+    input_id = $(_input_id);
+    button = $(_button);
+    placeholder = _placeholder;
+    link = _link;
+    
+    input.select2({
+      width: '100%',
+      placeholder: placeholder,
+      ajax: {
+        url: link,
+        processResults: processResults,
+        data: function (params) {
+          return {
+            part: params.term
+          };
+        },
+        cache: true
+      },
+      escapeMarkup: function (markup) { return markup; },
+      minimumInputLength: 1,
+      templateResult: templateResult,
+      templateSelection: templateSelection
+    });
+
+    button.click(function(e) {
+      input.select2('open');
+    });
+  }
+
+  function processResults(data, params) {
+    return {
+      results: data
+    };
+  }
+
+  function templateResult(item) {
+    if (item.loading) return item.text;
+    return '<span>'+item.full_name+'</span>';
+  }
+
+  function templateSelection(item) {
+    if(item.full_name) {
+      input_id.val(item['id']).trigger('change');
+      return item.full_name;
+    }
+    else
+      return item.text;
+  }
+};
+
+var findPracticeStaffController = new SearchController();
+findPracticeStaffController.initialize(
+  '#modal-messages-new-message-in-practice #find_message_practice_staff',
+  '#modal-messages-new-message-in-practice #practice_id',
+  '#modal-messages-new-message-in-practice #find_message_practice_staff_button',
+  'Search Practice Staff',
+  '<%= Rails.application.routes.url_helpers.practices_email_messages_path %>'
+);
+
+var findPatientsController = new SearchController();
+findPatientsController.initialize(
+  '#modal-messages-new-message-in-practice #find_message_patients',
+  '#modal-messages-new-message-in-practice #email_message_patient_id',
+  '#modal-messages-new-message-in-practice #find_message_patients_button',
+  'Search Patients',
+  '<%= Rails.application.routes.url_helpers.patients_email_messages_path %>'
+);

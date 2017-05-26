@@ -1,0 +1,22 @@
+@import 'colors';
+@import 'fonts';
+@import 'forms';
+@import 'buttons';
+@import 'input-groups';
+@import 'checkboxes';
+@import 'dropdowns';
+@import 'modals';
+@import 'navigation/header';
+@import 'navigation/side';
+@import 'navigation/categories';
+
+a:focus,
+input:focus,
+button:focus {
+  outline: 0 !important;
+}
+
+.disabled {
+  opacity: 0.5 !important;
+  pointer-events: none;
+}

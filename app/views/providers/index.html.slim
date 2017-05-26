@@ -1,0 +1,38 @@
+- content_for :title
+  | EHR1 | Electronic Health Records - Dashboard
+- content_for :back_link do
+  = link_to 'Dashboard', providers_path, class: 'active'
+.content
+  .container-fluid.content-container
+    .top-controls
+      a.btn.btn-default.btn-padding-md href="#" data-toggle="modal" data-target="#modal-lockscreen"
+        i.fa.fa-lock
+      - if policy(Patient).create?
+        = link_to 'Add Patient', new_patient_path, remote: true, class: "btn btn-default"
+      - if policy(Appointment).create?
+        = link_to 'Add Appointment', new_appointment_path, remote: true, class: "btn btn-default"
+    .windows
+      .left-block
+        p.current-date
+          = local_time(Time.now, '%A, %B %-dth, %Y')
+        - if policy(Appointment).show?
+          = render 'my_appointments', appointments: @appointments, field: '', type: ''
+      .right-block
+        - if policy(EmailMessage).show?
+          = render 'messages', messages: @messages
+        - if policy(ToDo).show?
+          = render 'to_dos', to_dos: @to_dos
+#modal-add-patient.modal.modal-provider.animated.fadeIn
+#modal-add-appointment.modal-provider.modal.animated.fadeIn
+#modal-add-patient-invite-to-portal.modal-provider.modal.animated.fadeIn
+#modal-new-patient.modal-provider.modal.animated.fadeIn
+#modal-show-appointment-details.modal-provider.modal.animated.fadeIn
+#modal-new-referral.modal-provider.modal.animated.fadeIn
+#modal-message-open.modal-provider.modal.animated.fadeIn
+#modal-message-reply.modal-provider.modal.animated.fadeIn
+.messages-wrapper
+  #modal-reply-to-message-from-patient.modal.modal-provider.animated.fadeIn
+  #modal-reply-to-message-in-practice-contacts.modal-provider.modal.animated.fadeIn
+  #modal-open-message.modal.modal-provider.animated.fadeIn
+javascript:
+  $('.item-dashboard').parent().addClass('active');

@@ -1,0 +1,82 @@
+@import "select2-custom/themes/theme";
+
+$height: 24px;
+$height-search: 24px;
+
+$text-color: #4a4a4a;
+$text-open-color: #4a4a4a;
+$text-decoration: none;
+$text-open-decoration: none;
+$text-dropdown-color: #4a4a4a;
+$text-dropdown-focus-color: #4a4a4a;
+$text-dropdown-focus-decoration: none;
+
+$background-color: #fff;
+$background-open-color: #fff;
+$background-dropdown-color: #fff;
+$background-arrow-color: #eee;
+$background-focus-color: #eee;
+
+$border: 1px;
+$border-dropdown: 1px;
+$border-radius: 0;
+$border-color: #000;
+$border-dropdown-color: #888;
+$border-dropdown-separator: 1px;
+$border-focus-color: #888;
+$border-focus-search: #888;
+
+$arrow-icon: '\f0d7';
+$arrow-icon-open: '\f0d8';
+$arrow-icon-color: #000;
+$arrow-icon-open-color: #888;
+$arrow-icon-border-separator: 1px;
+
+$box-shadow: none;
+$box-shadow-open: none;
+$box-shadow-dropdown: none;
+
+$padding-dropdown: 0;
+$padding-focus-size: 2px;
+
+$font-family-regular: 'Open Sans';
+$font-family-medium: 'Open Sans';
+$font-family-light: 'Open Sans';
+$font-family-bold: 'Open Sans';
+$font-family-heavy: 'Open Sans';
+
+$font-0-5x: 12px;
+$font-1x: 15px;
+$font-2x: 16px;
+$font-3x: 17px;
+$font-4x: 18px;
+
+$text-align-left: left;
+$text-align-center: center;
+$text-align-right: right;
+
+$padding-1x: 5px;
+$padding-1-5x: 10px;
+$padding-2x: 12px;
+$padding-2-5x: 15px;
+$padding-3x: 20px;
+
+$arrow-1x: 21px;
+$arrow-2x: 25px;
+$arrow-3x: 30px;
+$arrow-4x: 35px;
+
+$arrow-font-size-1x: 18px;
+$arrow-font-size-2x: 22px;
+$arrow-font-size-3x: 26px;
+$arrow-font-size-4x: 30px;
+
+$arrow-padding-0-5x: 10px;
+
+$validation-image-size: 16px;
+$validation-valid-image: image_url('field-valid-icon.svg');
+$validation-unvalid-image: image_url('field-unvalid-icon.svg');
+
+.select2-container--admin-black-white {
+  @import 'theme_init';
+}

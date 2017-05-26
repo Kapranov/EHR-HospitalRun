@@ -1,0 +1,291 @@
+$(document).ready(function(e) {
+  SelectContentController = function() {
+    var select_doctors, select_staffs;
+    var subscription;
+    var url;
+
+    this.initialize = function(_select_doctors, _select_staffs, _url) {
+      select_doctors = $(_select_doctors);
+      select_staffs = $(_select_staffs);
+      subscription = $('input[type=radio][name=annual]');
+      url = _url;
+      initSelectsData();
+      initSelects(select_doctors);
+      initSelects(select_staffs);
+      initRadios();
+    }
+
+    var initSelectsData = function() {
+      select_doctors.data('price', 0);
+      select_doctors.data('title', 'Doctor');
+      select_doctors.data('type', 'doctors');
+      select_doctors.data('number', 0);
+      select_staffs.data('price', 0);
+      select_staffs.data('title', 'Extra Staff Member');
+      select_staffs.data('type', 'staff');
+      select_staffs.data('number', 0);
+    }
+
+    var clearSelectsData = function() {
+      initSelectsData();
+      select_doctors.val('');
+      select_doctors.html('');
+      select_doctors.trigger('keyup');
+      select_doctors.trigger('change');
+
+      select_staffs.val('');
+      select_staffs.html('');
+      select_staffs.trigger('keyup');
+      select_staffs.trigger('change');
+    }
+
+    var initSelects = function(select, type) {
+      select.select2({
+        width: '100%',
+        ajax: {
+          url: url,
+          data: function (params) {
+            return {
+              type: select.data('type'),
+              annual_subscription: $('input[type=radio][name=annual]:checked').val()
+            };
+          },
+          cache: true,
+          processResults: processResults
+        },
+        templateResult: templateResult,
+        templateSelection: function(data) {
+          return templateSelection(data, select)
+        }
+      });
+    }
+
+    var initRadios = function() {
+      subscription.change(function(e) {
+        clearSelectsData();
+      });
+    }
+
+    function processResults(data, params) {
+      return {
+        results: data
+      };
+    }
+
+    function generateItem(number, title, price) {
+      var item = $('</p>');
+      item.addClass('full_title');
+      item.append('<span class="number">'+number+'</span> ');
+      item.append('<span class="title">'+title+'</span>');
+      item.append('<span class="price">'+price+'</span>');
+      return item;
+    }
+
+    function templateResult(data) {
+      if (data.loading) return data.text;
+      return generateItem(data.number, data.title, data.price);
+    }
+
+    function templateSelection(data, select) {
+      if(data.title) {
+        select.data('number', data.number);
+        select.data('price', data.price.replace('$', ''));
+        select.data('title', data.title);
+        return generateItem(data.number, data.title, data.price);
+      }
+      else
+        return data.text;
+    }
+  }
+
+  var selectContentController = new SelectContentController();
+  selectContentController.initialize('#ehr_subscription_doctors', '#ehr_subscription_staff', '<%= Rails.application.routes.url_helpers.payments_order_selects_data_path %>');
+
+  ValidationController = function() {
+    var form;
+
+    this.initialize = function() {
+      form = $('.new_ehr_subscription');
+
+      form.validate({
+        ignore: ':hidden:not(.select2):not(.validate)',
+        highlight: highlightHandler,
+        unhighlight: unhighlightHandler,
+        onkeyup: formValidationStateChecking,
+        errorPlacement: function(error,element) {
+          return true;
+        },
+        rules: {
+          'ehr_subscription[doctors]': {
+            required: {
+              required: true
+            }
+          },
+          'ehr_subscription[staff]': {
+            required: {
+              required: true,
+              depends: function() {
+                return $('#ehr_subscription_additional_staff').is(':checked');
+              }
+            }
+          }
+        }
+      });
+
+      formValidationStateChecking($('select').first())
+      $('input, select').change(function(e) {
+        formValidationStateChecking($(this));
+      });
+    }
+
+    var formValidationStateChanged = function(isEnable, control) {
+      var nextButton = form.find('input[type=submit]');
+
+      if($(control).attr('id') === 'ehr_subscription_additional_staff') {
+        if($(control).is(':checked'))
+          switchControlState($('#ehr_subscription_staff'), true);
+        else
+          switchControlState($('#ehr_subscription_staff'), false);
+      }
+      switchControlState(nextButton, isEnable);
+    }
+
+    var highlightHandler = function(element) {
+      $(element).addClass('unvalid');
+      $(element).removeClass('valid');
+      if($(element).hasClass('select2')) {
+        $('.select2-id-'+$(element).attr('id')).addClass('unvalid');
+        $('.select2-id-'+$(element).attr('id')).removeClass('valid');
+      }
+    }
+
+    var unhighlightHandler = function(element) {
+      $(element).removeClass('unvalid');
+      $(element).addClass('valid');
+      if($(element).hasClass('select2')) {
+        $('.select2-id-'+$(element).attr('id')).removeClass('unvalid');
+        $('.select2-id-'+$(element).attr('id')).addClass('valid');
+      }
+    }
+
+    var formValidationStateChecking = function(element) {
+      if(form.valid())
+        formValidHandler(element);
+      else
+        formUnvalidHandler(element);
+    }
+
+    var formValidHandler = function(element) {
+      formValidationStateChanged(true, element);
+    }
+
+    var formUnvalidHandler = function(element) {
+      formValidationStateChanged(false, element);
+    }
+  }
+
+  var validationController = new ValidationController();
+  validationController.initialize();
+
+  SummaryController = function() {
+    var select_doctors, select_staffs;
+    var summary_container;
+    var staff_checkbox;
+    var subscription;
+
+    this.initialize = function() {
+      summary_container = $('.summary-container');
+
+      select_doctors = $('#ehr_subscription_doctors');
+      select_staffs = $('#ehr_subscription_staff');
+      staff_checkbox = $('#ehr_subscription_additional_staff');
+
+      subscription = $('input[type=radio][name=annual]');
+
+      select_doctors.change(summaryBuildChangeHandler);
+      select_staffs.change(summaryBuildChangeHandler);
+      staff_checkbox.change(summaryBuildChangeHandler);
+      subscription.change(function(e) { buildSummary([]); })
+    }
+
+    var buildSummary = function(items) {
+      var isNotEmpty = false;
+      var summary_content = '\
+      <p class="title">SUBTOTAL (USD)</p>\
+      <div class="row summary-content">\
+        <div class="col-lg-3 pull-right">\
+          <ul>';
+      var summary = 0;
+      
+      $(items).each(function(i, item) {
+        if(item.price > 0 && item.number > 0) {
+          if(item.depends == true) {
+            isNotEmpty = true;
+            summary_content += '\
+            <li>\
+              <div class="row">\
+                <div class="col-lg-6 col-xs-6">\
+                  <p>'+ item.number +' ('+ item.title +')' +'</p>\
+                </div>\
+                <div class="col-lg-2 col-xs-2">\
+                  <p>$</p>\
+                </div>\
+                <div class="col-lg-4 col-xs-4">\
+                  <p>'+ item.price+'</p>\
+                </div>\
+              </div>\
+            </li>';
+            summary += parseFloat(item.price);
+          }
+        }
+      });
+
+      if(isNotEmpty) {
+        summary_content += '\
+              <li>\
+                <hr>\
+              </li>\
+              <li class="summary">\
+                <div class="row">\
+                  <div class="col-lg-2 col-xs-2 col-lg-offset-6 col-xs-offset-6">\
+                    <p>$</p>\
+                  </div>\
+                  <div class="col-lg-4 col-xs-4">\
+                    <p>' + parseFloat(summary).toFixed(2) + '</p>\
+                  </div>\
+                </div>\
+              </li>\
+            </ul>\
+          </div>\
+        </div>'
+        summary_container.html(summary_content);
+        summary_container.addClass('in');
+      }
+      else {
+        summary_container.removeClass('in');
+        summary_container.html('');
+      }
+    }
+
+    var summaryBuildChangeHandler = function(e) {
+      buildSummary(
+        [
+          { 
+            number: select_doctors.data('number'),
+            title: select_doctors.data('title'),
+            price: select_doctors.data('price'),
+            depends: true
+          },
+          { 
+            number: select_staffs.data('number'),
+            title: select_staffs.data('title'),
+            price: select_staffs.data('price'),
+            depends: staff_checkbox.is(':checked')
+          }
+        ]);
+    };
+  }
+
+  var summaryController = new SummaryController();
+  summaryController.initialize();
+})

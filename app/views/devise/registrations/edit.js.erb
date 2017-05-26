@@ -1,0 +1,6 @@
+$('#modal-edit-user').html('<%= escape_javascript(render 'form_edit') %>')
+
+initPickers('#modal-edit-user');
+initSelect2('#modal-edit-user');
+
+$('#modal-edit-user').modal('show');

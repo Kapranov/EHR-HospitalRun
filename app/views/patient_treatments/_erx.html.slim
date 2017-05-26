@@ -1,0 +1,22 @@
+.scrollable-container
+  .content
+    - if @dosespot.patient.dosespot_patient_id.present?
+      .dosespot-container
+        iframe#erx-iframe width="100%" height="100%" src=""
+    - elsif @dosespot.valid_url?
+      .controls
+        a.btn.btn-default#erx-registration href="#" tabindex="-1" Registration 
+      .dosespot-container
+        iframe#erx-iframe width="100%" height="100%" src=""
+    - else
+      .dosespot-container
+        p.message
+          = "Fields required for registration have not been filled correctly: #{@dosespot.full_message}."
+= javascript_tag "\
+  var dosespot_patient_id_present = #{@dosespot.patient.dosespot_patient_id.present?};\
+  var dosespot_url = '#{@dosespot.url}';\
+  var dosespot_patient_detail_url = '#{@dosespot.patient_detail_url}';\
+  var dosespot_valid_url = #{@dosespot.valid_url?};\
+  var dosespot_id = '#{@dosespot.id}';\
+"
+= javascript_include_tag 'providers/patient_treatments/show_patient/erx'

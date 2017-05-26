@@ -1,0 +1,18 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title You have been Logged out!
+    .modal-body
+      .scrollable-container
+        .content
+          .row
+            .col-lg-12
+              p#timeout_message_for_provider
+    .modal-footer
+      .controls
+        = link_to 'SIGN IN', new_user_session_path, class: 'btn btn-default'
+
+javascript:
+  $(function() {
+    $('#timeout_message_for_provider').text('Dear ' + $('#current_user_provider_full_name').val() + ', in order to protect your accout, you’ve been logged out due to inactivity.');
+  });

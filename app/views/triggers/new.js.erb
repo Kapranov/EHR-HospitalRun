@@ -1,0 +1,231 @@
+$('#modal-trigger').html('<%= escape_javascript(render 'form') %>');
+
+initPickers('#modal-trigger');
+initSelect2('#modal-trigger');
+
+$('#modal-trigger').modal('show');
+
+FindCodesController = function() {
+  var system, code_id, code_select, description, search_button, snomeds_link, diagnosis_link, is_snomed;
+
+  this.initialize = function(_system, _code_id, _code_select, _description, _search_button, _snomeds_link, _diagnosis_link) {
+    system = $(_system)
+    code_id = $(_code_id);
+    code_select = $(_code_select);
+    description = $(_description);
+    search_button = $(_search_button);
+    snomeds_link = _snomeds_link;
+    diagnosis_link = _diagnosis_link;
+    is_snomed = system.val() == 'Snomed';
+
+    system.change(function(e) {
+      if(system.val()) {
+        code_select.prop('disabled', false);
+        code_select.html('<option></option>');
+        code_select.val('');
+        switch(system.val()) {
+          case 'Snomed':
+            selectInit(snomeds_link);
+          break;
+          case 'Local':
+            selectInit(diagnosis_link);
+          break;
+        }
+        is_snomed = system.val() == 'Snomed';
+        code_id.val('');
+      }
+      else
+        code_select.prop('disabled', true);
+    })
+
+    selectInit(null);
+    code_select.prop('disabled', true);
+    disableControl(search_button);
+
+    search_button.click(function(e) {
+      if(!code_select.prop('disabled'))
+        code_select.select2('open');
+    });
+  }
+
+  function selectInit(link) {
+    code_select.select2({
+      width: '100%',
+      ajax: {
+        url: link,
+        processResults: processResults,
+        data: function (params) {
+          return {
+            part: params.term
+          };
+        },
+        cache: true
+      },
+      escapeMarkup: function (markup) { return markup; },
+      minimumInputLength: 1,
+      templateResult: templateResult,
+      templateSelection: templateSelection
+    });
+    if(link != null)
+      enableControl(search_button);
+  }
+
+  function processResults(data, params) {
+    return {
+      results: data
+    };
+  }
+
+  function templateResult(code) {
+    var codeId = is_snomed ? code.concept_id : code.code;
+    var codeTerm = is_snomed ? code.defaultTerm : code.full_name;
+
+    if (code.loading) return code.text;
+    return '<span>'+codeId+' - '+codeTerm+'</span>';
+  }
+
+  function templateSelection(code) {
+    var codeId = is_snomed ? code.concept_id : code.code;
+    var codeTerm = is_snomed ? code.defaultTerm : code.full_name;
+
+    if(codeId && codeTerm) {
+      code_id.val(codeId).change();
+      description.val(codeTerm).change();
+      system.attr('readonly', true);
+      code_select.prop('disabled', true);
+      disableControl(search_button);
+      addContainer(codeId, codeTerm);
+      description.focus();
+      return codeId;
+    }
+    else {
+      return code.text;
+    }
+  }
+
+  function addContainer(codeId, codeTerm) {
+    var tbody = $('#panel-triggers table tbody');
+    tbody.html('<tr><td><p>'+codeId+'</p></td><td><p>-</p></td><td><p>'+codeTerm+'</p></td><td><a href="#" class="icon icon-sm icon-circle icon-ic-delete" data-id="'+codeId+'"></a></td></tr>')
+    tbody.find('a.icon').click(function(e) {
+      e.preventDefault();
+      code_id.val('').change();
+      system.attr('readonly', false);
+      code_select.prop('disabled', false);
+      code_select.html('<option></option>');
+      code_select.change();
+      description.val('').change();
+      enableControl(search_button);
+      $('#row-triggers').removeClass('in');
+      tbody.html('');
+    });
+    $('#row-triggers').addClass('in');
+  }
+};
+
+var findCodesController = new FindCodesController();
+findCodesController.initialize(
+  '#modal-trigger #trigger_system',
+  '#modal-trigger #trigger_code',
+  '#modal-trigger #trigger_code_select',
+  '#modal-trigger #trigger_description',
+  '#modal-trigger #trigger_code_search_button',
+  '<%= Rails.application.routes.url_helpers.snomed_snomeds_path %>',
+  '<%= Rails.application.routes.url_helpers.diagnosis_codes_diagnosis_codes_path %>'
+);
+
+var ValidationController = function() {
+  var form;
+
+  this.initialize = function(_form) {
+    form = $(_form);
+
+    form.validate({
+      ignore: ':hidden:not(.select2)',
+      highlight: highlightHandler,
+      unhighlight: unhighlightHandler,
+      onkeyup: formValidationStateChecking,
+      errorPlacement: function(error,element) {
+        return true;
+      },
+      rules: {
+        'trigger[trigger_category_id]': {
+          required: {
+            required: true,
+            depends: dependsHandler
+          }
+        },
+        'trigger[system]': {
+          required: {
+            required: true,
+            depends: dependsHandler
+          }
+        },
+        'trigger[code]': {
+          required: {
+            required: true,
+            depends: dependsHandler
+          }
+        },
+        'trigger_code_select': {
+          required: {
+            required: true,
+            depends: dependsHandler
+          }
+        }
+      }
+    });
+
+    formValidationStateChecking(form.find('input.form-control').first());
+
+    $('.select2').change(function(e) {
+      formValidationStateChecking(form.find('input.form-control').first());
+    });
+  }
+
+  var dependsHandler = function(element) {
+    return $(($(element).closest('.left-block').hasClass('in')));
+  }
+
+  var formValidationStateChanged = function(isEnable, control) {
+    if(isEnable)
+      enableControl(form.find('input[type=submit]'));
+    else
+      disableControl(form.find('input[type=submit]'));
+  }
+
+  var highlightHandler = function(element) {
+    $(element).addClass('unvalid');
+    $(element).removeClass('valid');
+    if($(element).hasClass('select2')) {
+      $('.select2-id-'+$(element).attr('id')).addClass('unvalid');
+      $('.select2-id-'+$(element).attr('id')).removeClass('valid');
+    }
+  }
+
+  var unhighlightHandler = function(element) {
+    $(element).removeClass('unvalid');
+    $(element).addClass('valid');
+    if($(element).hasClass('select2')) {
+      $('.select2-id-'+$(element).attr('id')).removeClass('unvalid');
+      $('.select2-id-'+$(element).attr('id')).addClass('valid');
+    }
+  }
+
+  var formValidationStateChecking = function(element) {
+    if(form.valid())
+      formValidHandler(element);
+    else
+      formUnvalidHandler(element);
+  }
+
+  var formValidHandler = function(element) {
+    formValidationStateChanged(true, element);
+  }
+
+  var formUnvalidHandler = function(element) {
+    formValidationStateChanged(false, element);
+  }
+}
+
+var validationController = new ValidationController();
+validationController.initialize('#modal-trigger form.new_trigger');

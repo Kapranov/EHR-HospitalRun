@@ -1,0 +1,66 @@
+$(document).ready(function(e) {
+  PracticesActionsController = function() {
+    var admin_state, active_state, emergency_access_state;
+
+    this.initialize = function(_admin_state, _active_state, _emergency_access_state) {
+      admin_state = $(_admin_state);
+      active_state = $(_active_state);
+      emergency_access_state = $(_emergency_access_state);
+      initAll();
+    }
+
+    var initAll = function() {
+      admin_state.change(function(e) {
+        $.ajax({
+          type: 'POST',
+          url: '<%= Rails.application.routes.url_helpers.admin_practices_path %>',
+          data: {
+            id: $(this).data('id'),
+            admin: $(this).is(':checked')
+          }
+        });
+      });
+
+      active_state.click(function(e) {
+        e.preventDefault();
+        var active = !$(this).hasClass('active');
+        var link = $(this);
+        $.ajax({
+          type: 'POST',
+          url: '<%= Rails.application.routes.url_helpers.activate_practices_path %>',
+          data: {
+            id: $(this).data('id'),
+            active: active
+          }
+        }).success(function(){
+          if(active) {
+            link.removeClass('inactive');
+            link.addClass('active');
+            link.text('Active');
+          }
+          else {
+            link.removeClass('active');
+            link.addClass('inactive');
+            link.text('Inactive');
+          }
+        });
+      });
+
+      emergency_access_state.change(function(e) {
+        $.ajax({
+          url: '<%= Rails.application.routes.url_helpers.set_emergency_access_providers_path %>',
+          data: {
+            id: $(this).data('id'),
+            emergency_access: $(this).is(':checked')
+          }
+        });
+      })
+    }
+  }
+
+  var practicesActionsController = new PracticesActionsController();
+  practicesActionsController.initialize(
+    '.users-content table tbody .admin-state',
+    '.users-content table tbody .status-state',
+    '.users-content table tbody .emergency-access-state');
+});

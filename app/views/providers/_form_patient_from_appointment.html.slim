@@ -1,0 +1,46 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-sm
+      p.title New Patient
+    = render_messages
+    = simple_form_for @user, url: simple_create_patients_path, html: { autocomplete: 'off' }, remote: true do |u|
+      = u.simple_fields_for :patient, Patient.new do |q|
+        .modal-body
+          .scrollable-container
+            .content
+              .row
+                .col-lg-12.col-md-12.col-sm-12
+                  .form-group
+                    = q.input_field :first_name, class: 'form-control', placeholder: 'First Name'
+              .row
+                .col-lg-12.col-md-12.col-sm-12
+                  .form-group
+                    = q.input_field :last_name, class: 'form-control', placeholder: 'Last Name'
+              .row
+                .col-lg-8.col-md-8.col-sm-8.col-xs-6
+                  .form-group
+                    = u.input_field :email, as: :email, class: 'form-control input-email', placeholder: 'Email Address', id: 'new_patient_contact_email'
+                .col-lg-4.col-md-4.col-sm-4.col-xs-6
+                  .form-group
+                    .checkbox-custom.checkbox-new-patient-no-email
+                      = u.check_box :no_email, checked: true
+                      label for="no_email"
+                        .checkbox-icon-container
+                          span.checkbox-icon  
+                        span.checkbox-label No Email
+              .row
+                .col-lg-12.col-md-12.col-sm-12
+                  .form-group
+                    .input-group.input-group-phone
+                      = q.input_field :mobile_phone_code, as: :select, collection: [], class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                      = q.input_field :mobile_phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Contact Phone'
+              .row
+                .col-lg-12.col-md-12.col-sm-12
+                  .form-group
+                    .input-group
+                      = q.input_field :birth_date, class: 'form-control date-picker', placeholder: 'D.O.B'
+                      span.input-group-addon.input-group-addon-calendar
+        .modal-footer
+          .controls
+            = u.button :submit, 'Save', class: 'btn btn-default'
+            a.btn.btn-default.btn-padding-sm data-dismiss="modal" Cancel

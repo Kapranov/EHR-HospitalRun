@@ -1,0 +1,8 @@
+.footer
+  p.app-version
+    | &#169;
+    | &nbsp;
+    = "#{Date.today.year} #{Rails.application.secrets.company_name}"
+    | &nbsp;&nbsp;
+    - if AppSetting.first.present?
+      = "version: #{AppSetting.first.try(:version)}"

@@ -1,0 +1,76 @@
+#secure-questions-wrapper
+  = render_messages
+  = simple_form_for @secure_question, html: { autocomplete: 'off' } do |f|
+    #secure-questions-wrapper-index.fade.in
+      .secure-questions-wrapper
+        .secure-questions-top
+          .string
+            .string-top
+              .image-center
+                = image_tag 'ehr.svg', width: 232, height: 88, alt: 'EHR1 Logo'
+            .container
+              .string-top-container
+                = link_to root_path, class: 'string-top-home-link'
+                  = image_tag 'num-top.svg', width: 146, height: 248, alt: 'EHR1 One Num Logo'
+        .container
+          .content
+            .row
+              .col-lg-12
+                .form-group
+                  p 
+                    span Create Security Question
+                  hr
+            .row
+              .col-lg-12
+                .form-group
+                  p For added security, we require the creation of a security question and answer.
+            .row
+              .col-lg-12
+                .form-group
+                  ul
+                    li
+                      p 
+                        | Always confirm you’re on the EHR1 site (
+                        a href="#" How?
+                        | ) before entering your password or answering the security question.&nbsp;
+                        a href="#" Why?
+                    li
+                      p You will be asked for this security question whenever you log in to EHR1 from a new computer and when resetting your password.
+            .row
+              .col-lg-2
+                .form-group
+                  p.title QUESTION
+              .col-lg-10
+                .form-group
+                  = f.input_field :question, as: :select, collection: @questions, include_blank: false, class: 'select2', data: { theme: 'gray-lighter-highlight', arrow: '3x', padding: '2x', font: '1x' }
+            .row
+              .col-lg-2
+                .form-group
+                  p.title ANSWER
+              .col-lg-10
+                .form-group
+                  = f.input_field :answer, class: 'form-control'
+            .row
+              .col-lg-2
+                .form-group
+                  p.title IMPORTANT
+              .col-lg-10
+                .form-group
+                  .checkbox-custom
+                    = check_box_tag :understanding_access_locking, '', true, class: 'checkbox'
+                    label[for="understanding_access_locking"]
+                      span.checkbox-icon-container
+                        span.checkbox-icon.checkbox-icon-green
+                      span.checkbox-label I understand my access to patients portal will be locked if I am unable to answer this question
+                .form-group
+                  .checkbox-custom
+                    = check_box_tag :remember_this_computer, '', false, class: 'checkbox'
+                    label[for="remember_this_computer"]
+                      span.checkbox-icon-container
+                        span.checkbox-icon.checkbox-icon-green
+                      span.checkbox-label Remember this computer
+          .footer
+            .controls
+              = f.submit 'CREATE', class: 'btn btn-default'
+              = link_to 'Cancel and Sign out', destroy_user_session_path, method: :delete, class: 'btn btn-padding-md'
+#modal-secure-questions-message.modal-provider.modal.animated.fadeIn

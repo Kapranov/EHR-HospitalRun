@@ -1,0 +1,6 @@
+$('#modal-secure-questions-edit').html('<%= escape_javascript(render 'edit_form') %>');
+
+initPickers('#modal-secure-questions-edit');
+initSelect2('#modal-secure-questions-edit');
+
+$('#modal-secure-questions-edit').modal('show');

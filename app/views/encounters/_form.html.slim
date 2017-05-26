@@ -1,0 +1,205 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title
+        = "#{ @encounter.new_record? ? 'Add' : 'Edit' } Encounter Note"
+      a.close-btn.close-btn-default href="#" data-dismiss="modal"
+    = render_messages
+    = simple_form_for @encounter, html: { autocomplete: 'off' }, remote: true do |e|
+      = e.input_field :patient_id, as: :hidden, value: @patient.id
+      .modal-body
+        .scrollable-container
+          .content
+            .row.row-header
+              .col-lg-5.col-md-5.col-sm-5
+                p.title Date of Service:
+              .col-lg-7.col-md-7.col-md-7
+                .right-block
+                  = e.input_field :serviced_at_date, class: 'form-control date-picker'
+                  = select_tag :procedure_id, options_for_select(@procedures), { class: 'select2', data: { placeholder: 'Temp Route', theme: 'green-light', arrow: '1x', padding: '1x', font: '1x', width: 'auto' } }
+            .row.row-content#row_main_info
+              .col-lg-2.col-md-2.col-sm-2
+                p Provider:
+              .col-lg-10.col-md-10.col-sm-10
+                = e.input_field :provider_id, as: :hidden, value: current_user.provider.id
+                .input-group
+                  = select_tag :find_provider, '', { class: 'select2', data: { placeholder: 'Search', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' } }
+                  span.input-group-addon.input-group-addon-search#find_provider_button
+            .row.row-header
+              .col-lg-12
+                p.title Procedure(s) Completed:
+            .row.row-content#row_procedure_completed
+              .col-lg-12
+                .panel
+                  .panel-heading
+                    .row
+                      .col-lg-8.col-md-8.col-sm-8
+                        = hidden_field_tag :proc_completed
+                        .input-group
+                          = select_tag :find_procedure_completed, '', { class: 'select2', data: { placeholder: 'Search', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' } }
+                          span.input-group-addon.input-group-addon-right.input-group-addon-search#find_procedure_completed_button
+                      .col-lg-4.col-md-4.col-sm-4
+                        .pull-right
+                          a.plus-edit-right.btn.btn-default#find_procedure_completed_add_button
+                            span.glyphicon.glyphicon-plus
+                  .panel-body#procedure_completed_list
+            .row.row-header
+              .col-lg-12
+                p.title Procedure(s) Recommended:
+            .row.row-content#row_procedure_recomended
+              .col-lg-12
+                .panel.panel-default
+                  .panel-heading
+                    .row
+                      .col-lg-8.col-md-8.col-sm-8
+                        = hidden_field_tag :proc_recommended
+                        .input-group
+                          = select_tag :find_procedure_recommended, '', { class: 'select2', data: { placeholder: 'Search', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' } }
+                          span.input-group-addon.input-group-addon-right.input-group-addon-search#find_procedure_recommended_button
+                      .col-lg-4.col-md-4.col-sm-4
+                        .pull-right
+                          a.plus-edit-right.btn.btn-default#find_procedure_recommended_add_button
+                            span.glyphicon.glyphicon-plus
+                  .panel-body#procedure_recommended_list
+            .row.row-content#row_notes
+              .col-lg-2.col-md-2.col-sm-2
+                p Notes:
+              .col-lg-10.col-md-10.col-sm-10
+                .form-group
+                  = e.input_field :notes, as: :text, class: 'form-control'
+            .row.row-content#row_vitals
+              .col-lg-12
+                .panel.panel-default
+                  .panel-heading
+                    .panel-title
+                      a.collapsed data-toggle="collapse" href="#vitals_add_encounter" aria-expanded="false"
+                        | Vitals
+                        .pull-right
+                          i.fa.fa-angle-down
+                          i.fa.fa-angle-right
+                  .panel-collapse.collapse#vitals_add_encounter
+                    = e.simple_fields_for :vital, @vital do |v|
+                      - unless @encounter.new_record?
+                        = v.input_field :id, as: :hidden
+                      .panel-body
+                        .row
+                          .col-lg-5.col-md-5.col-sm-5
+                            .form-group
+                              .input-group
+                                span.input-group-addon Height
+                                = v.input_field :height_major, class: 'form-control'
+                                = select_tag :height_major_unit_system, options_for_select([["ft", "0"], ["m", "1"]]), class: 'select2', data: { theme: 'green-dark', arrow: '1x', padding: '1x', 'arrow-padding': '05x', font: '1x', width: '26px', 'text-align': 'center' }
+                                = v.input_field :height_minor, class: 'form-control'
+                                = select_tag :height_minor_unit_system, options_for_select([["in", "0"], ["cm", "1"]]), class: 'select2', data: { theme: 'green-dark', arrow: '1x', padding: '1x', 'arrow-padding': '05x', font: '1x', width: '36px', 'text-align': 'center' }
+                          .col-lg-4.col-md-4.col-sm-4
+                            .form-group
+                              .input-group
+                                span.input-group-addon Weight
+                                = v.input_field :weight, class: 'form-control'
+                                = select_tag :weight_unit_system, options_for_select([["lbs.", "0"], ["kg.", "1"]]), class: 'select2', data: { theme: 'green-dark', arrow: '1x', padding: '1x', 'arrow-padding': '05x', font: '1x', width: '38px', 'text-align': 'center' }
+                          .col-lg-3.col-md-3.col-sm-3
+                            .form-group
+                              .input-group
+                                span.input-group-addon BMI
+                                = text_field_tag :bmi, '', class: 'form-control text-centered', id: 'encounter_vital_bmi', placeholder: '', autocomplete: 'off'
+                        .row
+                          .col-lg-5.col-md-5.col-sm-5
+                            .form-group
+                              .input-group
+                                span.input-group-addon BP
+                                = v.input_field :bp_left, class: 'form-control'
+                                span.input-group-addon  &nbsp;/&nbsp;
+                                = v.input_field :bp_right, class: 'form-control'
+                          .col-lg-4.col-md-4.col-sm-4
+                            .form-group
+                              .input-group
+                                span.input-group-addon Temp
+                                = v.input_field :temp, class: 'form-control'
+                                span.input-group-addon F
+                          .col-lg-3.col-md-3.col-sm-3
+                            .form-group
+                              = v.input_field :temp_type, as: :select, collection: Vital.temp_types, selected: '', class: 'select2', include_blank: true, data: { placeholder: 'Temp Route', theme: 'green-light', arrow: '1x', padding: '1x', 'arrow-padding': '05x', font: '1x' }
+                        .row
+                          .col-lg-5.col-md-5.col-sm-5
+                            .row.row-sub
+                              .col-lg-6.col-md-6.col-sm-6
+                                .form-group
+                                  .input-group
+                                    span.input-group-addon Pulse
+                                    = v.input_field :pulse, class: 'form-control'
+                              .col-lg-6.col-md-6.col-sm-6
+                                .form-group
+                                  .input-group
+                                    span.input-group-addon RR
+                                    = v.input_field :rr, class: 'form-control'
+                          .col-lg-4.col-md-4.col-sm-4
+                            .form-group
+                              .input-group
+                                span.input-group-addon
+                                  | O
+                                  sup 2
+                                  |  Sat.
+                                = v.input_field :sat, class: 'form-control'
+                                span.input-group-addon %
+                          .col-lg-3.col-md-3.col-sm-3
+                            .form-group
+                              = v.input_field :ra_type, as: :select, collection: Vital.ra_types, class: 'select2', include_blank: true, data: { placeholder: 'RA', theme: 'green-light', arrow: '1x', padding: '1x', font: '1x' }
+                        .row
+                          .col-lg-5.col-md-5.col-sm-5
+                            .form-group
+                              .input-group
+                                span.input-group-addon Blood type
+                                = v.input_field :blood, class: 'form-control'
+            .row.row-content#row_quality_of_care
+              .col-lg-12
+                .form-group
+                  p Quality of Care:
+                .form-group
+                  .checkbox-custom
+                    = e.check_box :med_completed, id: 'patients_dental_medication_reconciliations_completed'
+                    label for="patients_dental_medication_reconciliations_completed"
+                      span.checkbox-icon-container
+                        span.checkbox-icon
+                      span.checkbox-label Medication Reconciliation Completed
+                .form-group
+                  .checkbox-custom
+                    = e.check_box :patient_education, id: 'patients_dental_education_resources_provider'
+                    label for="patients_dental_education_resources_provider"
+                      span.checkbox-icon-container
+                        span.checkbox-icon
+                      span.checkbox-label Patient Education Resources Provider
+                .form-group
+                  .checkbox-custom
+                    = e.check_box :clinical_summary, id: 'patients_dental_clinical_summary_declined'
+                    label for="patients_dental_clinical_summary_declined"
+                      span.checkbox-icon-container
+                        span.checkbox-icon
+                      span.checkbox-label Clinical Summary Declined by Patient
+                .row
+                  .col-lg-4.col-md-4.col-sm-4
+                    .form-group
+                      .checkbox-custom
+                        input.checkbox type="checkbox" id="patients_dental_referred_to_provider"
+                        label for="patients_dental_referred_to_provider"
+                          span.checkbox-icon-container
+                            span.checkbox-icon
+                          span.checkbox-label Referred to:
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = e.input_field :to_provider_id, as: :select, collection: current_user.provider.providers_collection, class: 'select2', data: { placeholder: 'Select Provider', theme: 'green-light', arrow: '1x', padding: '3x', font: '1x' }
+                .row
+                  .col-lg-4.col-md-4.col-sm-4
+                    .form-group
+                      .checkbox-custom
+                        input.checkbox type="checkbox" id="patients_dental_referred_from_provider"
+                        label for="patients_dental_referred_from_provider"
+                          span.checkbox-icon-container
+                            span.checkbox-icon
+                          span.checkbox-label Referred from:
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = e.input_field :from_provider_id, as: :select, collection: current_user.provider.providers_collection, class: 'select2', data: { placeholder: 'Select Provider', theme: 'green-light', arrow: '1x', padding: '3x', font: '1x' }
+      .modal-footer
+        .controls
+          = e.submit "#{ @encounter.new_record? ? 'Add' : 'Edit' } & Sign", class: 'btn btn-default'
+          a.btn.btn-default.btn-padding-sm data-dismiss="modal" Cancel

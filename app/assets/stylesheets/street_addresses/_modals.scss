@@ -1,0 +1,73 @@
+#modal-street-addresses-registration-addresses {
+  &.modal-success .modal-dialog,
+  &.modal-success .modal-dialog .modal-content {
+    max-width: 780px;
+  }
+  &.modal-danger .modal-dialog,
+  &.modal-danger .modal-dialog .modal-content {
+    max-width: 460px;
+  }
+  .modal-content {
+    .modal-header {
+      .title {
+        padding-left: 20px;
+      }
+      .close-btn {
+        right: 10px;
+      }
+    }
+    .modal-body {
+      padding: 10px 0;
+      p.main-title {
+        color: $graytextdark;
+        font-size: 24px;
+        font-family: 'Times New Roman';
+        text-align: center;
+      }
+      .row {
+        .form-group {
+          margin-bottom: 5px;
+        }
+        &:first-child .form-group {
+          margin-bottom: 20px;
+        }
+      }
+      .street-input {
+        .form-control {
+          font-size: 15px;
+          color: $graytextdark;
+          padding-right: 65px;
+        }
+        a {
+          position: absolute;
+          right: 25px;
+          top: 12px;
+          color: $green;
+          font-size: 15px;
+          font-family: 'Times New Roman';
+          text-decoration: underline !important;
+          transition: opacity .2s;
+          &:hover,
+          &:focus,
+          &:active {
+            opacity: .75;
+          }
+        }
+      }
+    }
+  }
+  &.modal-success .modal-content {
+    .modal-body {
+      p.main-title {
+        margin: 5px 0 0 0;
+      }
+    }
+  }
+  &.modal-danger .modal-content {
+    .modal-body {
+      p.main-title {
+        margin: 30px 0 40px 0;
+      }
+    }
+  } 
+}

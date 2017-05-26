@@ -1,0 +1,56 @@
+<component>
+  <section>
+    <templateId root="2.16.840.1.113883.10.20.22.2.6.1"/>
+    <code code="48765-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Allergies, Adverse Reactions, Alerts"/>
+    <title>Allergies</title>
+    <text>
+      <table width="95%" border="1">
+        <thead>
+          <tr>
+            <th>Allergy</th>
+            <th>Date</th>
+            <th>Reaction Status</th>
+            <th>Severity Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% allergies.each do |allergy| %>
+            <tr>
+              <td><%= allergy.allergen_type %></td>
+              <td><%= ccda_time(allergy.start_date) %></td>
+              <td><%= allergy.active %></td>
+              <td><%= allergy.severity_level %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </text>
+    <% allergies.each do |allergy| %>
+      <entry typeCode="DRIV">
+        <act classCode="ACT" moodCode="EVN">
+          <templateId root="2.16.840.1.113883.10.20.22.4.30"/>
+          <id root="2.16.840.1.113883.3.3388.1.1.1.573798.3" extension="138736163"/>
+          <code xsi:type="CE" code="48765-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Allergies, adverse reactions, alerts"/>
+          <statusCode code="completed"/>
+          <effectiveTime>
+            <low nullFlavor="UNK"/>
+            <high <%= value_or_null_flavor(allergy.start_date) %>/>
+          </effectiveTime>
+          <entryRelationship typeCode="SUBJ" inversionInd="true">
+            <observation classCode="OBS" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.10.20.22.4.7"/>
+              <id root="2.16.840.1.113883.3.3388.1.1.1.40324.3" extension="552931"/>
+              <code code="ASSERTION" codeSystem="2.16.840.1.113883.5.4"/>
+              <statusCode code="completed"/>
+              <effectiveTime>
+                <low nullFlavor="UNK"/>
+                <high <%= value_or_null_flavor(allergy.start_date) %>/>
+              </effectiveTime>
+              <value xsi:type="CE" nullFlavor="NI"/>
+            </observation>
+          </entryRelationship>
+        </act>
+      </entry>
+    <% end %>
+  </section>
+</component>

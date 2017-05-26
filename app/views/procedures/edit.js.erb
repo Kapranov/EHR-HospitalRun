@@ -1,0 +1,126 @@
+$('#modal-patient-show-procedure').html('<%= escape_javascript(render 'edit_form') %>');
+$('#modal-patient-show-procedure').modal('show');
+
+initPickers('#modal-patient-show-procedure');
+initModalFadeInOut('#modal-patient-show-procedure');
+initSelect2('#modal-patient-show-procedure');
+
+$(function initModal() {
+  var status = $('#procedure_status');
+  var addToEncounter = $('#add_to_encounter_note_button');
+  var encounter = $('#procedure_encounter_id');
+
+  var dateOfService = $('#procedure_date_of_service');
+  var dateOfServiceDate = $('#date_of_service_date');
+  var dateOfServiceDateContainer = $('#date_of_service_container');
+
+  var code = $('#procedure_procedure_code');
+  var toothNum = $('#procedure_tooth_table_id');
+  var status = $('#procedure_status');
+  var description = $('#procedure_description');
+  var submit = $('#modal-patient-show-procedure input[type=submit]');
+
+  function initForm() {
+    if(encounter.val()) {
+      disableControl(description);
+      disableControl(code);
+      disableControl(toothNum);
+      disableControl(status);
+      addToEncounter.addClass('disabled');
+      submit.addClass('disabled');
+    }
+  }
+  initForm();
+
+  function initDate() {
+    if(dateOfService.val()) {
+      var date = dateOfService.val().substring(0,10).split('-');
+      dateOfServiceDate.val(date[1]+'/'+date[2]+'/'+date[0]);
+    }
+  }
+  initDate();
+
+
+  function initHandlers() {
+    dateOfService.change(function(e) {
+      if($(this).val()) {
+        var date = $(this).val().substring(0,10).split('-');
+        dateOfServiceDate.val(date[1]+'/'+date[2]+'/'+date[0]);
+        dateOfServiceDateContainer.removeClass('hidden');
+      }
+      else {
+        dateOfServiceDateContainer.addClass('hidden');
+        dateOfServiceDate.val('');
+      }
+    })
+
+    status.change(function(e) {
+      if($(this).val()=='Completed') {
+        addToEncounter.removeClass('disabled');
+        dateOfService.val("<%= @procedure.created_at %>").change();
+      }
+      else {
+        addToEncounter.addClass('disabled');
+        dateOfService.val('').change();
+      }
+    })
+  }
+  initHandlers();
+});
+
+ProcedureCodesSearchController = function() {
+  var input, input_id, button, link;
+
+  this.initialize = function(_input, _input_id, _button, _link) {
+    input = $(_input)
+    input_id = $(_input_id);
+    button = $(_button);
+    link = _link;
+    
+    input.select2({
+      width: '100%',
+      placeholder: 'Procedure Code',
+      ajax: {
+        url: link,
+        processResults: processResults,
+        data: function (params) {
+          return {
+            part: params.term
+          };
+        },
+        cache: true
+      },
+      escapeMarkup: function (markup) { return markup; },
+      minimumInputLength: 1,
+      templateResult: templateResult,
+      templateSelection: templateSelection
+    });
+
+    button.click(function(e) {
+      input.select2('open');
+    });
+  }
+
+  function processResults(data, params) {
+    return {
+      results: data
+    };
+  }
+
+  function templateResult(procedure) {
+    if (procedure.loading) return procedure.text;
+    return '<span>'+procedure.full_name+'</span>';
+  }
+
+  function templateSelection(procedure) {
+    if(procedure.full_name) {
+      input_id.val(procedure['id']).trigger('change');
+      return procedure.full_name;
+    }
+    else
+      return procedure.text;
+  }
+};
+
+var procedureCodesSearchController = new ProcedureCodesSearchController();
+procedureCodesSearchController.initialize('#modal-patient-show-procedure #procedure_code', '#modal-patient-show-procedure #procedure_procedure_code_id', '#modal-patient-show-procedure #procedure_code_button', '<%= Rails.application.routes.url_helpers.procedure_codes_procedures_path %>');

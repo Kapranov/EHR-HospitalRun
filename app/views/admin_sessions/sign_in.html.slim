@@ -1,0 +1,37 @@
+= form_for @user, url: users_second_step_path do |f|
+  = csrf_meta_tags
+  #authorization-admin-signin-wrapper.authorization-admin-signin-wrapper
+    .container
+      .row
+        .col-lg-4.col-md-4.col-sm-4.col-xs-2
+        .col-lg-4.col-md-4.col-sm-4.col-xs-8.content
+          .row
+            .col-lg-12.top-logo-container
+              = link_to root_path
+                = image_tag 'logo.svg', width: 100, height: 100, class: 'top-logo'
+          .row
+            .col-lg-12
+              .form-group
+                = f.email_field :email, autofocus: true, class: 'form-control', placeholder: "Your Email"
+          .row
+            .col-lg-12
+              .form-group
+                = f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: "Password"
+                - if @devise_mapping.recoverable?
+                  = link_to 'Forgot your password?', new_password_path(User), class: 'link-forgot pull-right'
+          - if @devise_mapping.rememberable?
+            .row
+              .col-lg-12
+                .form-group
+                  .checkbox-custom
+                    = f.check_box :remember_me, checked: 'checked', id: 'user[remember_me]', class: 'checkbox'
+                    label for="user[remember_me]"
+                      span.checkbox-icon-container
+                        span.checkbox-icon
+                      span.checkbox-label Remember me
+          .row
+            .col-lg-12
+              .form-group
+                .controls
+                  = f.submit 'Sign in', class: 'btn btn-default'
+        .col-lg-4.col-md-4.col-sm-4.col-xs-2

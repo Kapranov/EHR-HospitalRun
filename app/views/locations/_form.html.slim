@@ -1,0 +1,77 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title
+        = "#{@location.persisted? ? 'Edit' : 'Add'} location"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @location, html: { autocomplete: 'off' }, remote: true do |l|
+      .modal-body
+        .scrollable-container
+          .content
+            .row-container
+              .row
+                .col-lg-12
+                  .form-group
+                    .input-group
+                      span.input-group-addon Location Name
+                      = l.input_field :location_name, label: false, class: 'form-control'
+              .row
+                .col-lg-12
+                  .form-group
+                    .input-group.input-group-phone
+                      span.input-group-addon Phone Number
+                      = l.input_field :location_phone_code, as: :select, collection: ((@location.persisted? && @location.location_phone_code.present?) ? [@location.location_phone_code] : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '2x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                      = l.input_field :location_phone_tel, as: :tel, class: 'form-control input-phone'
+              .row
+                .col-lg-12
+                  .form-group
+                    .input-group.input-group-phone
+                      span.input-group-addon Fax
+                      = l.input_field :location_fax_code, as: :select, collection: ((@location.persisted? && @location.location_fax_code.present?) ? [@location.location_fax_code] : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '2x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                      = l.input_field :location_fax_tel, as: :tel, class: 'form-control input-phone'
+              .row
+                .col-lg-12
+                  .form-group
+                    .input-group
+                      span.input-group-addon Street Address
+                      = l.input_field :location_address, as: :select, collection: [@location.location_address], data: { theme: 'gray-lighter', arrow: '3x', padding: '3x', font: '2x', 'arrow-padding' => '05x' }, class: 'select2', tabindex: '-1'
+            .row-container
+              .row
+                .col-lg-6.col-md-6.col-sm-6
+                  .form-group
+                    .input-group.disabled
+                      span.input-group-addon City
+                      = l.input_field :city, class: 'form-control', readonly: true, tabindex: '-1'
+                .col-lg-2.col-md-2.col-sm-2
+                  .form-group
+                    .input-group.disabled
+                      = l.input_field :state, class: 'form-control form-control-padding-sm', placeholder: 'State', readonly: true, tabindex: '-1'
+                .col-lg-4.col-md-4.col-sm-4
+                  .form-group
+                    .input-group.disabled
+                      span.input-group-addon Zip
+                      = l.input_field :zip, class: 'form-control', readonly: true, tabindex: '-1'
+            .row-container
+              .row
+                .col-lg-6.col-md-6.col-sm-6
+                  .form-group
+                    .input-group
+                      - if @practice_id.present?
+                        span.input-group-addon NPI
+                      - else
+                        span.input-group-addon Organization NPI
+                      = l.input :location_npi, label: false, input_html: { class: 'form-control' }
+                .col-lg-6.col-md-6.col-sm-6
+                  .form-group
+                    .input-group
+                      span.input-group-addon TIN/EIN
+                      = l.input :location_tin_en, label: false, input_html: { class: 'form-control' }
+            - if @location.persisted?
+              = render 'edit_timeslots_form', l: l, location: @location
+            - else
+              = render 'new_timeslots_form', l: l
+      .modal-footer
+        .controls
+          = l.submit 'Save Changes', class: 'btn btn-default'
+          a.btn.btn-default.btn-padding-md data-dismiss="modal" Cancel

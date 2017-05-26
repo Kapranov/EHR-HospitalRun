@@ -1,0 +1,41 @@
+- content_for :title
+  | EHR1 | Electronic Health Records - Settings (Access Permissions)
+- content_for :back_link do
+  = link_to 'Settings', settings_access_permissions_path, class: 'active'
+.col-lg-10
+  #settings-access-permissions-container.right-block
+    .row-container.access-permissions-settings
+      .bordered-container
+        .category-header
+          p.title Access Permissions
+        .access-permissions
+          - if @permissions.any?
+            = simple_form_for current_user.provider, url: settings_update_permissions_path do |f|
+              .table-responsive
+                table.table
+                  tbody
+                    tr.header-main
+                      td
+                      - @permissions.first.availabilities.each do |availability|
+                        td
+                          p
+                            = availability.role
+                    - @permissions.each do |permission|
+                      = f.simple_fields_for "permissions[#{permission.id}]", permission do |p|
+                        tr
+                          td
+                            p
+                              = permission.presentation
+                          - permission.availabilities.each do |availability|
+                            = p.simple_fields_for "availabilities[#{availability.id}]", availability do |a|
+                              td
+                                .checkbox-custom
+                                  = a.check_box :available, id: availability.id, class: 'checkbox'
+                                  label[for="#{availability.id}"]
+                                    span.checkbox-icon-container
+                                      span.checkbox-icon
+              .row
+                .col-lg-12.controls
+                  = f.submit 'Save', class: 'btn btn-default'
+javascript:
+  $('#item-settings-access-permissions').parent().addClass('active');

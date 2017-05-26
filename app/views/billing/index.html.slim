@@ -1,0 +1,35 @@
+- content_for :title
+  | EHR1 | Electronic Health Records - Billing
+- content_for :back_link do
+  = link_to 'Billing', billing_index_path, class: 'active'
+.content
+  .container-fluid.content-container
+    .controls
+      .row
+        .col-lg-4
+          .form-group
+            .input-group
+              = text_field_tag :search_patient, '', class: 'form-control', id: 'search-patient', placeholder: 'Search Patients'
+              span.input-group-addon.input-group-addon-search#search-patients-button
+        .col-lg-3
+          .form-group
+            .input-group
+              = text_field_tag :dos_min, '', { class: 'form-control date-picker', placeholder: 'DOS Min' }
+              span.input-group-addon.input-group-addon-calendar
+        .col-lg-3
+          .form-group
+            .input-group
+              = text_field_tag :dos_max, '', { class: 'form-control date-picker', placeholder: 'DOS Max' }
+              span.input-group-addon.input-group-addon-calendar
+        .col-lg-2
+          .form-group
+            = select_tag :export, options_for_select([['Export to CSV', 0], ['Export to PDF', 1]]), { id: 'export-billing', class: 'select2', include_blank: true, data: { placeholder: 'Export', theme: 'green-dark', arrow: '1x', padding: '3x', font: '1x' } }
+    .main-content
+      ul.nav.nav-tabs#tabList role="tablist"
+        - @patients.each_with_index do |patient, i|
+          li class="#{'active' if i == 0}" role="presentation"
+            a.tab aria-controls="billingPatientTab#{i}" data-toggle="tab" href="#billingPatientTab#{i}" role="tab" data-id="#{patient.id}"
+              = patient.full_name
+              span.btn-close
+      .tab-content
+        = render 'tab_container', patient: @patient

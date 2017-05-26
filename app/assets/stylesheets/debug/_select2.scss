@@ -1,0 +1,25 @@
+#debug-wrapper-select2 {
+  padding: 20px 0;
+  #themes-container {
+    text-align: center;
+    .btn-group {
+      margin-bottom: 20px;
+    }
+    .panel {
+      .panel-heading {
+        text-align: left;
+        a {
+          color: #333;
+          h1, h2, h3, h4, h5 {
+            margin: 0;
+          }
+        }
+      }
+      .panel-body {
+        h1, h2, h3, h4, h5 {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}

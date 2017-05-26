@@ -1,0 +1,118 @@
+$("#modal-patient-diagnoses").html("<%= escape_javascript(render 'index') %>")
+$("#modal-patient-diagnoses").modal("show")
+
+initModalFadeInOut('#modal-patient-diagnoses');
+$('.scrollable').slimScroll();
+
+var SearchCodeController = function() {
+  var search_input;
+  var search_button;
+  var search_list;
+  var add_custom_dx;
+  var url;
+  var url_diagnosis;
+
+  var liFocusIn = false;
+
+  this.initialize = function(input, button, list, path) {
+    search_input = $(input);
+    search_button = $(button);
+    search_list = $(list);
+    add_custom_dx = $('#add-custom-diagnosis-button');
+    url = path;
+    url_diagnosis = '<%= Rails.application.routes.url_helpers.form_diagnoses_path %>';
+    initFind10Click();
+    initSearchOnInput();
+    initSelectClick('.used-diagnosis-code', true);
+  };
+
+  var listFill = function(elements) {
+    if(elements.length > 0) {
+      search_list.closest('.scrollable-padding-container').removeClass('collapse');
+      search_input.closest('.input-group').addClass('open');
+      disableControl(add_custom_dx);
+    }
+    else {
+      search_list.closest('.scrollable-padding-container').addClass('collapse');
+      search_input.closest('.input-group').removeClass('open');
+      enableControl(add_custom_dx);
+    }
+    search_list.empty();
+    for(var i in elements) {
+      var id = 'dcode' + elements[i]['id'];
+      var link = $('<a/>');
+      link.attr('href', '#');
+      link.attr('id', id);
+      link.text( elements[i]['term'].trim());
+      link.addClass('btn-modal');
+      link.data('target', '#modal-patient-add-diagnoses');
+      link.data('snomed_id', elements[i]['id']);
+      link.data('id', elements[i]['id']);
+      search_list.append(link);
+    }
+    initModalFadeInOut('#modal-patient-diagnoses');
+    initSelectClick(search_list.find('.btn-modal'), false);
+    repositionModal($('#modal-patient-diagnoses'), false);
+  };
+
+  var initFind10Click = function() {
+    search_button.on('click', function() {
+      search(search_input.val());
+    })
+  };
+
+  var initSearchOnInput = function() {
+    search_input.on('keyup', function(){
+      search($(this).val());
+      if(!search_input.val())
+        enableControl(add_custom_dx);
+      if(search_input.val().length <= 3) {
+        search_list.closest('.scrollable-padding-container').addClass('collapse');
+        search_input.closest('.input-group').removeClass('open');
+        search_list.empty();
+        enableControl(add_custom_dx);
+        repositionModal($('#modal-patient-diagnoses'), false);
+      }
+    });
+  };
+
+  var search = function(search_part) {
+    if(search_part.length > 3){
+      $.ajax({
+        url: url,
+        data: {
+          part: search_part
+        }
+      }).done(function(elements){
+        listFill(elements);
+      });
+    }
+  };
+
+  var initSelectClick = function(selector, flag) {
+    $(selector).click(function(e) {
+      e.preventDefault();
+
+      $('.used-diagnosis-code').removeClass('active');
+      search_list.closest('.scrollable-padding-container').find('a').removeClass('active');
+      $(this).addClass('active');
+      search_input.val($(this).text()).trigger('change');
+      search_list.closest('.scrollable-padding-container').addClass('collapse');
+      search_input.closest('.input-group').removeClass('open');
+      if(!flag) {
+        var snomedId = $(this).data('snomed_id');
+        $.ajax({
+          url: url_diagnosis,
+          data: {
+            patient_id: '<%= @patient.id %>',
+            snomed_id: snomedId
+          }
+        });
+      }
+      repositionModal($('#modal-patient-diagnoses'), false);
+    });
+  };
+};
+
+var diagnosisSearchController = new SearchCodeController();
+diagnosisSearchController.initialize('#modal-patient-diagnoses input#search_diagnoses', '#modal-patient-diagnoses span#search_diagnoses_button', '#modal-patient-diagnoses #search_diagnoses_list', '<%= Rails.application.routes.url_helpers.snomed_snomeds_path %>');

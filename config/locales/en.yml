@@ -1,0 +1,13 @@
+en:
+  previous_label: "<i class='fa fa-angle-left'></i>"
+  next_label: "<i class='fa fa-angle-right'></i>"
+  model_titles:
+    advanced_directive: 'Advanced Directive'
+    alert: 'Alert'
+    allergy: 'Allergy'
+    amendment: 'Amendment'
+    appointment: 'Appointment'
+    block_out: 'Block Out'
+    email_message: 'E-mail Message'
+    past_medical_history: 'Past Medical History'
+    smoking_status: 'Smoking Status'

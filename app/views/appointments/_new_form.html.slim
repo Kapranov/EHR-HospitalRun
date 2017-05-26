@@ -1,0 +1,167 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-sm
+      p.title Add New Appointment
+    .modal-body
+      ul.nav.nav-tabs
+        li.active
+          a href="#tab-appointment" data-toggle="tab" New Appointment
+        li
+          a href="#tab-blockout" data-toggle="tab" New Block Out
+      .tab-content
+        #tab-appointment.tab-pane.fade.in.active
+          = render_messages
+          = simple_form_for @appointment, html: { autocomplete: 'off' }, remote: true do |a|
+            .scrollable-container
+              .content
+                .row
+                  .col-lg-8.col-md-8.col-sm-8
+                    .form-group
+                      = a.input_field :patient_id, as: 'hidden'
+                      .input-group
+                        = select_tag :find_patient, '', { class: 'select2', data: { placeholder: 'Search Patient', theme: 'gray-lighter', arrow: 'none', padding: '3x', font: '1x' } }
+                        span.input-group-addon.input-group-addon-search#find-patient-button
+                  .col-lg-4.col-md-4.col-sm-4
+                    .form-group
+                      = link_to "Add New Patient", add_patient_from_appointment_providers_path, remote: true, class: 'btn btn-default btn-modal', id: 'modal-new-patient-button ', data: { target: '#modal-new-patient' }
+                .row
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = a.input_field :provider_id, as: :select, collection: @providers, selected: current_user.provider.id, include_blank: true, class: 'select2', data: { placeholder: 'Provider', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = a.input_field :location_id, as: :select, collection: @locations, selected: current_user.provider.location.try(:id), include_blank: true, class: 'select2', data: { placeholder: 'Location', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+                .row
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = a.input_field :room_id, as: :select, collection: @rooms, include_blank: true, class: 'select2', data: { placeholder: 'Room', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = a.input_field :appointment_type_id, as: :select, collection: @appointment_types, include_blank: true, class: 'select2', data: { placeholder: 'Appointment Type', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+                .row
+                  .col-lg-12.col-md-12.col-sm-12
+                    .form-group
+                      = a.input_field :reason, as: :text, class: 'form-control', placeholder: 'CC/Reason', rows: '6'
+                .row
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      .input-group
+                        = a.input_field :appointment_datetime_date, class: 'form-control date-picker', placeholder: 'Appointment Date'
+                        span.input-group-addon.input-group-addon-calendar
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = a.input_field :appointment_datetime_time, class: 'form-control time-picker', placeholder: 'Appointment Time'
+                .row
+                  .col-lg-4.col-md-4.col-sm-4
+                    .form-group
+                      = a.input_field :duration, as: :select, collection: @durations, class: 'select2', data: { placeholder: 'Duration', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = a.input_field :contact_email, placeholder: 'Contact Email', class: 'form-control', id: 'contact_email'
+                  .col-lg-2.col-md-2.col-sm-2
+                    .form-group
+                      .checkbox-custom.checkbox-custom-vertical.checkbox-no-email
+                        input.checkbox type="checkbox" id="appointment_doesnt_have_email" checked="true"
+                          label for="appointment_doesnt_have_email"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label No Email
+                .row
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = a.input_field :contact_phone, as: :hidden, collection: [['Contact Phone', nil]], id: 'contact_phone'
+                      = select_tag :contact_phone_fill, options_for_select([['Contact Phone', nil]]), class: 'select2', data: { placeholder: 'Contact Phone', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }, include_blank: true
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      .checkbox-custom.checkbox-reminder-to-patient
+                        = a.check_box :reminder, class: 'checkbox', id: 'appointment-reminder-email'
+                        label[for="appointment-reminder-email"]
+                          span.checkbox-icon-container
+                            span.checkbox-icon
+                          span.checkbox-label Send Reminder to the patient
+                .row
+                  .col-lg-8.col-md-8.col-sm-8
+                    .form-group
+                      = hidden_field_tag :referral_id
+                      .input-group
+                        = select_tag :find_referral, '', class: 'select2', data: { placeholder: 'Referred by', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+                        span.input-group-addon.input-group-addon-search id="find-referral-button"
+                  .col-lg-4.col-md-4.col-sm-4
+                    .form-group
+                      = link_to 'New Referral', new_referral_path, remote: 'true', class: 'btn btn-default btn-modal', id: 'modal-new-referral-button', data: { target: '#modal-new-referral' }
+        #tab-blockout.tab-pane.fade
+          = simple_form_for BlockOut.new, html: { autocomplete: 'off' }, remote: true do |b|
+            .scrollable-container
+              .content
+                = b.input_field :block_datetime, as: :hidden
+                .row
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = b.input_field :time_for, as: :select, collection: @time_fors, class: 'select2', data: { placeholder: 'Block Time For', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      .input-group
+                        = b.input_field :block_datetime_date, class: 'form-control date-picker', placeholder: 'Date'
+                        span.input-group-addon.input-group-addon-calendar
+                .row
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = b.input_field :block_datetime_time, class: 'form-control time-picker', placeholder: 'Time'
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = b.input_field :duration, as: :select, collection: @block_out_durations, class: 'select2', data: { placeholder: 'Duration', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+                .row
+                  .col-lg-12.col-md-12.col-sm-12
+                    .form-group
+                      = b.input_field :description, as: :text, class: 'form-control', placeholder: 'Description', rows: 6
+                .row
+                  .col-lg-12.col-md-12.col-sm-12
+                    .form-group
+                      = b.input_field :note, as: :text, class: 'form-control', placeholder: 'Notes', rows: 6
+                .recuring-controls-block
+                  .row
+                    .col-lg-4.col-md-4.col-sm-4
+                      .form-group
+                        .checkbox-custom.checkbox-blockout-recurring
+                          = b.check_box :recurring, class: 'checkbox', id: 'blockout_recurring'
+                          label for="blockout_recurring"
+                            span.checkbox-icon-container
+                              span.checkbox-icon
+                            span.checkbox-label Recurring
+                    .col-lg-8.col-md-8.col-sm-8
+                      .form-group
+                        .input-group.reccur-every
+                          span.input-group-addon
+                            | Recur Every #
+                          = b.input_field :recur_every, as: :integer, class: 'form-control', id: 'blockout_reccur_every', tabindex: -1, readonly: true
+                          span.input-group-addon
+                            | (s)
+                  .row
+                    .col-lg-4.col-md-4.col-sm-4
+                      .form-group
+                        .recurring-radio-buttons
+                          - %w(daily weekly).each do |time_type|
+                            .radiobutton-custom
+                              - if time_type == 'daily'
+                                input type="radio" checked="true" id="blockout_recurring_daily" name="recurring_buttons"
+                              - else
+                                input type="radio" id="blockout_recurring_weekly" name="recurring_buttons"
+                              label for="blockout_recurring_#{time_type}"
+                                span.radio-icon
+                                span.radio-label
+                                  = time_type.to_s.titleize
+                    .col-lg-8.col-md-8.col-sm-8
+                      .form-group
+                        .recurring-checkboxes
+                          - week_days.each do |week_day|
+                            .checkbox-custom
+                              = b.check_box :range_days, class: 'checkbox', checked: true, id: "recurring-#{week_day[:name]}"
+                              label for="recurring-#{week_day[:name]}"
+                                span.checkbox-icon-container
+                                  span.checkbox-icon
+                                span.checkbox-label
+                                  = week_day[:abbr]
+    .modal-footer
+      .controls
+        a.btn.btn-default.modal-add-patient-save Save
+        a.btn.btn-default.btn-padding-sm data-dismiss="modal" Cancel

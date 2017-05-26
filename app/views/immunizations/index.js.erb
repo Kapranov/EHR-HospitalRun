@@ -1,0 +1,16 @@
+$("#modal-patient-immunizations").html("<%= escape_javascript(render 'immunizations') %>")
+
+initPickers('#modal-patient-immunizations');
+initModalFadeInOut('#modal-patient-immunizations');
+initSelect2('#modal-patient-immunizations');
+
+$("#modal-patient-immunizations").modal("show")
+
+$('select#print_immunization').change(function() {
+  if($(this).val() == 0) {
+    window.open('<%= Rails.application.routes.url_helpers.download_pdf_immunizations_path(immunization: { patient_id: @patient.id }) %>','_blank');
+  }
+  else {
+    window.open('<%= Rails.application.routes.url_helpers.download_csv_immunizations_path(immunization: { patient_id: @patient.id }) %>','_blank');
+  }
+});

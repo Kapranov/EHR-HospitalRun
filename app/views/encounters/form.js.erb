@@ -1,0 +1,286 @@
+$("#modal-patient-add-encounter").html("<%= escape_javascript(render 'form') %>");
+$("#modal-patient-add-encounter").modal("show")
+
+initPickers('#modal-patient-add-encounter');
+initSelect2('#modal-patient-add-encounter');
+
+ProviderSearchController = function() {
+  var input, input_id, button, link;
+
+  this.initialize = function(_input, _input_id, _button, _link) {
+    input = $(_input)
+    input_id = $(_input_id);
+    button = $(_button);
+    link = _link;
+    
+    input.select2({
+      width: '100%',
+      placeholder: 'Search',
+      ajax: {
+        url: link,
+        processResults: processResults,
+        data: function (params) {
+          return {
+            part: params.term
+          };
+        },
+        cache: true
+      },
+      escapeMarkup: function (markup) { return markup; },
+      minimumInputLength: 1,
+      templateResult: templateResult,
+      templateSelection: templateSelection
+    });
+
+    button.click(function(e) {
+      input.select2('open');
+    });
+  }
+
+  function processResults(data, params) {
+    return {
+      results: data
+    };
+  }
+
+  function templateResult(provider) {
+    if (provider.loading) return provider.text;
+    return '<span>'+provider.full_name+'</span>';
+  }
+
+  function templateSelection(provider) {
+    if(provider.full_name) {
+      input_id.val(provider.id).trigger('change');
+      return provider.full_name;
+    }
+    else
+      return provider.text;
+  }
+};
+
+ProceduresSearchController = function() {
+  var input, input_id, button, add_button, list, attribute, link, counter_index = 0;
+
+  this.initialize = function(_input, _input_id, _button, _add_button, _list, _attribute, _link) {
+    input = $(_input)
+    input_id = $(_input_id);
+    button = $(_button);
+    list = $(_list);
+    add_button = $(_add_button);
+    attribute = _attribute;
+    link = _link;
+    
+    input.select2({
+      width: '100%',
+      placeholder: 'Search',
+      ajax: {
+        url: link,
+        processResults: processResults,
+        data: function (params) {
+          return {
+            part: params.term
+          };
+        },
+        cache: true
+      },
+      escapeMarkup: function (markup) { return markup; },
+      minimumInputLength: 1,
+      templateResult: templateResult,
+      templateSelection: templateSelection
+    });
+
+    button.click(function(e) {
+      input.select2('open');
+    });
+
+    add_button.click(function(e) {
+      var row = $('<div class="row"></div>');
+      row.append('<div class="col-xs-8"><p>' + input.data('value') + '</p></div>');
+      row.append('<div class="col-xs-4"><p>' + input_id.val() + '</p></div>');
+      row.append('<input type="hidden" name="encounter[' + attribute + '][' + counter_index + '][procedure_code]" value="' + input_id.val() + '" />');
+      list.append(row);
+      counter_index += 1;
+      input.val('').trigger('change');
+      input.html('<option></option>')
+    });
+  }
+
+  function processResults(data, params) {
+    return {
+      results: data
+    };
+  }
+
+  function templateResult(procedure) {
+    if (procedure.loading) return procedure.text;
+    return '<span>'+procedure.full_name+'</span>';
+  }
+
+  function templateSelection(procedure) {
+    if(procedure.full_name) {
+      input.data('value', procedure.full_name);
+      input.data('id', procedure.id);
+      input_id.val(procedure.id).trigger('change');
+      add_button.removeClass('disabled');
+      input.html('<option></option>')
+      return procedure.full_name;
+    }
+    else {
+      add_button.addClass('disabled');
+      input.html('<option></option>')
+      return procedure.text;
+    }
+  }
+};
+
+BMIController = function() {
+  var height_major;
+  var height_minor;
+  var height_major_unit_system;
+  var height_minor_unit_system;
+  var weight_unit_system;
+  var weight;
+  var unit_system;
+  var bmi;
+
+  this.initialize = function(major_height, minor_height, major_unit_system_height, minor_unit_system_height, unit_system_weight, weig, b) {
+    height_major = $(major_height);
+    height_minor = $(minor_height);
+    height_major_unit_system = $(major_unit_system_height);
+    height_minor_unit_system = $(minor_unit_system_height);
+    weight_unit_system = $(unit_system_weight);
+    weight       = $(weig);
+    bmi          = $(b);
+    bmi.data('system', 'us');
+    SetOnChange();
+    CountBMI();
+  };
+
+  var SetOnChange = function() {
+    height_major.keyup(CountBMI);
+    height_minor.keyup(CountBMI);
+    weight.keyup(CountBMI);
+    height_major_unit_system.change(UnitSystemChange);
+    height_minor_unit_system.change(UnitSystemChange);
+    weight_unit_system.change(UnitSystemChange);
+  };
+
+  var UnitSystemChange = function(e) {
+    var control = $(e.currentTarget);
+    var id = control.attr('id');
+    switch(id) {
+      case 'height_major_unit_system':
+        if(height_minor_unit_system.val() != control.val() && weight_unit_system.val() != control.val()) {
+          height_minor_unit_system.val(control.val()).change();
+          weight_unit_system.val(control.val()).change();
+        }
+      break;
+      case 'height_minor_unit_system':
+        if(height_major_unit_system.val() != control.val() && weight_unit_system.val() != control.val()) {
+          height_major_unit_system.val(control.val()).change();
+          weight_unit_system.val(control.val()).change();
+        }
+      break;
+      case 'weight_unit_system':
+        if(height_minor_unit_system.val() != control.val() && height_major_unit_system.val() != control.val()) {
+          height_minor_unit_system.val(control.val()).change();
+          height_major_unit_system.val(control.val()).change();
+        }
+      break;
+    }
+    switch(control.val()) {
+      case 0:
+        bmi.data('system', 'us');
+      break;
+      case 1:
+        bmi.data('system', 'euro');
+      break;
+    }
+    RecountValues();
+  };
+
+  var RecountValues = function() {
+    var total;
+    var major;
+    var minor;
+    var height_major_val = parseFloat(height_major.val());
+    var height_minor_val = parseFloat(height_minor.val());
+    var weight_val;
+
+    if(bmi.data('system') == 'us') {
+      total = RoundFour((height_major_val * 12 + height_minor_val) * 2.54);
+      major = Math.floor(total / 100.0);
+      minor = total - major * 100;
+      weight_val = weight.val() * 0.453592;
+      bmi.data('system', 'euro');
+    } else {
+      total = RoundFour((height_major_val * 100 + height_minor_val) * 0.393701);
+      major = Math.floor(total / 12.0);
+      minor = total - major * 12;
+      weight_val = weight.val() * 2.20462;
+      bmi.data('system', 'us');
+    }
+    height_major.val(RoundFour(parseInt(major)));
+    height_minor.val(minor);
+    weight.val(RoundFour(weight_val));
+    CountBMI();
+  };
+
+  var RoundFour = function(num) {
+    return Math.round(num * 10000) / 10000
+  };
+
+  var CountBMI = function() {
+    var h = parseInt(height_major.val());
+    if(bmi.data('system') == 'euro')
+      h = h * 100 + h;
+    else
+      h = h * 12 + h;
+    var w = parseInt(weight.val());
+    if(w && h) {
+      bmi.val(((w * 703) / Math.pow(h, 2)).toFixed(2));
+    }
+  };
+};
+
+var providerSearchController = new ProviderSearchController();
+providerSearchController.initialize(
+  '#modal-patient-add-encounter #find_provider',
+  '#modal-patient-add-encounter #encounter_provider_id',
+  '#modal-patient-add-encounter #find_provider_button',
+  '<%= Rails.application.routes.url_helpers.providers_providers_path %>'
+);
+
+
+var proceduresCompletedSearchController = new ProceduresSearchController();
+proceduresCompletedSearchController.initialize(
+  '#modal-patient-add-encounter #find_procedure_completed',
+  '#modal-patient-add-encounter #proc_completed',
+  '#modal-patient-add-encounter #find_procedure_completed_button',
+  '#modal-patient-add-encounter #find_procedure_completed_add_button',
+  '#modal-patient-add-encounter #procedure_completed_list',
+  'procedure_completeds',
+  '<%= Rails.application.routes.url_helpers.procedure_codes_procedures_path %>'
+);
+
+var proceduresRecommendedSearchController = new ProceduresSearchController();
+proceduresRecommendedSearchController.initialize(
+  '#modal-patient-add-encounter #find_procedure_recommended',
+  '#modal-patient-add-encounter #proc_recommended',
+  '#modal-patient-add-encounter #find_procedure_recommended_button',
+  '#modal-patient-add-encounter #find_procedure_recommended_add_button',
+  '#modal-patient-add-encounter #procedure_recommended_list',
+  'procedure_recommends',
+  '<%= Rails.application.routes.url_helpers.procedure_codes_procedures_path %>'
+);
+
+var bmiController = new BMIController();
+bmiController.initialize(
+  '#modal-patient-add-encounter input#encounter_vital_height_major',
+  '#modal-patient-add-encounter input#encounter_vital_height_minor',
+  '#modal-patient-add-encounter select#height_major_unit_system',
+  '#modal-patient-add-encounter select#height_minor_unit_system',
+  '#modal-patient-add-encounter select#weight_unit_system',
+  '#modal-patient-add-encounter input#encounter_vital_weight',
+  '#modal-patient-add-encounter input#encounter_vital_bmi'
+);

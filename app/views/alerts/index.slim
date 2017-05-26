@@ -1,0 +1,147 @@
+- content_for :title
+  | EHR1 | Electronic Health Records - Settings (Clinical Decision Support)
+- content_for :back_link do
+  = link_to 'Settings', alerts_path, class: 'active'
+.col-lg-10
+  #settings-cds-container.right-block
+    .row-container
+      .bordered-container
+        .category-header
+          p.title Clinical Decision Support
+          - if policy(:cds).configure?
+            = link_to new_alert_path, class: 'btn-small btn-modal', data: { target: '#modal-alert' }, remote: true
+              i.fa.fa-plus
+        .settings-cds-content
+          - if @alerts.any?
+            .row.row-main
+              .col-lg-9.col-md-9
+                .form-group
+                  p.title Turn all Accountable Care Organization Alerts on or off for all your patients
+              .col-lg-3.col-md-3
+                .form-group
+                  .btn-group.pull-right
+                    a.btn.btn-default href="#" class="#{'active' if @alerts_all_state}" data-active="true" On
+                    a.btn.btn-default href="#" class="#{'active' if !@alerts_all_state}" data-active="false" Off
+            .row.row-alerts.collapse.fade class="#{'in' if @alerts_all_state}"
+              .col-lg-12
+                .panel-group.panel-group-alerts#alerts-container
+                  - @alerts.each_with_index do |alert, index|
+                    .panel.panel-alert
+                      .panel-heading
+                        a class="#{'disabled' if !alert.active}" data-toggle="collapse" data-parent="#alerts-container" aria-expanded="false" href="#alert-#{alert.id}"
+                          p.title
+                            span.number
+                              = index+1
+                            span.text
+                              = alert.name
+                          .icon.icon-md.icon-circle.icon-ic-collapse.pull-right
+                        .btn-group
+                          a.btn.btn-default class="#{'active' if alert.active?}" href="#" data-active="true" data-id="#{alert.id}" On
+                          a.btn.btn-default class="#{'active' if !alert.active?}" href="#" data-active="false" data-id="#{alert.id}" Off
+                      .panel-collapse.collapse id="alert-#{alert.id}"
+                        = simple_form_for alert do |f|
+                          = f.input_field :id, as: :hidden, value: alert.id
+                          .panel-body
+                            .row
+                              .col-lg-12
+                                .form-group
+                                  p.title Description*
+                                  = f.input_field :description, value: alert.description, class: 'form-control form-control-green form-control-bold'
+                            .row
+                              .col-lg-12
+                                .form-group
+                                  p.title Trigger Rule:
+                                  = f.input_field :rules, as: :select, collection: @rules, selected: alert.rule, class: 'select2', data: { theme: 'green-lighter', arrow: '2x', padding: '2x', font: '0-5x', 'font-weight' => 'bold' }
+                            .row
+                              .col-lg-12
+                                .form-group
+                                  - if policy(:cds).configure?
+                                    .panel.panel-triggers
+                                      .panel-heading
+                                        .row
+                                          .col-lg-6
+                                            p.title Trigger Condition Builder
+                                          .col-lg-6
+                                            = link_to 'New Trigger', new_trigger_path(alert_id: alert.id), class: 'btn btn-default pull-right btn-modal', data: { target: '#modal-trigger' }, remote: true
+                                      - if alert.triggers.any?
+                                        .panel-body
+                                          .table-responsive
+                                            table.table
+                                              thead
+                                                tr
+                                                  td
+                                                  td
+                                                    p Category
+                                                  td
+                                                    p Code
+                                                  td
+                                                    p Code System
+                                                  td
+                                                    p Description
+                                                  td
+                                              tbody
+                                                - alert.triggers.each do |trigger|
+                                                  tr
+                                                    td
+                                                      - if trigger.system.to_s == 'Snomed'
+                                                        = link_to '', info_medline_plus_path(title: "#{trigger.code} (#{trigger.system.upcase}) - #{trigger.description}", link: trigger.medline_url), data: { target: '#modal-medline' }, class: 'icon icon-sm icon-circle icon-ic-info btn-modal', remote: true
+                                                    td
+                                                      p 
+                                                        = trigger.trigger_category.category
+                                                    td
+                                                      p 
+                                                        = trigger.code
+                                                    td
+                                                      p 
+                                                        = trigger.system
+                                                    td
+                                                      p
+                                                        = trigger.description
+                                                    td
+                                                      - if policy(:cds).configure?
+                                                        = link_to '', trigger_path(trigger), method: :delete, class: 'icon icon-sm icon-circle icon-ic-delete'
+                            .row
+                              .col-lg-12
+                                .form-group
+                                  p.title Resolution:
+                                  = f.input_field :resolution, as: :text, value: alert.resolution, class: 'form-control form-control-green textarea-resize-vertical'
+                            .row
+                              .col-lg-12
+                                .form-group
+                                  p.title Bibliography:
+                                  = f.input_field :bibliography, as: :text, value: alert.bibliography, class: 'form-control form-control-green textarea-resize-vertical'
+                            .row
+                              .col-lg-12
+                                .form-group
+                                  p.title Developer:
+                                  = f.input_field :developer, value: alert.developer, class: 'form-control form-control-green form-control-bold'
+                            .row
+                              .col-lg-6
+                                .form-group.form-group-horizontal
+                                  .row
+                                    .col-lg-4.col-md-3
+                                      p.title Funding Source:
+                                    .col-lg-8.col-md-9
+                                      = f.input_field :funding_source, value: alert.funding_source, class: 'form-control form-control-green form-control-bold'
+                              .col-lg-6
+                                .form-group.form-group-horizontal
+                                  .row
+                                    .col-lg-4.col-md-3
+                                      p.title Release Date(s)
+                                    .col-lg-8.col-md-9
+                                      .input-group.input-group-green
+                                        = f.input_field :release_date, value: alert.release_date_date, class: 'form-control form-control-green date-picker form-control-bold'
+                                        span.input-group-addon.input-group-addon-calendar
+                          .panel-footer
+                            .controls
+                              = f.submit 'Save', class: 'btn btn-default btn-padding-lg'
+          - else
+            .row
+              .col-lg-12
+                p.title.title-empty Accountable Care Organization Alerts Not Found
+#modal-alert.modal.modal-provider.animated.fadeIn
+#modal-alert-medline.modal.modal-provider.animated.fadeIn
+#modal-trigger.modal.modal-provider.animated.fadeIn
+#modal-medline.modal.modal-provider.animated.fadeIn
+javascript:
+  $('#item-settings-cds').parent().addClass('active');

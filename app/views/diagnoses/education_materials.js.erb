@@ -1,0 +1,28 @@
+var modal = $('#modal-patient-diagnoses-education-materials');
+
+modal.html('<%= escape_javascript(render 'form_education_materials') %>');
+
+var anyData = ('<%= @education_material.present? %>' === 'true');
+
+if(anyData)
+  modal.removeClass('modal-danger');
+else
+  modal.addClass('modal-danger');
+
+modal.modal('show');
+
+PrintController = function() {
+  var button;
+
+  this.initialize = function(_button) {
+    button = $(_button);
+
+    button.click(function(e) {
+      e.preventDefault();
+      window.print();
+    })
+  }
+}
+
+var printController = new PrintController();
+printController.initialize('.btn-print');

@@ -1,0 +1,33 @@
+#modal-medline {
+  .modal-dialog,
+  .modal-dialog, .modal-content {
+    max-width: 760px;
+  }
+  .modal-dialog {
+    .modal-content {
+      .modal-header {
+        .title {
+          padding-left: 15px;
+        }
+        .close-btn {
+          right: 12px;
+        }
+      }
+      .modal-body {
+        padding: 5px 0;
+        .content {
+          padding: 0 !important;
+        }
+        .slimScrollDiv #iframe-info {
+          width: calc(100% - 30px);
+        }
+        #iframe-info {
+          width: 100%;
+          min-height: 390px;
+          height: 100%;
+          border: 0;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,140 @@
+.scrollable-container
+  .content
+    .panel.panel-default
+      .panel-heading
+        p.panel-title Guarantor
+      .panel-body
+        = simple_form_for @patient.guarantor, html: { autocomplete: 'off' }, remote: true do |f|
+          = f.input_field :patient_id, as: :hidden, value: @patient.id
+          .left-block.col-lg-6
+            .row
+              .col-lg-4
+                .form-group
+                  = f.input_field :first_name, class: 'form-control', placeholder: 'First Name'
+              .col-lg-2
+                .form-group
+                  = f.input_field :middle_name, class: 'form-control', placeholder: 'M.I.'
+              .col-lg-6
+                .form-group
+                  = f.input_field :last_name, class: 'form-control', placeholder: 'Last Name'
+            .row
+              .col-lg-12
+                .form-group
+                  p.sex-radio-buttons-title Sex:
+                  .sex-radio-buttons
+                    .radiobutton-custom
+                      = f.radio_button :gender, :Male
+                      label for="guarantor_gender_male"
+                        span.radio-icon
+                        span.radio-label Male
+                    .radiobutton-custom
+                      = f.radio_button :gender, :Female
+                      label for="guarantor_gender_female"
+                        span.radio-icon
+                        span.radio-label Female
+                    .radiobutton-custom
+                      = f.radio_button :gender, :Other
+                      label for="guarantor_gender_other"
+                        span.radio-icon
+                        span.radio-label Other
+            .row
+              .col-lg-6
+                .form-group
+                  = f.input_field :social_number, as: :string, class: 'form-control input-social-security', placeholder: 'Social Security Number'
+              .col-lg-6
+                .form-group
+                  .input-group
+                    = f.input_field :birth_date, as: :date_picker, class: 'form-control date-picker', placeholder: 'Date of Birth'
+                    span.input-group-addon.input-group-addon-calendar
+            .row
+              .col-lg-8
+                .form-group
+                  = f.input_field :relation, as: :select, collection: Guarantor.relations, include_blank: true, class: 'select2', data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x', placeholder: 'Relationship to Patient' }
+          .right-block.col-lg-6
+            .row
+              .col-lg-12
+                .form-group
+                  .input-group.input-group-phone
+                    = f.input_field :phone_code, as: :select, collection: ((@patient.persisted? && @patient.guarantor.phone_code.present?) ? [@patient.guarantor.phone_code] : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                    = f.input_field :phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Phone'
+            .row
+              .col-lg-12
+                .form-group
+                  = f.input_field :email, as: :email, class: 'form-control input-email', placeholder: 'Email Address'
+            .row
+              .col-lg-12
+                .form-group
+                  = f.input_field :street_address, as: :select, collection: [], include_blank: true, class: 'select2', data: { placeholder: 'Street Address', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+            .row
+              .col-lg-6
+                .form-group
+                  = f.input_field :city, class: 'form-control', placeholder: 'City', readonly: true, tabindex: '-1'
+              .col-lg-2
+                .form-group
+                  = f.input_field :state, class: 'form-control form-control-padding-sm', placeholder: 'State', readonly: true, tabindex: '-1'
+              .col-lg-4
+                .form-group
+                  = f.input_field :zip, class: 'form-control', placeholder: 'Zip', readonly: true, tabindex: '-1'
+    .panel.panel-default
+      .panel-heading
+        p.panel-title Insurance
+        .row
+          .col-lg-6
+          .col-lg-6
+            .row.controls
+              .col-lg-2.col-md-2.col-sm-2
+              .col-lg-6.col-md-6.col-sm-6
+                = link_to new_insurance_path(patient_id: @patient.id), remote: true, class: 'btn btn-default btn-modal', data: { target: '#modal-patient-add-insurance' }
+                  i.fa.fa-plus
+              .col-lg-4.col-md-4.col-sm-4
+                select.select2 data-theme="green-light"  data-arrow="2x" data-padding="1x" data-font="1x"
+                  option value="Active" Active
+      .panel-heading
+        .controls
+          .row
+            .col-lg-3.col-md-3.col-sm-6
+              select.select2 data-placeholder="Payment Preference" data-theme="green-light"  data-arrow="2x" data-padding="1x" data-font="1x"
+                option value=""
+                option value="Empty list" Empty list
+            .col-lg-3.col-md-3.col-sm-6
+              .checkbox-custom
+                input type="checkbox" id="user_patient_attributes_insurance_no_insurance"
+                label for="user_patient_attributes_insurance_no_insurance"
+                  span.checkbox-icon-container
+                    span.checkbox-icon
+                  span.checkbox-label No Insurance
+      .panel-body
+        .table-responsive
+          table.table.table-bordered
+            thead
+              tr
+                th Order of Benefits
+                th Payer
+                th Type
+                th Address
+                th Ins. ID
+                th Effective From
+                th Effective To
+                th Co-Pay
+                th Status
+            tbody
+              - @insurances.each do |insurance|
+                tr
+                  td
+                  td
+                    = insurance.try(:payer).try(:name)
+                  td
+                    = insurance.copay_type
+                  td
+                    = insurance.try(:payer).try(:claim).try(:street_address1)
+                  td
+                    = insurance.insurance_number
+                  td
+                    = insurance.effective_from.try(:strftime, '%m/%d/%Y')
+                  td
+                    = insurance.effective_to.try(:strftime, '%m/%d/%Y')
+                  td
+                    = insurance.copay_amount
+                  td
+                    = insurance.active
+= javascript_include_tag 'providers/patient_treatments/show_patient/insurance'

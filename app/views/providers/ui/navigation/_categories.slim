@@ -1,0 +1,18 @@
+.header
+  .categories-header class="#{'trial-header' if current_user.provider.trial.present? && current_user.role == :Provider && trial_header}" class="#{'trial-header-danger' if current_user.provider.trial_5? && trial_header && current_user.role == :Provider}"
+    .row
+      .categories-container class="#{'col-lg-6 col-md-6 col-sm-6 col-xs-5' if current_user.provider.trial.present? && current_user.role == :Provider && trial_header}" class="#{'col-lg-12' if !trial_header || !current_user.provider.trial.present?}"
+        ul.categories
+          li
+            = link_to 'Home', home_link
+          li
+            i.category-arrow.fa.fa-angle-right
+          li
+            = content_for :back_link
+      - if current_user.provider.trial.present? && current_user.role == :Provider && trial_header
+        .col-lg-6.col-md-6.col-sm-6.col-xs-7.trial-container
+          p 
+            | Your Trial Period Ends in&nbsp;
+            span 
+              = "#{current_user.provider.trial} days"
+          = link_to 'Subscribe', current_user.provider.subscribed? ? payments_shop_path : payments_agreement_path, class: 'btn btn-default btn-padding-lg'

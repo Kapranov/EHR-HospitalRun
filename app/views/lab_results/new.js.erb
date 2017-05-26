@@ -1,0 +1,182 @@
+$('#modal-lab-results').html('<%= escape_javascript(render 'form') %>');
+
+initPickers('#modal-lab-results');
+initSelect2('#modal-lab-results');
+initModalFadeInOut('#modal-lab-results');
+
+$('#modal-lab-results').modal('show');
+
+$('.lab-order-num').change(function() {
+  var lab_order_id = $(this).val();
+  $.ajax({
+    url: '<%= test_order_form_lab_results_path %>',
+    data: { lab_order_id: lab_order_id }
+  }).done(function(partial) {
+    console.log(partial);
+    $('#test-order-body').html(partial);
+  });
+});
+
+var showViewResultsSearchController = new ShowViewResultsSearchController();
+showViewResultsSearchController.initialize();
+
+var showViewResultsValidationController = new ValidationController();
+showViewResultsValidationController.initialize(
+  'form.new_lab_result',
+  {
+    'lab_result_find_patient': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[patient_id]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result_patient_primary_phone': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result_patient_date_of_birth': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result_patient_sex': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result_patient_age': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[fasting]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[specimen]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[specimen_type]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[test_resported_at_date]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[ordering_physician]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[order_name]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[lab_order_id]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[order_address]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[performing_name]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[performing_address]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[collected_at_date]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[collected_at_time]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result_collected_at_time_12_hour': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[received_at_date]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[received_at_time]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result_received_at_time_12_hour': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[tested_at_date]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[tested_at_time]': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result_tested_at_time_12_hour': {
+      required: {
+        required: true
+      }
+    },
+    'lab_result[notes]': {
+      required: {
+        required: true
+      }
+    }
+  }
+);
+
+var timeAmPmContollerCollected = new TimeAmPmController();
+timeAmPmContollerCollected.initialize(
+  '#lab_result_collected_at_time_12_hour',
+  '#lab_result_collected_at_time',
+  '#lab_result_collected_at_am_btn',
+  '#lab_result_collected_at_pm_btn'
+);
+
+var timeAmPmContollerReceived = new TimeAmPmController();
+timeAmPmContollerReceived.initialize(
+  '#lab_result_received_at_time_12_hour',
+  '#lab_result_received_at_time',
+  '#lab_result_received_at_am_btn',
+  '#lab_result_received_at_pm_btn'
+);
+
+var timeAmPmContollerTested = new TimeAmPmController();
+timeAmPmContollerTested.initialize(
+  '#lab_result_tested_at_time_12_hour',
+  '#lab_result_tested_at_time',
+  '#lab_result_tested_at_am_btn',
+  '#lab_result_tested_at_pm_btn'
+);

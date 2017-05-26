@@ -1,0 +1,149 @@
+- content_for :title
+  | EHR1 | Electronic Health Records - My Profile
+#myprofile-wrapper.container.content
+  = simple_form_for current_user, url: patient_path(current_user.patient) do |u|
+    = u.simple_fields_for :patient, current_user.patient do |p|
+      .row.top-block
+        .col-lg-12
+          h4 Basic Info
+          .panel.panel-default
+            .panel-body
+              .photo-container.pull-left
+                a.button-attachment href="#"
+                  - if gravatar?(current_user)
+                    = gravatar_for(current_user, { class: 'photo-patient', alt: 'avatar' })
+                  - else
+                    - if current_user.patient.profile_image.present?
+                      img src="#{current_user.patient.profile_image.url}" class='photo-patient' alt='avatar'
+                    - else
+                      = image_tag 'avatar-empty-white.svg', size: 500, class: "avatar avatar-empty avatar-empty-dark"
+                = p.file_field  :profile_image
+              .row.pull-right
+                .col-lg-5.col-md-5
+                  .form-group
+                    = p.input_field :first_name, class: 'form-control', placeholder: 'First Name'
+                .col-lg-2.col-md-2
+                  .form-group
+                    = p.input_field :middle_name, class: 'form-control', placeholder: 'M.I.'
+                .col-lg-5.col-md-5
+                  .form-group
+                    = p.input_field :last_name, class: 'form-control', placeholder: 'Last Name'
+              .row.pull-right
+                .col-lg-5.col-md-5
+                  .form-group
+                    = p.input_field :birth_date, class: 'form-control date-picker', placeholder: 'Date of Birth'
+                .col-lg-3.col-md-3
+                  .form-group
+                    = p.input_field :gender, as: :select, collection: Patient.genders.to_a, class: 'select2', data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }, include_blank: true
+              .row.pull-right
+                .col-lg-10.col-md-10
+                  p Account Access
+                  .row.controls
+                    .col-lg-6.col-md-6
+                      .form-group
+                        = link_to 'Change Password', edit_user_registration_path, class: 'btn btn-default btn-modal', remote: true, data: { target: '#modal-edit-user' }
+                    - if @secure_question.set?
+                      .col-lg-6.col-md-6
+                        .form-group
+                          = link_to 'Change your Security Question', edit_secure_question_path(id: @secure_question.id), class: 'btn btn-default btn-modal', remote: true, data: { target: '#modal-secure-questions-edit' }
+              .row.pull-right
+                .col-lg-12
+                  p Actions
+                  .row.controls
+                    .col-lg-2.col-md-2
+                      .form-group
+                        = p.submit 'Save', class: 'btn btn-default'
+      .row.bottom-block
+        .col-lg-6.col-md-6.left-block
+          h4 My Contact Infrormation
+          .panel.panel-default
+            .panel-body
+              .row
+                .col-lg-12
+                  .form-group
+                    .input-group.input-group-phone
+                      = p.input_field :mobile_phone_code, as: :select, collection: ((current_user.patient.persisted? && current_user.patient.mobile_phone_code.present?) ? [current_user.patient.mobile_phone_code] : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align' => 'center', search: true, 'search-input' => true }, include_blank: false
+                      = p.input_field :mobile_phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Cell Phone'
+              .row
+                .col-lg-12
+                  .form-group
+                    = u.input_field :email, as: :email, class: 'form-control input-email', placeholder: 'Email'
+              .row
+                .col-lg-12
+                  .form-group
+                    .input-group.input-group-phone
+                      = p.input_field :primary_phone_code, as: :select, collection: ((current_user.patient.persisted? && current_user.patient.primary_phone_code.present?) ? [current_user.patient.primary_phone_code] : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align' => 'center', search: true, 'search-input' => true }, include_blank: false
+                      = p.input_field :primary_phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Home Phone'
+              .row
+                .col-lg-12
+                  .form-group
+                    = p.input_field :street_address, as: :select, collection: [], class: 'select2', data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x', placeholder: 'Address' }, include_blank: true
+              .row
+                .col-lg-4.col-md-4
+                  .form-group
+                    = p.input_field :city, class: 'form-control', placeholder: 'City', readonly: true, tabindex: '-1'
+                .col-lg-4.col-md-4
+                  .form-group
+                    = p.input_field :state, class: 'form-control', placeholder: 'State', readonly: true, tabindex: '-1'
+                .col-lg-4.col-md-4
+                  .form-group
+                    = p.input_field :zip, class: 'form-control', placeholder: 'Zip', readonly: true, tabindex: '-1'
+              .row
+                .col-lg-12
+                  .form-group
+                    .input-group.input-group-phone
+                      = p.input_field :work_phone_code, as: :select, collection: ((current_user.patient.persisted? && current_user.patient.work_phone_code.present?) ? [current_user.patient.work_phone_code] : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align' => 'center', search: true, 'search-input' => true }, include_blank: false
+                      = p.input_field :work_phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Work Phone'
+              .controls.pull-right
+                = u.submit 'Save', class: 'btn btn-default'
+        .col-lg-6.col-md-6.right-block
+          h4 Emergency Contact
+          .panel.panel-default
+            = p.simple_fields_for current_user.patient.emergency_contact do |ec|
+              = ec.input_field :patient_id, as: :hidden, value: current_user.patient.id
+              .panel-body
+                .row
+                  .col-lg-4.col-md-4
+                    .form-group
+                      = ec.input_field :first_name, class: 'form-control', placeholder: 'First Name'
+                  .col-lg-4.col-md-4
+                    .form-group
+                      = ec.input_field :middle_name, class: 'form-control', placeholder: 'M.I.'
+                  .col-lg-4.col-md-4
+                    .form-group
+                      = ec.input_field :last_name, class: 'form-control', placeholder: 'Last Name'
+                .row
+                  .col-lg-12
+                    .form-group
+                      = ec.input_field :relation, as: :select, collection: EmergencyContact.relations.to_a, class: 'select2', data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }, include_blank: false
+                .row
+                  .col-lg-12
+                    .form-group
+                      .input-group.input-group-phone
+                        = ec.input_field :mobile_phone_code, as: :select, collection: ((current_user.patient.emergency_contact.persisted? && current_user.patient.emergency_contact.mobile_phone_code.present?) ? [current_user.patient.emergency_contact.mobile_phone_code.present?] : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align' => 'center', search: true, 'search-input' => true }, include_blank: false
+                        = ec.input_field :mobile_phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Phone'
+                .row
+                  .col-lg-12
+                    .form-group
+                      = ec.input_field :email, as: :email, class: 'form-control input-email', placeholder: 'Email'
+                .row
+                  .col-lg-12
+                    .form-group
+                      = ec.input_field :street_address, as: :select, collection: [], class: 'select2', data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x', placeholder: 'Address' }, include_blank: true
+                .row
+                  .col-lg-4.col-md-4
+                    .form-group
+                      = ec.input_field :city, class: 'form-control', placeholder: 'City', readonly: true, tabindex: '-1'
+                  .col-lg-4.col-md-4
+                    .form-group
+                      = ec.input_field :state, class: 'form-control', placeholder: 'State', readonly: true, tabindex: '-1'
+                  .col-lg-4.col-md-4
+                    .form-group
+                      = ec.input_field :zip, class: 'form-control', placeholder: 'Zip', readonly: true, tabindex: '-1'
+                .row
+                  .col-lg-12
+                    .controls.pull-right
+                      = ec.submit 'Save', class: 'btn btn-default'
+#modal-secure-questions-edit.modal-provider.modal.animated.fadeIn
+javascript:
+  $('.item-myprofile').parent().addClass('active');

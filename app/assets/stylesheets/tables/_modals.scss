@@ -1,0 +1,82 @@
+.modal-tables {
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  .modal-dialog {
+    .modal-content {
+      border-radius: 3px;
+      border: 1px solid $graymedium;
+      background-color: $graylight;
+      .modal-header {
+        height: 50px;
+        border-radius: 3px 3px 0 0;
+        border-bottom: 0;
+        background-color: $graymedium;
+        padding-left: 20px;
+        padding-right: 20px;
+        .title {
+          font-size: 14px;
+          font-weight: bold;
+          margin: 0;
+        }
+        .close-button {
+          width: 25px;
+          height: 25px;
+          position: absolute;
+          display: block;
+          right: 20px;
+          top: 13px;
+          background-image: asset_url('close-button-graydark.svg');
+          &:hover {
+            background-image: asset_url('close-button-graydark.svg');
+            opacity: 0.75;
+          }
+        }
+      }
+      .modal-body {
+        padding-right: 0;
+        .content {
+          padding-right: 20px;
+        }
+        .slimScrollDiv {
+          .content {
+            padding-right: 30px;
+          }
+        }
+        .form-control {
+          font-size: 15px;
+        }
+        textarea {
+          height: 125px !important;
+          resize: none;
+        }
+        .checkbox-custom label .checkbox-label {
+          position: relative;
+          left: 10px;
+          text-transform: none;
+          font-weight: normal;
+          color: $graytext;
+        }
+      }
+      .modal-footer {
+        border-top: 0;
+        border-radius: 0 0 3px 3px;
+        padding-left: 20px;
+        padding-right: 20px;
+        .controls {
+          text-align: right;
+          margin: 0 -10px;
+          .btn {
+            display: inline-block;
+            width: auto;
+            height: 35px;
+            line-height: 35px;
+            font-size: 14px;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin: 0 10px;
+          }
+        }
+      }
+    }
+  }
+}

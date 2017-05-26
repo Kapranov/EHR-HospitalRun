@@ -1,0 +1,175 @@
+$(document).ready(function(e) {
+  ValidationControler = function() {
+    var billing_check, billing_first_name, billing_last_name, biling_email, billing_phone;
+    var technical_check, technical_first_name, technical_last_name, technical_email, technical_phone;
+    var form;
+
+    this.initialize = function(_form) {
+      form = $(_form);
+      submit_btn = form.find('input[type=submit]');
+      
+      billing_check = $('#ehr_subscription_billing');
+      billing_first_name = $('#ehr_subscription_billing_first_name');
+      billing_last_name = $('#ehr_subscription_billing_last_name');
+      billing_email = $('#ehr_subscription_billing_email');
+      billing_phone_code = $('#ehr_subscription_billing_phone_code');
+      billing_phone_tel = $('#ehr_subscription_billing_phone_tel');
+
+      technical_check = $('#ehr_subscription_technical');
+      technical_first_name = $('#ehr_subscription_technical_first_name');
+      technical_last_name = $('#ehr_subscription_technical_last_name');
+      technical_email = $('#ehr_subscription_technical_email');
+      technical_phone_code = $('#ehr_subscription_technical_phone_code');
+      technical_phone_tel = $('#ehr_subscription_technical_phone_tel');
+
+      form.validate({
+        ignore: ':hidden:not(.select2):not(.validate)',
+        highlight: highlightHandler,
+        unhighlight: unhighlightHandler,
+        onkeyup: formValidationStateChecking,
+        errorPlacement: function(error,element) {
+          return true;
+        },
+        rules: {
+          'ehr_subscription[billing_first_name]': {
+            required: {
+              required: true,
+              depends: billingDependsHandler
+            }
+          },
+          'ehr_subscription[billing_last_name]': {
+            required: {
+              required: true,
+              depends: billingDependsHandler
+            }
+          },
+          'ehr_subscription[billing_email]': {
+            required: {
+              email: true,
+              required: true,
+              depends: billingDependsHandler
+            }
+          },
+          'ehr_subscription[billing_phone_code]': {
+            required: {
+              required: true,
+              depends: billingDependsHandler
+            }
+          },
+          'ehr_subscription[billing_phone_tel]': {
+            minlength: 7,
+            required: {
+              required: true,
+              depends: billingDependsHandler
+            }
+          },
+          'ehr_subscription[technical_first_name]': {
+            required: {
+              required: true,
+              depends: technicalDependsHandler
+            }
+          },
+          'ehr_subscription[technical_last_name]': {
+            required: {
+              required: true,
+              depends: technicalDependsHandler
+            }
+          },
+          'ehr_subscription[technical_email]': {
+            notEqualTo: "#ehr_subscription_billing_email",
+            required: {
+              email: true,
+              required: true,
+              depends: technicalDependsHandler
+            }
+          },
+          'ehr_subscription[technical_phone_code]': {
+            required: {
+              required: true,
+              depends: billingDependsHandler
+            }
+          },
+          'ehr_subscription[technical_phone_tel]': {
+            minlength: 7,
+            notEqualTo: "#ehr_subscription_billing_phone_tel",
+            required: {
+              required: true,
+              depends: billingDependsHandler
+            }
+          },
+        }
+      });
+
+      formValidationStateChecking($('input').first())
+      $('input, select').change(function(e) {
+        formValidationStateChecking($(this));
+      });
+    }
+
+    var billingDependsHandler = function(element) {
+      return $('#ehr_subscription_billing').is(':checked');
+    }
+
+    var technicalDependsHandler = function(element) {
+      return $('#ehr_subscription_technical').is(':checked');
+    }
+
+    var formValidationStateChanged = function(isEnable, control) {
+      switch($(control).attr('id')) {
+        case billing_check.attr('id'):
+          var enabled = billing_check.is(':checked');
+          switchControlState(billing_first_name, enabled);
+          switchControlState(billing_last_name, enabled);
+          switchControlState(billing_email, enabled);
+          switchControlState(billing_phone_code, enabled);
+          switchControlState(billing_phone_tel, enabled);
+        break;
+        case technical_check.attr('id'):
+          var enabled = technical_check.is(':checked');
+          switchControlState(technical_first_name, enabled);
+          switchControlState(technical_last_name, enabled);
+          switchControlState(technical_email, enabled);
+          switchControlState(technical_phone_code, enabled);
+          switchControlState(technical_phone_tel, enabled);
+        break;
+      }
+      switchControlState(submit_btn, isEnable);
+    }
+
+    var highlightHandler = function(element) {
+      $(element).addClass('unvalid');
+      $(element).removeClass('valid');
+      if($(element).hasClass('select2')) {
+        $('.select2-id-'+$(element).attr('id')).addClass('unvalid');
+        $('.select2-id-'+$(element).attr('id')).removeClass('valid');
+      }
+    }
+
+    var unhighlightHandler = function(element) {
+      $(element).removeClass('unvalid');
+      $(element).addClass('valid');
+      if($(element).hasClass('select2')) {
+        $('.select2-id-'+$(element).attr('id')).removeClass('unvalid');
+        $('.select2-id-'+$(element).attr('id')).addClass('valid');
+      }
+    }
+
+    var formValidationStateChecking = function(element) {
+      if(form.valid())
+        formValidHandler(element);
+      else
+        formUnvalidHandler(element);
+    }
+
+    var formValidHandler = function(element) {
+      formValidationStateChanged(true, element);
+    }
+
+    var formUnvalidHandler = function(element) {
+      formValidationStateChanged(false, element);
+    }
+  }
+
+  var validationController = new ValidationControler();
+  validationController.initialize('form.edit_ehr_subscription');
+});

@@ -1,0 +1,57 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header.modal-header-md
+      p.title Reply to Message
+    = render_messages
+    = simple_form_for EmailMessage.new, url: create_reply_email_messages_path, html: { autocomplete: 'off' } do |f|
+      = f.input :message_id, as: :hidden, input_html: { value: @message.id }
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-12
+                .form-group
+                  .input-group
+                    span.input-group-addon To:
+                    input.form-control type="text" disabled="disabled" readonly="readonly" tabindex="-1" value="#{@message.from.try(:person).try(:full_name)}"
+            .row
+              .col-lg-12
+                .form-group
+                  .input-group
+                    span.input-group-addon From:
+                    input.form-control type="text" disabled="disabled" readonly="readonly" tabindex="-1" value="#{@message.to.try(:person).try(:full_name)}"
+            - if @message.from.try(:role) == 'Patient'
+              .row
+                .col-lg-12
+                  .form-group
+                    .input-group
+                      span.input-group-addon Patient:
+                      input.form-control type="text" disabled="disabled" readonly="readonly" tabindex="-1" value="#{@message.from.person.full_name}"
+            .row
+              .col-lg-12
+                .form-group-large
+                  = f.input :subject_id, as: :hidden
+                  .input-group.input-group-custom.input-group-subject
+                    span.input-group-addon Subject:
+                    a.form-control#subject-button href="#"
+                    #subjects-container
+                      ul.dropdown-menu#subjects-list data-selected="#{@message.subject.try(:id)}"
+                      .controls
+                        input.form-control#subject-add-input type="text" placeholder="Add New Subject"
+                        a.btn.btn-default#subject-add-button href="#" Add
+            .row
+              .col-lg-12
+                .text-areas.form-control
+                  = f.input :body, as: :text, input_html: { class: 'form-control', rows: 4, placeholder: 'Message:' }
+                  = text_area_tag :original, @message.body, class: 'form-control', rows: 4, readonly: true, tabindex: -1
+      .modal-footer
+        .controls
+          .checkbox-custom.checkbox-custom-danger.checkbox-urgent
+            = f.check_box :urgent, input_html: { class: 'checkbox' }
+            label for="email_message_urgent"
+              span.checkbox-icon-container
+                span.checkbox-icon
+              span.checkbox-label Urgent
+          = f.submit 'Send', class: 'btn btn-default btn-padding-md'
+          = f.submit 'Save', class: 'btn btn-default btn-padding-md'
+          a.btn.btn-default.btn-padding-sm data-dismiss="modal" Cancel

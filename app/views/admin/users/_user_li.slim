@@ -1,0 +1,45 @@
+tbody class="#{ main ? 'main' : 'child-user collapse' }" data-id="#{main_provider_id}"
+  tr
+    td.user-name
+      .checkbox-custom
+        input.checkbox type="checkbox" id="#{provider.id}"
+        label for="#{provider.id}"
+          span.checkbox-icon-container
+            span.checkbox-icon
+      - if main && provider.providers.any?
+        a.user-child-expand href="#"
+          i.fa.fa-plus-square
+      p
+        = "#{provider.full_name}#{provider.degree.present? ? ', ' : ''}#{provider.degree}"
+    td.user-location
+      p
+        = provider.business_name
+    td.user-address
+      p
+        = provider.location.try(:to_label)
+    td.user-phone
+      p
+        = provider.primary_phone
+    td.user-period
+      p class="#{main ? '' : provider.active? ? 'active' : (provider.user.trial? ? '' : 'suspended')}"
+        = provider.active? ? 'ACTIVE' : 'SUSPENDED'
+    - if paid.present?
+      td.user-view
+        = link_to 'View', edit_admin_user_path(provider.user), class: 'btn btn-default', remote: true
+      td.user-status
+        - if provider.trial?
+          = link_to 'Paid', pay_admin_user_path(provider.user), method: :post, class: 'btn btn-default', remote: true
+        - else
+          = link_to 'Not Paid', trial_admin_user_path(provider.user), method: :post, class: 'btn btn-default', remote: true
+      td.user-status
+        - if provider.active?
+          = link_to 'Suspend', suspend_admin_user_path(provider.user, type: 'users'), method: :post, class: 'btn btn-default', remote: true
+        - else
+          = link_to 'Activate', activate_admin_user_path(provider.user, type: 'users'), class: 'btn btn-default', remote: true
+      td.user-delete
+        - if provider.trial?
+          = link_to delete_confirmation_admin_user_path(provider.user, type: 'users'), remote: true
+            i.fa.fa-2x.fa-ban
+- if provider.providers.any?
+  - provider.providers.each do |prov|
+    = render 'user_li', provider: prov, main_provider_id: provider.id, main: false, paid: paid

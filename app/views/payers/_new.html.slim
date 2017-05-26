@@ -1,0 +1,83 @@
+.modal-dialog role="document"
+  .modal-content
+    .modal-header.modal-header-md
+      p.title Add Payer/Plan
+    = render_messages
+    = simple_form_for @payer, remote: true do |f|
+      = f.input_field :patient_id, as: :hidden, value: @patient.id
+      .modal-body
+        .scrollable-container
+          .content
+            .panel
+              .panel-body
+                .row
+                  .col-lg-12
+                    .form-group
+                      = f.input_field :name, class: 'form-control', placeholder: 'Payer Name'
+                .row
+                  .col-lg-12
+                    .form-group
+                      = f.input_field :plan, class: 'form-control', placeholder: 'Plan Name'
+                .row
+                  .col-lg-6.col-md-6.col-sm-6
+                    .form-group
+                      = f.input_field :plan_type, as: :select, collection: Payer.plan_types, selected: 0, class: 'select2', include_blank: true, data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x', placeholder: 'Plan Type' }
+            .panel
+              .panel-heading
+                p.panel-title Claims Contact
+              .panel-body
+                = f.simple_fields_for :claim, Claim.new do |c|
+                  .row
+                    .col-lg-4.col-md-4.col-sm-4
+                      .form-group
+                        = c.input_field :first_name, class: 'form-control', placeholder: 'First Name'
+                    .col-lg-2.col-md-2.col-sm-2
+                      .form-group
+                        = c.input_field :middle_name, class: 'form-control', placeholder: 'M.I.'
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        = c.input_field :last_name, class: 'form-control', placeholder: 'Last Name'
+                  .row
+                    .col-lg-12
+                      .form-group
+                        = c.input_field :street_address1, as: :select, collection: [], class: 'select2', include_blank: true, data: { theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x', placeholder: 'Address 1' }
+                  .row
+                    .col-lg-12
+                      .form-group
+                        = c.input_field :street_address2, class: 'form-control', placeholder: 'Address 2'
+                  .row
+                    .col-lg-4.col-md-4.col-sm-4
+                      .form-group
+                        = c.input_field :city, class: 'form-control', placeholder: 'City', readonly: true, tabindex: '-1'
+                    .col-lg-2.col-md-2.col-sm-2
+                      .form-group
+                        = c.input_field :state, class: 'form-control form-control-padding-sm', placeholder: 'State', readonly: true, tabindex: '-1'
+                    .col-lg-6.col-md-6.col-sm-6
+                      .form-group
+                        = c.input_field :zip, class: 'form-control', placeholder: 'Zip', readonly: true, tabindex: '-1'
+                  .row
+                    .col-lg-8.col-md-8.col-sm-8
+                      .form-group
+                        .input-group.input-group-phone
+                          = c.input_field :phone_code, as: :select, collection: ((@payer.persisted? && @payer.phone_code.present?) ? [@payer.phone_code] : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                          = c.input_field :phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Claims Phone'
+                    .col-lg-4.col-md-4.col-sm-4
+                      .form-group
+                        = c.input_field :ext1, class: 'form-control', placeholder: 'Ext.'
+                  .row
+                    .col-lg-8.col-md-8.col-sm-8
+                      .form-group
+                        .input-group.input-group-phone
+                          = c.input_field :fax_code, as: :select, collection: ((@payer.persisted? && @payer.fax_code.present?) ? [@payer.fax_code] : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                          = c.input_field :fax_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Claims Fax'
+                    .col-lg-4.col-md-4.col-sm-4
+                      .form-group
+                        = c.input_field :ext2, class: 'form-control', placeholder: 'Ext.'
+                  .row
+                    .col-lg-12
+                      .form-group
+                        = c.input_field :notes, as: :text, class: 'form-control', row: 4, placeholder: 'Notes'
+      .modal-footer
+        .controls
+          = f.submit 'Add', class: 'btn btn-default btn-padding-lg'
+          a.btn.btn-default.btn-padding-sm data-dismiss="modal" type="button" Cancel

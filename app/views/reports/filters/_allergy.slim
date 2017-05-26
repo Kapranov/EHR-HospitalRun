@@ -1,0 +1,68 @@
+.row-main
+  = simple_form_for @report do |r|
+    = r.simple_fields_for :query, nil do |f|
+      .row
+        .col-lg-2.col-md-3
+          .form-group
+            = r.input_field :criteria, as: :select, collection: @criterias, id: 'criteria', class: 'select2', data: { placeholder: 'Select Criteria', theme: 'green-lighter', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: true
+        .col-lg-5.col-md-6
+          .row
+            .col-lg-5.col-md-5
+              .form-group
+                = f.input_field '', as: :select, collection: Patient.allergy_criterias.values, selected: @report.query[0], id: 'allergy_criteria', class: 'select2', data: { theme: 'green-lighter', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: false
+            .col-lg-4.col-md-5
+              .form-group
+                = f.input_field '', as: :select, collection: @report.query[1].present? ? @report.allergy_values_list : Allergy.allergen_types, selected: @report.query[1], id: 'value_criteria', class: 'select2', data: { theme: 'green-lighter', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: false
+      .row
+        .col-lg-2
+          .form-group
+            .input-group.input-group-green
+              = f.input_field '', placeholder: 'Start Date', value: @report.query[2], class: 'form-control date-picker'
+              span.input-group-addon.input-group-addon-calendar
+        .col-lg-4
+          .row
+            .col-lg-6.col-md-6
+              .form-group
+                = select_tag :contains, options_for_select([['Added', 0]]), selected: 0, class: 'select2', data: { theme: 'green-lighter', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: false
+                span.divider
+                  | :
+            .col-lg-6.col-md-6
+              .form-group
+                .input-group.input-group-green
+                  = f.input_field '', value: @report.query[3], placeholder: 'mm/dd/yyyy', class: 'form-control date-picker'
+                  span.input-group-addon.input-group-addon-calendar
+        .col-lg-2.col-md-12.col-lg-offset-4
+          .form-group.pull-right
+            = r.submit 'Filter', class: 'btn btn-default btn-padding-md'
+/ = simple_form_for @report do |r|
+/   = r.input :criteria, as: :select, collection: @criterias, include_blank: false, input_html: { id: 'criteria' }
+/   = r.simple_fields_for :query, nil do |f|
+/     = f.input '', as: :select, collection: Patient.allergy_criterias.values, selected: @report.query[0], input_html: { id: 'allergy_criteria' }
+/     = f.input '', as: :select, collection: @report.query[1].present? ? @report.allergy_values_list : Allergy.allergen_types, selected: @report.query[1], input_html: { id: 'value_criteria' }
+/     br
+/     = f.input '', input_html: { placeholder: 'Start Date', value: @report.query[2] }
+/     br
+/     label Added
+/     = f.input '', input_html: { placeholder: 'mm/dd/yyyy', value: @report.query[3] }
+/     = r.submit 'Filter'
+/     = r.submit 'Import CSV', name: 'import'
+
+/ javascript:
+/   $('#allergy_criteria').change(function() {
+/     var criteria_list = [];
+/     switch($(this).val()) {
+/       case "#{Patient.allergy_criterias[:by_type]}":
+/         criteria_list = #{raw Allergy.allergen_types.to_json};
+/       break;
+/       case "#{Patient.allergy_criterias[:by_level]}":
+/         criteria_list = #{raw Allergy.severity_levels.to_json};
+/       break;
+/       case "#{Patient.allergy_criterias[:by_onset]}":
+/         criteria_list = #{raw Allergy.onset_ats.to_json};
+/       break;
+/     }
+/     $('#value_criteria').html('');
+/     criteria_list.forEach(function(criteria) {
+/       $('#value_criteria').append('<option value="' + criteria + '">' + criteria + '</option>')
+/     });
+/   });

@@ -1,0 +1,46 @@
+$("#modal-new-patient").html("<%= escape_javascript(render 'form_patient_from_appointment') %>");
+if(!$("#modal-new-patient").hasClass('in'))
+  $("#modal-new-patient").modal("show");
+
+initPickers('#modal-new-patient');
+initSelect2('#modal-new-patient');
+
+var emailCheckingController = new EmailCheckingController();
+emailCheckingController.initialize('#new_patient_contact_email', '#user_no_email');
+
+//var validationController = new ValidationController();
+//validationController.initialize(
+//  'form.new_user',
+//  {
+//    'user[patient][first_name]': {
+//      required: {
+//        required: true
+//      }
+//    },
+//    'user[patient][last_name]': {
+//      required: {
+//        required: true
+//      }
+//    },
+//    'user[email]': {
+//      required: {
+//        required: true
+//      }
+//    },
+//    'user[patient][mobile_phone_code]': {
+//      required: {
+//        required: true
+//      }
+//    },
+//    'user[patient][mobile_phone_tel]': {
+//      required: {
+//        required: true
+//      }
+//    },
+//    'user[patient][birth_date]': {
+//      required: {
+//        required: true
+//      }
+//    }
+//  }
+//);

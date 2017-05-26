@@ -1,0 +1,19 @@
+- content_for :title
+  | EHR1 | Electronic Health Records - Labs&amp;Imaging
+- content_for :back_link do
+  = link_to 'Labs&Imaging', lab_orders_path, class: 'active'
+.content
+  .container-fluid.content-container
+    .labs-imaging-container
+      ul.nav.nav-tabs.styled
+        li
+          = link_to 'Labs', lab_orders_path
+        li.active
+          = link_to 'Imaging', image_orders_path
+      .tab-content#all_tabs_container
+        = render 'image_orders'
+#modal-image-order.modal-provider.modal.animated.fadeIn
+#modal-image-order-attachment.modal-provider.modal.animated.fadeIn
+#modal-image-results.modal-provider.modal.animated.fadeIn
+#modal-image-result-search-by-image-order.modal-provider.modal.animated.fadeIn
+#modal-image-result-results-search-by-image-order.modal-provider.modal.animated.fadeIn

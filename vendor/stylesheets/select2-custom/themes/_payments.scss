@@ -1,0 +1,113 @@
+@import "select2-custom/themes/theme";
+
+$height: 45px;
+$height-search: 35px;
+
+$text-color: #4a4a4a;
+$text-open-color: #4a4a4a;
+$text-decoration: none;
+$text-open-decoration: none;
+$text-dropdown-color: #4a4a4a;
+$text-dropdown-focus-color: #41b6a6;
+$text-dropdown-focus-decoration: none;
+
+$background-color: #fff;
+$background-open-color: rgba(59, 167, 153, 0.1);
+$background-dropdown-color: #fff;
+$background-arrow-color: transparent;
+$background-focus-color: rgba(59, 167, 153, 0.1);
+
+$border: 1px;
+$border-dropdown: 1px;
+$border-radius: 3px;
+$border-color: #41b6a6;
+$border-dropdown-color: #41b6a6;
+$border-dropdown-separator: 0;
+$border-focus-color: #41b6a6;
+$border-focus-search: #41b6a6;
+
+$arrow-icon: '\f0d7';
+$arrow-icon-open: '\f0d8';
+$arrow-icon-color: #41b6a6;
+$arrow-icon-open-color: #41b6a6;
+$arrow-icon-border-separator: 1px;
+
+$box-shadow: none;
+$box-shadow-open: none;
+$box-shadow-dropdown: none;
+
+$padding-dropdown: 10px;
+$padding-focus-size: 10px;
+
+$font-family-regular: 'SF UI Text Regular';
+$font-family-medium: 'SF UI Text Medium';
+$font-family-light: 'SF UI Text Light';
+$font-family-bold: 'SF UI Text Bold';
+$font-family-heavy: 'SF UI Text Heavy';
+
+$font-0-5x: 12px;
+$font-1x: 15px;
+$font-2x: 16px;
+$font-3x: 17px;
+$font-4x: 18px;
+
+$text-align-left: left;
+$text-align-center: center;
+$text-align-right: right;
+
+$padding-1x: 5px;
+$padding-1-5x: 10px;
+$padding-2x: 12px;
+$padding-2-5x: 15px;
+$padding-3x: 20px;
+
+$arrow-1x: 25px;
+$arrow-2x: 28px;
+$arrow-3x: 30px;
+$arrow-4x: 33px;
+
+$arrow-font-size-1x: 18px;
+$arrow-font-size-2x: 22px;
+$arrow-font-size-3x: 26px;
+$arrow-font-size-4x: 30px;
+
+$arrow-padding-0-5x: 10px;
+
+$validation-image-size: 24px;
+$validation-valid-image: image_url('field-valid-icon.svg');
+$validation-unvalid-image: image_url('field-unvalid-icon.svg');
+
+$arrow-offset: 3px;
+
+.select2-container--payments {
+  @import 'theme_init';
+  .select2-selection__arrow {
+    height: $height - ($border * 2) - ($arrow-offset * 2);
+    margin-top: $arrow-offset;
+  }
+  .select2-selection .select2-selection__rendered,
+  .select2-dropdown .select2-results .select2-results__options .select2-results__option {
+    p {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    .full_title {
+      width: 100%;
+      .number {
+        font-size: $font-4x;
+        font-family: $font-family-medium;
+      }
+      .title {
+        font-size: $font-0-5x !important;
+        font-family: $font-family-bold;
+        text-transform: uppercase;
+      }
+      .price {
+        float: right;
+        font-size: $font-4x;
+        font-family: $font-family-bold;
+        color: $text-dropdown-focus-color;
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+.btn {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font-size: 13px;
+  border-radius: 2px;
+  border-color: #333;
+  color: #333;
+  transition: background-color 0.2s, border-color 0.2s, opacity 0.2s;
+  &.btn-default {
+    background-color: $gray_light;
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      background-color: #ccc;
+    }
+  }
+  &.btn-danger {
+    color: #fff;
+    background-color: $red;
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      background-color: $red_dark;
+    }
+  }
+  &.btn-info {
+    background-color: $blue;
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      color: #333;
+      background-color: $blue_dark;
+    }
+  }
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    box-shadow: none;
+    border-color: #444;
+  }
+  &:active {
+    border-color: #333;
+  }
+}

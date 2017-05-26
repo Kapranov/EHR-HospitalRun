@@ -1,0 +1,82 @@
+- content_for :title
+  | EHR1 | Electronic Health Records - Dashboard
+.row#dashboard-wrapper.dashboard-wrapper
+  .categories-container
+    ul.categories
+      li
+        = link_to admin_index_path
+          i.fa.fa-2x.fa-home
+          span Home
+      li
+        span >
+      li
+        a.active href="#" Dashboard
+  .content
+    .row
+      .col-lg-6
+        .window.window-site-visits.disabled
+          .window-message
+            p Site Visits
+      .col-lg-6
+        .window.window-recent-activities.disabled
+          .window-message
+            p Recent Activities
+    .row
+      .col-lg-6
+        .window.window-users
+          .window-header
+            .row
+              .col-lg-6.col-md-6.col-sm-6
+                p.title Users
+              .col-lg-6.col-md-6.col-sm-6
+                .controls
+                  = link_to 'Add New User', new_admin_user_path, class: 'btn btn-default', remote: true
+          .window-content
+            .table-responsive
+              table.table.table-users
+                tbody
+                  - @providers.any?
+                    - @providers.each do |provider|
+                      tr
+                        td.user-name
+                          p
+                            = "#{provider.full_name}#{provider.degree.present? ? ', ' : ''}#{provider.degree}"
+                        td.user-phone
+                          p
+                            = provider.primary_phone
+                        td.user-period
+                          p
+                            = provider.active? ? 'Activated' : 'Not Activated'
+                        td.user-period
+                          p
+                            = provider.user.try(:trial?) ? 'Trial' : 'Paid'
+                        td.user-view
+                          = link_to 'View', edit_admin_user_path(provider.user), class: 'btn btn-default', remote: true
+                        td.user-status
+                          - if provider.active?
+                            = link_to 'Suspend', suspend_admin_user_path(provider.user, type: 'index'), method: :post, class: 'btn btn-default', remote: true
+                          - else
+                            = link_to 'Activate', activate_admin_user_path(provider.user, type: 'index'), class: 'btn btn-default', remote: true
+                        td.user-delete
+                          - if provider.trial?
+                            = link_to delete_confirmation_admin_user_path(provider.user, type: 'index'), remote: true
+                              i.fa.fa-2x.fa-ban
+          .window-footer
+            .controls
+              = link_to 'View All', admin_users_path, class: 'btn btn-default'
+      .col-lg-6
+        .window.window-billing-summary.disabled
+          .window-header
+            .row
+              .col-lg-6.col-md-6.col-sm-6
+                p.title Billing Summary
+              .col-lg-6.col-md-6.col-sm-6
+                .controls
+                  a.btn.btn-default href="#" New Invoice
+          .window-message
+            p ?
+#modal-admin-add-user.modal.modal-admin.animated.fadeIn
+#modal-admin-delete-user.modal.modal-admin.animated.fadeIn
+#modal-admin-deleted-user.modal.modal-admin.animated.fadeIn
+#modal-admin-activate-user.modal.modal-admin.animated.fadeIn
+#modal-admin-activated-user.modal.modal-admin.animated.fadeIn

@@ -1,0 +1,22 @@
+.modal-dialog
+  .modal-content
+    .modal-body
+      .scrollable-container
+        .content
+          p.message 
+            | User Activation
+            br
+            br
+            = "Are you sure, you'd like to activate #{@user.provider.full_name}?"
+          .checkbox-custom
+            input.checkbox#activate-user-checkbox type="checkbox"
+            label for="activate-user-checkbox"
+              span.checkbox-icon-container
+                span.checkbox-icon
+              span.checkbox-label Yes, Please activate and send activation email
+          .row
+            .col-lg-12
+              = link_to 'Activate', activated_admin_user_path(user: @user.provider.id, type: params[:type]), method: :post, class: 'btn btn-info button-modal-open', id: 'activate-user-btn', 'data-target' => '#modal-admin-activated-user', remote: true
+          .row
+            .col-lg-12
+              a.btn.btn-default href="#" data-dismiss="modal" No, thank you!

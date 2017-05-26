@@ -1,0 +1,90 @@
+$('#modal-patient-immunization-vaccine').html('<%= escape_javascript(render 'immunization', type_general: params[:type_general], type: 'Edit') %>')
+
+$(function initModal() {
+  initPickers('#modal-patient-immunization-vaccine');
+  initSelect2('#modal-patient-immunization-vaccine');
+
+  if(!$('#modal-patient-immunization-vaccine').hasClass('in'))
+    $('#modal-patient-immunization-vaccine').modal("show")
+
+  $(function() {
+    $('#modal-patient-immunization-vaccine .immunization-name').click(function(e) {
+        if($(this).prop('checked')) {
+          $.ajax({
+            url: '<%= Rails.application.routes.url_helpers.name_block_immunizations_path(immunization: { patient_id: @patient.id }) %>',
+            data: {
+              type_general: $(this).val(),
+              id: '<%= @immunization.id %>',
+              type: 'Edit'
+            }
+          }).done(function(partial) {
+            $('#immunization-container').html(partial);
+            initModal();
+            repositionModal($('#modal-patient-immunization-vaccine'), false);
+          });
+        }
+      })
+  })
+  
+  VaccineSearchController = function() {
+    var input, input_id, button, link;
+
+    this.initialize = function(_input, _input_id, _button, _link) {
+      input = $(_input)
+      input_id = $(_input_id);
+      button = $(_button);
+      link = _link;
+
+      input.select2({
+        width: '100%',
+        placeholder: 'Start typing to search for vaccine',
+        ajax: {
+          url: link,
+          processResults: processResults,
+          data: function (params) {
+            return {
+              part: params.term
+            };
+          },
+          cache: true
+        },
+        escapeMarkup: function (markup) { return markup; },
+        minimumInputLength: 1,
+        templateResult: templateResult,
+        templateSelection: templateSelection
+      });
+
+      button.click(function(e) {
+        input.select2('open');
+      });
+    }
+
+    function processResults(data, params) {
+      return {
+        results: data
+      };
+    }
+
+    function templateResult(vaccine) {
+      if (vaccine.loading) return vaccine.text;
+      return '<span>'+vaccine.name+'</span>';
+    }
+
+    function templateSelection(vaccine) {
+      if(vaccine.name) {
+        input_id.val(vaccine.id).trigger('change');
+        return vaccine.name;
+      }
+      else
+        return vaccine.text;
+    }
+  };
+
+  var vaccineSearchController = new VaccineSearchController();
+  vaccineSearchController.initialize(
+    '#find_vaccine',
+    '#immunization_vaccine_id',
+    '#find_vaccine_button',
+    '<%= Rails.application.routes.url_helpers.vaccines_immunizations_path(immunization: { patient_id: @patient.id }) %>'
+  );
+})

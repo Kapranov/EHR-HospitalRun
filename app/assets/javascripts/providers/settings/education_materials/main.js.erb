@@ -1,0 +1,162 @@
+$(document).ready(function(e) {
+  EducationMaterialPanelsController = function() {
+    var panel_container, panels;
+    this.initialize = function() {
+      panel_container = $('#education-materials-container');
+      panels = panel_container.find('.panel-education-material .panel-collapse');
+
+      initPanelCollapseEvents();
+    }
+
+    var initPanelCollapseEvents = function() {
+      panels.on('show.bs.collapse', function(e) {
+        $(e.target).closest('.panel').attr('aria-expanded', true);
+      });
+
+      panels.on('hide.bs.collapse', function(e) {
+        $(e.target).closest('.panel').attr('aria-expanded', false);
+      });
+    }
+  }
+
+  var educationMaterialPanelsController = new EducationMaterialPanelsController();
+  educationMaterialPanelsController.initialize();
+
+  FindCodesController = function() {
+    var system, code_id, code_select, name, search_buttons;
+    var snomed, medline, loinc;
+    var snomed_url, medline_url, loinc_url;
+
+    var Url = function() {
+      switch(system.val()){
+        case snomed:  return snomed_url;
+        case medline: return medline_url;
+        case loinc:   return loinc_url;
+      }
+    };
+
+    var Field = function() {
+      switch (system.val()) {
+        case snomed:  return 'defaultTerm';
+        case medline: return 'description';
+        case loinc:   return 'description';
+      }
+    };
+
+    var Code = function () {
+      switch (system.val()) {
+        case snomed:  return 'concept_id';
+        case medline: return 'title';
+        case loinc:   return 'loinc_num';
+      }
+    };
+
+    this.initialize = function() {
+      system = $('#modal-education-material #education_material_code_system');
+      code_id = $('#modal-education-material #education_material_code_id');
+      code_select = $('#modal-education-material #education_material_code_select');
+      name = $('#modal-education-material #education_material_name');
+      search_buttons = $('#modal-education-material .search-button');
+
+      snomed  = 'SNOMED';
+      medline = 'Medline';
+      loinc   = 'LOINC';
+
+      snomed_url  = "<%= Rails.application.routes.url_helpers.snomed_snomeds_path %>";
+      medline_url = "<%= Rails.application.routes.url_helpers.medline_plus_search_search_path %>";
+      loinc_url   = "<%= Rails.application.routes.url_helpers.loinc_search_search_path %>";
+
+      system.change(function(e) {
+        if(system.val() == snomed || system.val() == medline || system.val() == loinc) {
+          code_select.prop('disabled', false);
+          code_select.html('<option></option>');
+          code_select.val('');
+          name.val('');
+          code_id.val('');
+          selectInit();
+          enableControl(search_buttons);
+        }
+        else {
+          code_select.prop('disabled', true);
+          disableControl(search_buttons);
+        }
+      });
+
+      selectInit();
+      code_select.prop('disabled', true);
+      disableControl(search_buttons);
+
+      search_buttons.click(function(e) {
+        e.preventDefault();
+        if(!code_select.prop('disabled'))
+          code_select.select2('open');
+      });
+    }
+
+    function selectInit() {
+      code_select.select2({
+        width: '100%',
+        placeholder: 'Enter Code ID',
+        ajax: {
+          url: Url(),
+          processResults: processResults,
+          data: function (params) {
+            return {
+              part: params.term
+            };
+          },
+          cache: true
+        },
+        escapeMarkup: function (markup) { return markup; },
+        minimumInputLength: 1,
+        templateResult: templateResult,
+        templateSelection: templateSelection
+      });
+    }
+
+    function processResults(data, params) {
+      return {
+        results: data
+      };
+    }
+
+    function templateResult(code) {
+      if (code.loading) return code.text;
+      return '<span>'+code[Code()]+' - '+code[Field()]+'</span>';
+    }
+
+    function templateSelection(code) {
+      if(code[Code()] && code[Field()]) {
+        code_id.val(code[Code()]).trigger('keyup');
+        name.val(code[Field()]).trigger('keyup');
+        system.attr('readonly', true);
+        code_select.prop('disabled', true);
+        disableControl(search_buttons);
+        addContainer(system.val(), code[Code()], code[Field()]);
+        disableControl(search_buttons);
+        return code[Code()];
+      }
+      else
+        return code.text;
+    }
+
+    function addContainer(systemId, codeId, codeTerm) {
+      var tbody = $('#panel-codes table tbody');
+      tbody.html('<tr><td><p>'+systemId+'</p></td><td><p>'+codeId+'</p></td><td><p>'+codeTerm+'</p></td><td><a href="#" class="icon icon-sm icon-circle icon-ic-delete" data-id="'+codeId+'"></a></td></tr>')
+      tbody.find('a.icon').click(function(e) {
+        e.preventDefault();
+        code_id.val('').trigger('keyup');
+        system.attr('readonly', false);
+        code_select.prop('disabled', false);
+        code_select.html('<option></option>').trigger('keyup');
+        name.val('').trigger('keyup');
+        enableControl(search_buttons);
+        $('#row-codes').removeClass('in');
+        tbody.html('');
+        repositionModal($('#modal-education-material'));
+      });
+      $('#row-codes').addClass('in');
+      repositionModal($('#modal-education-material'));
+    }
+  };
+});

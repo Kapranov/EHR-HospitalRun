@@ -1,0 +1,21 @@
+.category-header
+  .row.controls
+    .col-lg-6.col-md-6.col-sm-6
+      .row.left-block
+        .btn-group.btn-group-shadowed
+          = link_to 'Order', payments_order_path, class: "btn btn-default #{'active' if name == 'order' || name == 'details' || name == 'card-info'}"
+          = link_to 'Quote', payments_quote_path, class: "btn btn-default #{'active' if name == 'quote'}"
+    .col-lg-6.col-md-6.col-sm-6
+      .row.right-block
+        .col-lg-10.col-md-10
+          .btn-group
+            = link_to 'Shop', payments_shop_path, class: "btn #{'active' if name == 'shop'}"
+            = link_to 'Pay Quote', payments_quote_price_path, class: "btn #{'active' if name == 'quote-price'}"
+            a.btn.disabled href="#" Upgrade
+        .col-lg-2.col-md-2
+          .btn-group.btn-group-shadowed
+            .btn-badged
+              = link_to 'Cart', payments_cart_path, class: "btn btn-default #{'active' if name == 'cart'}"
+              - if @count.present? && @count > 0
+                .badge
+                  = @count

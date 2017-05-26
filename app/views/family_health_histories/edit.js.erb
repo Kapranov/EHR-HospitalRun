@@ -1,0 +1,62 @@
+$('#modal-family-history').html('<%= escape_javascript(render 'form') %>');
+
+initPickers('#modal-family-history');
+initSelect2('#modal-family-history');
+
+$('#modal-family-history').modal('show');
+
+var familyHealthCollapseController = new FamilyHealthCollapseController();
+familyHealthCollapseController.initialize();
+
+var familyHealthAgeController = new FamilyHealthAgeController();
+familyHealthAgeController.initialize();
+
+var familyHealthHistoryValidationController = new ValidationController();
+familyHealthHistoryValidationController.initialize(
+  'form.edit_family_health_history',
+  {
+    'family_health_history[past_medical_history_id]': {
+      required: {
+        required: true
+      }
+    },
+    'family_health_history[age]': {
+      required: {
+        required: true
+      }
+    },
+    'family_health_history[first_name]': {
+      required: {
+        required: true
+      }
+    },
+    'family_health_history[last_name]': {
+      required: {
+        required: true
+      }
+    },
+    'family_health_history[relationship]': {
+      required: {
+        required: true
+      }
+    },
+    'family_health_history[birth_at_date]': {
+      required: {
+        required: true
+      }
+    },
+    'family_health_history[birth_at_date]': {
+      required: {
+        required: true
+      }
+    },
+    'family_health_history[notes]': {
+      required: {
+        required: true
+      }
+    }
+  }
+);
+
+var familyHealthDiagnosesController = new FamilyHealthDiagnosesController();
+familyHealthDiagnosesController.initialize('#modal-family-history');

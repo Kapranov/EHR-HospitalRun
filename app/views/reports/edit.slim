@@ -1,0 +1,34 @@
+.reports-content
+  .content
+    .container-fluid.content-container
+      .controls.top-block
+        .row.row-controls
+          .col-lg-4.col-md-5
+            .row
+              .col-lg-3.col-md-3
+                .form-group
+                  p.title Category:
+              .col-lg-9.col-md-9
+                .form-group
+                  = select_tag :category, '', class: 'select2', readonly: true, data: { placeholder: 'Select One', theme: 'labs-imaging', arrow: '2x', padding: '1-5x', font: '1x' }, include_blank: true
+          .col-lg-3.col-md-3
+            .row
+              .col-lg-3.col-md-3
+                .form-group
+                  p.title Report:
+              .col-lg-9.col-md-9
+                .form-group
+                  = select_tag :report, '', class: 'select2', readonly: true, data: { placeholder: '', theme: 'labs-imaging', arrow: '2x', padding: '1-5x', font: '1x' }, include_blank: true
+          .col-lg-5.col-md-4
+            .row
+              .col-lg-9.col-md-6
+                .form-group.pull-right
+                  = link_to 'Run Report', '#', class: 'btn btn-default btn-padding-lg disabled', id: 'run_report'
+              .col-lg-3.col-md-6
+                .form-group
+                  = select_tag :print, options_for_select([['Export to CSV', 0], ['Print', 1], ['Clear Criteria', 2]]), class: 'select2', readonly: true, data: { placeholder: 'Actions', theme: 'labs-imaging', arrow: '2x', padding: '1-5x', font: '1x' }, include_blank: true
+      .center-block.filter-block#filter
+        = render @report.partial_name('filters')
+      .content-block#results
+        = render @report.partial_name('results')
+= render 'filter'

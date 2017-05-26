@@ -1,0 +1,137 @@
+.modal {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  .modal-dialog {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+#modal-admin-add-user {
+  .modal-dialog,
+  .modal-content {
+    width: 747px;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .modal-content {
+    &.add-user-view {
+      .modal-header {
+        padding-left: 15px;
+        p.title {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+      }
+    }
+    .modal-body {
+      .same-as-practice {
+        margin-top: 5px;
+        @media(max-width: 767px) {
+          margin-top: 0;
+          margin-bottom: 5px;
+        }
+      }
+      .links {
+        .form-group {
+          margin-bottom: 15px;
+        }
+        .generate-random {
+          .input-password {
+            height: 18px;
+            border: 0;
+          }
+          .show-random-password-container {
+            text-align: right;
+          }
+        }
+        .row:last-child .form-group {
+          margin-bottom: 0;
+        }
+        a {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+#modal-admin-delete-user,
+#modal-admin-deleted-user,
+#modal-admin-activate-user,
+#modal-admin-activated-user {
+  .modal-dialog,
+  .modal-content {
+    width: 446px;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .modal-content {
+    .modal-body {
+      padding: 20px 0 30px 0;
+      .content {
+        text-align: center;
+        .message {
+          margin-bottom: 35px;
+          @media(max-width: 459px) {
+            padding: 0 72px;
+          }
+        }
+        .checkbox-custom {
+          margin-bottom: 20px;
+          label {
+            display: inline-block;
+          }
+        }
+        .btn-danger,
+        .btn-info {
+          margin-bottom: 15px;
+          padding: 20px 30px;
+        }
+      }
+    }
+  }
+
+  &#modal-admin-deleted-user {
+    .modal-content {
+      .modal-body {
+        .message {
+          padding: 0 120px;
+        }
+      }
+    }
+  }
+
+  &#modal-admin-delete-user {
+    .modal-content {
+      .modal-body {
+        .message {
+          font-weight: bold;
+          padding: 0 135px;
+        }
+        .btn-danger {
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+
+  &#modal-admin-activate-user,
+  &#modal-admin-activated-user {
+    .modal-dialog,
+    .modal-content {
+      width: 416px;
+    }
+  }
+
+  &#modal-admin-activate-user {
+    .modal-content {
+      .modal-body {
+        .message {
+          padding: 0 20px;
+          margin-bottom: 25px;
+        }
+      }
+    }
+  }
+}

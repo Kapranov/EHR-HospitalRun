@@ -1,0 +1,60 @@
+= link_to 'Sync with dosespot', dosespot_sync_allergies_path(patient_id: @patient.id)
+- if @exist_allergy.present?
+  table
+    tr
+      th Referral
+      th Description
+      th Reaction
+      th Severity
+      th Status
+      th Modified Date
+    tr
+      td
+        = @exist_allergy.referral
+      td
+        = @exist_allergy.note
+      td
+        = @exist_allergy.allergen_type
+      td
+        = @exist_allergy.severity_level
+      td
+        = @exist_allergy.active
+      td
+        = @exist_allergy.updated_at.strftime(Date::DATE_FORMATS[:dosespot])
+    - if @referral_allergies.any?
+      - @referral_allergies.each do |allergy|
+        tr
+          td
+            = allergy.referral
+          td
+            = allergy.note
+          td
+            = allergy.allergen_type
+          td
+            = allergy.severity_level
+          td
+            = allergy.active
+          td
+            = allergy.updated_at.strftime(Date::DATE_FORMATS[:dosespot])
+
+  = link_to 'Previous', '#', id: 'previous-reconcilitation-allergy'
+  = link_to 'Confirm',  '#', id: 'confirm-reconcilitation-allergy'
+
+  javascript:
+    $('#previous-reconcilitation-allergy').click(function () {
+      $.ajax({
+        type: 'POST',
+        url: '#{previous_reconciliation_allergy_path(@exist_allergy)}'
+      }).done(function (partial) {
+        $('#allergies-container').html(partial);
+      });
+    });
+
+    $('#confirm-reconcilitation-allergy').click(function () {
+      $.ajax({
+        type: 'POST',
+        url: '#{confirm_reconciliation_allergy_path(@exist_allergy)}'
+      }).done(function (partial) {
+        $('#allergies-container').html(partial);
+      });
+    });

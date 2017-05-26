@@ -1,0 +1,162 @@
+$(document).ready(function() {
+  FamilyHealthCollapseController = function() {
+    var modal, collapse_panels;
+
+    this.initialize = function() {
+      modal = $('#modal-family-history');
+      collapse_panels = modal.find('.panel-body.collapse');
+
+      initCollapsePanelsEvents();
+    }
+
+    var initCollapsePanelsEvents = function() {
+      collapse_panels.on('shown.bs.collapse', function() {
+        repositionModal($('#'+modal.attr('id')), false);
+      });
+      collapse_panels.on('hidden.bs.collapse', function() {
+        repositionModal($('#'+modal.attr('id')), false);
+      });
+    }
+  };
+
+  FamilyHealthAgeController = function() {
+    var age_input, date_of_birth_input;
+
+    this.initialize = function() {
+      age_input =           $('#family_health_history_age');
+      date_of_birth_input = $('#family_health_history_birth_at_date');
+      
+      initAll();
+    }
+
+    var initAll = function() {
+      initAgeHandler();
+      date_of_birth_input.change(initAgeHandler)
+    }
+
+    var initAgeHandler = function() {
+      var age = Math.floor(moment(new Date()).diff(moment(date_of_birth_input.val(),'MM/DD/YYYY'),'years',true));
+        if(age > 0)
+          age_input.val(age).trigger('keyup');
+        else
+          age_input.val('').trigger('keyup');
+    }
+  }
+
+  FamilyHealthDiagnosesController = function() {
+    var modal, diagnosis_search_input, diagnosis_search_btn, diagnosis_onset, diagnosis_list, diagnosis_add_btn, link;
+
+    this.initialize = function(_modal) {
+      modal =                  $(_modal);
+      diagnosis_search_input = modal.find('#find_snomed');
+      diagnosis_search_btn =   modal.find('.find-snomed-btn');
+      diagnosis_onset =        modal.find('#onset_at');
+      diagnosis_list =         modal.find('#diagnosis_list');
+      diagnosis_add_btn =      modal.find('#add_diagnosis');
+      link =                   '<%= Rails.application.routes.url_helpers.snomed_snomeds_path %>';
+
+      initAll();
+      initAddRemoveDiagnosis();
+    }
+
+    var processResults = function(data, params) {
+      return {
+        results: data
+      };
+    }
+
+    var templateResult = function(diagnosis) {
+      if (diagnosis.loading) return diagnosis.text;
+      return '<span>' + diagnosis.concept_id.substring(0, 10) + '...' + ' - ' + diagnosis.term.substring(0, 10) + '...' + '</span>';
+    }
+
+    var templateSelection = function(diagnosis) {
+      if(diagnosis.concept_id && diagnosis.term) {
+        diagnosis_add_btn.data('snomed_id', diagnosis.id);
+        diagnosis_add_btn.data('snomed_term', diagnosis.term);
+        switchControlState(diagnosis_add_btn, true);
+        return diagnosis.concept_id.substring(0, 10) + '...' + ' - ' + diagnosis.term.substring(0, 10) + '...';
+      }
+      else {
+        switchControlState(diagnosis_add_btn, false);
+        return diagnosis.text;
+      }
+    }
+
+    var initAll = function() {
+      diagnosis_search_input.select2({
+        width: '100%',
+        ajax: {
+          url: link,
+          processResults: processResults,
+          data: function (params) {
+            return {
+              part: params.term
+            };
+          },
+          cache: true
+        },
+        escapeMarkup: function (markup) { return markup; },
+        minimumInputLength: 1,
+        templateResult: templateResult,
+        templateSelection: templateSelection
+      });
+      
+      diagnosis_search_btn.click(function(e) {
+        e.preventDefault();
+
+        diagnosis_search_input.select2('open');
+      });
+    }
+
+    var initAddRemoveDiagnosis = function() {
+      diagnosis_add_btn.click(function(e) {
+        e.preventDefault();
+
+        var next_num_val =    diagnosis_add_btn.data('count') + 1;
+        var snomed_id_val =   diagnosis_add_btn.data('snomed_id');
+        var snomed_term_val = diagnosis_add_btn.data('snomed_term');
+        var onset_val =       diagnosis_onset.val();
+
+        if(diagnosis_list.find('li[data-index]').length == 0)
+          diagnosis_list.html('');
+        diagnosis_list.append('\
+          <li data-index="' + next_num_val + '">\
+            <input class="string optional" type="hidden" value="' + onset_val + '" name="family_health_history[dx[new][' + next_num_val + ']][onset_at]" id="family_health_history_dxes_new_' + next_num_val + '__onset_at">\
+            <input class="string optional" type="hidden" value="' + snomed_id_val + '" name="family_health_history[dx[new][' + next_num_val + ']][snomed_id]" id="family_health_history_dxes_new_' + next_num_val + '__snomed_at">\
+            <div class="row">\
+              <div class="col-lg-10 col-md-10">\
+                <p>\
+                  - ' + snomed_term_val + ', onset: ' + onset_val + '\
+                </p>\
+              </div>\
+              <div class="col-lg-2 col-md-2">\
+                <a href="#" class="icon icon-sm icon-circle icon-ic-delete pull-right"></a>\
+              </div>\
+            </div>\
+          </li>'
+        );
+        diagnosis_list.find('li[data-index='+ next_num_val +'] a.icon-ic-delete').click(function() {
+          $(this).closest('li').remove();
+          if((diagnosis_list).find('li').length == 0) {
+            diagnosis_list.html('');
+            diagnosis_list.append('\
+              <li>\
+                <p>\
+                  no existing Dx(s)\
+                </p\
+              </li>\
+            ');
+          }
+          repositionModal(modal, false);
+        });
+        diagnosis_add_btn.data('count', next_num_val);
+        diagnosis_add_btn.data('snomed_id', null);
+        diagnosis_add_btn.data('snomed_term', null);
+        diagnosis_search_input.val('').trigger('change');
+        switchControlState(diagnosis_add_btn, false);
+        repositionModal(modal, false);
+      })
+    }
+  };
+})

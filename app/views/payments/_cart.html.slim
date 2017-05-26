@@ -1,0 +1,77 @@
+.content
+  .row
+    .col-lg-12
+      p.title Review Quote
+  - if @ehr_subscription.present? && !@payment.subscribe
+    .table-responsive
+      table.table
+        thead
+          tr
+            td
+            td Number of Users
+            td Price (USD)
+            td
+        tbody
+          tr.main-subscription
+            td
+              p.title Electronic Health Record (EHR) Subscription
+            td
+              p
+                = @ehr_subscription.doctors
+            td
+              .row
+                .col-lg-3.col-xs-3
+                  p $
+                .col-lg-9.col-xs-9
+                  p
+                    = @ehr_subscription.price_for_doctors
+            td
+              = link_to '', payments_destroy_subscription_path(ehr: true), class: 'icon-sm icon-ic-trash', method: :delete
+          - if @ehr_subscription.additional_staff
+            tr
+              td
+                p.title Additional Auxiliary Staff Member(s)
+              td
+                p
+                  = @ehr_subscription.staff
+              td
+                .row
+                  .col-lg-3.col-xs-3
+                    p $
+                  .col-lg-9.col-xs-9
+                    p
+                      = @ehr_subscription.price_for_staff
+              td
+                = link_to '', payments_destroy_subscription_path(staff: true), class: 'icon-sm icon-ic-trash', method: :delete
+        tfoot
+          - unless @payment.fee_paid
+            tr.additional-pay
+              td colspan="2"
+                p One-time activation fee (per-doctor)
+              td
+                .row
+                  .col-lg-3.col-xs-3
+                    p $
+                  .col-lg-9.col-xs-9
+                    p
+                      = Payment.fee
+              td
+          tr
+            td.summary-title colspan="4"
+              p TOTAL PRICE
+          tr
+            td.summary-price colspan="4"
+              p
+                | $&nbsp;
+                = @ehr_subscription.total
+  - else
+    p Cart is empty
+  hr
+  .controls
+    .row
+      .left-block class="#{@ehr_subscription.present? ? 'col-lg-6 col-md-6 col-sm-6' : 'col-lg-12 col-md-12 col-sm-12'}"
+        = link_to 'Continue Shopping', payments_shop_path
+      - if @ehr_subscription.present?
+        .col-lg-6.col-md-6.col-sm-6.right-block
+          = link_to 'CHECK OUT', payments_details_path, class: 'btn btn-default'
+          = link_to 'Or save this as quote', payments_quote_path

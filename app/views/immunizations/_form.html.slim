@@ -1,0 +1,218 @@
+= simple_form_for @immunization, html: { autocomplete: 'off' }, remote: true do |f|
+  = f.input_field :patient_id, as: :hidden, value: @patient.id
+  .modal-body
+    .scrollable-container
+      .content
+        .row
+          .col-lg-12
+            .form-group
+              .vaccine-types-radio-buttons
+                .radiobutton-custom
+                  = f.radio_button :name, 'Administered', checked: type_general == 'Administered', class: 'immunization-name'
+                  label for="immunization_name_administered"
+                    span.radio-icon
+                    span.radio-label
+                      | Administered
+                .radiobutton-custom
+                  = f.radio_button :name, 'Historical', checked: type_general == 'Historical', class: 'immunization-name'
+                  label for="immunization_name_historical"
+                    span.radio-icon
+                    span.radio-label
+                      | Historical
+                .radiobutton-custom
+                  = f.radio_button :name, 'Refused', checked: type_general == 'Refused', class: 'immunization-name'
+                  label for="immunization_name_refused"
+                    span.radio-icon
+                    span.radio-label
+                      | Refused
+        .row
+          .col-lg-12
+            .form-group
+              p.title
+                | Vaccine:
+                span *
+              = f.input_field :vaccine_id, as: :hidden
+              .input-group.input-group-green
+                = select_tag :find_vaccine, '', { class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x' } }
+                span.input-group-addon.input-group-addon-small.input-group-addon-search id="find_vaccine_button"
+        - if type_general == 'Refused'
+          .row
+            .col-lg-6
+              .form-group
+                p.title
+                  | Reason Refused:
+                  span *
+                = f.input_field :reason_refused, as: :select, collection: Immunization.reason_refuseds, class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x', placeholder: 'Select Refusal Reason' }
+        .row
+          = f.input_field :administered_at, as: :hidden
+          .col-lg-5
+            .form-group
+              - if type_general == 'Refused'
+                p.title
+                  | Date Refused:
+                  span *
+                .input-group.input-group-green
+                  = f.input_field :refused_at_date, class: 'form-control form-control-green date-picker'
+                  span.input-group-addon.input-group-addon-large.input-group-addon-calendar
+              - else
+                p.title
+                  | Date Administered:
+                  span *
+                .input-group.input-group-green
+                  = f.input_field :administered_at_date, class: 'form-control form-control-green date-picker'
+                  span.input-group-addon.input-group-addon-large.input-group-addon-calendar
+          - if type_general == 'Refused'
+            .col-lg-1
+          .col-lg-5
+            .form-group
+              - if type_general == 'Administered'
+                p.title
+                  | Time administered:
+                  span *
+                .input-group.input-group-green
+                  = f.input_field :administered_at_time, class: 'form-control form-control-green time-picker', placeholder: 'hh:mm xm'
+                  span.input-group-addon.input-group-addon-large.input-group-addon-alarm
+              - if type_general == 'Historical'
+                p.title
+                  | Source of Information:
+                  span *
+                = f.input_field :source_of_information, as: :select, collection: Immunization.source_of_informations, class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x', placeholder: 'Select a source' }
+              - if type_general == 'Refused'
+                p.title
+                  | Status:
+                p.title-bolder
+                  | Refused
+        - if type_general == 'Administered'
+          .row
+            .col-lg-6
+              .form-group
+                p.title
+                  | Administered by:
+                  span *
+                = f.input_field :administered_by_id, as: :select, collection: current_user.provider.all_providers, selected: current_user.provider.id, class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x' }
+            .col-lg-6
+              .form-group
+                p.title
+                  | Ordered by:
+                  span *
+                = f.input_field :ordered_by_id, as: :select, collection: current_user.provider.all_providers, selected: current_user.provider.id, class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x' }
+        .row
+          .col-lg-12
+            .form-group
+              - if type_general == 'Refused'
+                p.title
+                  | Facility:
+                  span *
+                = f.input_field :facility_id, as: :select, collection: current_user.provider.main_provider.locations, selected: current_user.provider.try(:location).try(:id), class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x' }
+              - else
+                p.title
+                  | Administered Facility:
+                  span *
+                = f.input_field :administered_facility_id, as: :select, collection: current_user.provider.main_provider.locations, selected: current_user.provider.try(:location).try(:id), class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x' }
+        - if type_general == 'Refused'
+          .row
+            .col-lg-5
+              .form-group.disabled
+                p.title
+                  | VIS Edition:
+                  span *
+                .input-group.input-group-green
+                  = f.input_field :created_at, value: "#{@immunization.created_at.present? ? @immunization.created_at.to_date.to_s(:frontend_date) : Time.now.to_date.to_s(:frontend_date)}", class: 'form-control form-control-green date-picker', readonly: true, tabindex: '-1'
+                  span.input-group-addon.input-group-addon-large.input-group-addon-calendar
+        - if type_general == 'Administered'
+          .row
+            .col-lg-6
+              .form-group
+                p.title
+                  | Manufacturer:
+                  span *
+                = f.input_field :manufacturer, as: :select, collection: Immunization.manufacturers, class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x' }
+            .col-lg-6
+              .form-group
+                p.title
+                  | Lot:
+                  span *
+                = f.input_field :lot, class: 'form-control form-control-green'
+          .row
+            .col-lg-6
+              .form-group
+                p.title
+                  | Quantity:
+                  span *
+                = f.input_field :quantity, class: 'form-control form-control-green'
+          .row
+            .col-lg-4
+              .form-group
+                p.title
+                  | Dose:
+                  span *
+                = f.input_field :dose, class: 'form-control form-control-green'
+            .col-lg-4
+              .form-group
+                p.title
+                  | Units:
+                  span *
+                = f.input_field :unit, as: :select, collection: Immunization.units, class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x' }
+            .col-lg-4
+              .form-group
+                p.title
+                  | Expiration Date:
+                  span *
+                .input-group.input-group-green
+                  = f.input_field :expiration_at_date, class: 'form-control form-control-green date-picker'
+                  span.input-group-addon.input-group-addon-large.input-group-addon-calendar
+          .row
+            .col-lg-12
+              .form-group
+                p.title Route:
+                = f.input_field :route, as: :select, collection: Immunization.routes, class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x', placeholder: 'Select a Value' }
+          .row
+            .col-lg-12
+              .form-group
+                p.title Body Site:
+                = f.input_field :body_site, as: :select, collection: Immunization.body_sites, class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x', placeholder: 'Select a Value' }
+          .row
+            .col-lg-12
+              .form-group
+                p.title Funding Source:
+                = f.input_field :funding_source, as: :select, collection: Immunization.funding_sources, class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x', placeholder: 'Select a funding source' }
+          .row
+            .col-lg-12
+              .form-group
+                p.title Registry Notifications:
+                = f.input_field :registry_notification, as: :select, collection: Immunization.registry_notifications, class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x', placeholder: 'Notify me' }
+          .row
+            .col-lg-12
+              .form-group
+                p.title VFC Financial Class
+                = f.input_field :vfc_class, as: :select, collection: Immunization.vfc_classes, class: 'select2', data: { theme: 'green-white-light', arrow: '4x', padding: '3x', font: '1x', placeholder: 'Class Selection' }
+        .row
+          .col-lg-12
+            .form-group
+              p.title Comments
+              = f.input_field :comments, as: :text, class: 'form-control form-control-green', row: 3, placeholder: 'Comments'
+        - if type == 'Edit'
+          .log-container
+            .row
+              .col-lg-12
+                p.title Change Log:
+                p.log-record
+                  = "#{@immunization.updated_at.try(:strftime, '%-m/%-d/%Y %I:%M %p')} - By: #{current_user.provider.title}. #{current_user.provider.last_name} - "
+                  = link_to 'View Changes', '#'
+                - if @logs.present?
+                  p.title Logs:
+                  - @logs.each do |log|
+                    p
+                      = log
+  .modal-footer
+    .row
+      .col-lg-12
+        .controls
+          - case type
+            - when 'Add'
+              = f.submit 'Add', class: 'btn btn-default'
+            - when 'Edit'
+              = f.submit 'Save', class: 'btn btn-default'
+            - else
+              = f.submit 'Submit', class: 'btn btn-default'
+          a.btn.btn-danger data-dismiss="modal" Cancel

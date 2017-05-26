@@ -1,0 +1,18 @@
+//Main (options: (height, height, padding, color, color, border-width, border-width, border-radius, color, color, border-width, color, color, color, content, border-width, text-decoration, box-shadow): [Height, Search Height, Dropdown Padding, Background Color, Arrow Background Color, Border Width, Border Radius, Border Color, Dropdown Border Color, Dropdown Border Top\Bottom Separator, Text Color, Dropdown Text Color, Arrow Icon Color, Arrow Content Icon, Arrow Icon Border Left\Right Separator Width, Text Decoration, Box Shadow])
+@include main($height, $height-search, $padding-dropdown, $background-color, $background-arrow-color, $background-dropdown-color, $border, $border-dropdown, $border-radius, $border-color, $border-dropdown-color, $border-dropdown-separator, $text-color, $text-dropdown-color, $arrow-icon-color, $arrow-icon, $arrow-icon-border-separator, $text-decoration, $box-shadow);
+//States (options: (border-width, color, color, color, color, color, color, color, text-decoration, padding, color, content, text-decoration, box-shadow, box-shadow): [Border Width, Border Color, Dropdown Border Color, Search Focus Border Color, Open Background Color, Focus Background Color,  Open Color, Dropdown Focus Color, Dropdown Focus Text Decoration, Focus Padding Size, Focus Arrow Icon Color, Opened Arrow Icon, Opened Text Decoration, Open Box Shadow, Dropdown Box Shadow])
+@include states_all($border, $border-focus-color, $border-dropdown-color, $border-focus-search, $background-open-color, $background-focus-color, $text-open-color, $text-dropdown-focus-color, $text-dropdown-focus-decoration, $padding-focus-size, $arrow-icon-open-color, $arrow-icon-open, $text-open-decoration, $box-shadow-open, $box-shadow-dropdown);
+//Validation (options: (background-image, background-image, background-size): [Valid Image, Unvalid Image, Validation Image Size])
+@include validation_all($validation_valid_image, $validation_unvalid_image, $validation-image-size);
+//Fonts (options: (font-family): [Regular, Medium, Light, Bold, Heavy])
+@include font_weight_all($font-family-regular, $font-family-medium, $font-family-light, $font-family-bold, $font-family-heavy);
+//Fonts (options: (padding): [1x, 1.5x, 2x, 2.5x, 3x])
+@include padding_all($padding-1x, $padding-1-5x, $padding-2x, $padding-2-5x, $padding-3x);
+//Arrow Sizes (options: (width, width, width , width, font-size, font-size, font-size, font-size, padding, padding, padding, padding, padding): [1x, 2x, 3x, 4x, 1x, 2x, 3x, 4x, 1x, 1.5x, 2x, 2.5x, 3x])
+@include arrow_all($arrow-1x, $arrow-2x, $arrow-3x, $arrow-4x, $arrow-font-size-1x, $arrow-font-size-2x, $arrow-font-size-3x, $arrow-font-size-4x, $padding-1x, $padding-1-5x, $padding-2x, $padding-2-5x, $padding-3x);
+//Arrow Padding (options: (width, width, width, width): [1x, 2x, 3x, 4x])
+@include arrow_padding_all($arrow-1x, $arrow-2x, $arrow-3x, $arrow-4x);
+//Font Sizes (options: (font-size, font-size, font-size, font-size): [0.5x, 1x, 2x, 3x, 4x])
+@include font_all($font-0-5x, $font-1x, $font-2x, $font-3x, $font-4x);
+//Text Align Positions(options: (text-align, text-align, text-align): [Left, Center, Right])
+@include text_align_all($text-align-left, $text-align-center, $text-align-right);

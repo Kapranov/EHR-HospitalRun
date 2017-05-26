@@ -1,0 +1,32 @@
+= render 'styles', file: __FILE__
+table.mailer-wrapper.mailer-send-representative-invitation
+  = render 'devise/mailer/mailer_header'
+  tbody
+    tr
+      td
+        p 
+          = "Dear, #{@first_name}"
+    tr
+      td
+        p 
+          = "You have been granted access to access health records of #{@patient_full_name}"
+    tr
+      td
+        p To setup your account, please use your email and temporary password below:
+    tr
+      td
+        p.code
+          = @code
+    tr
+      td
+        p Please click on the below link to finish your registration:
+    tr
+      td
+        = link_to new_user_session_url, new_user_session_url
+    tr
+      td
+        p Sincerely,
+    tr
+      td
+        p EHR1 Team
+    = render 'devise/mailer/mailer_footer'

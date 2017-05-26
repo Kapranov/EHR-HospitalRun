@@ -1,0 +1,247 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title 
+        = "#{@lab_result.persisted? ? 'Edit' : 'Add'} Lab Results"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @lab_result do |f|
+      .modal-body
+        .scrollable-container
+          .content
+            .lab-results-content
+              .patient-block
+                .row
+                  .col-lg-5.col-md-5
+                    p.title Patient Name:
+                    .row
+                      .col-lg-12
+                        .form-group
+                          .input-group.input-group-green
+                            - unless @lab_order.present?
+                              = select_tag :lab_result_find_patient, nil, class: 'select2', data: { theme: 'labs-imaging', arrow: 'none', padding: '3x', font: '1x', 'font-weight': 'bold' }
+                            - else
+                              = select_tag :lab_result_find_patient, options_for_select(["#{@lab_order.patient.last_name}, #{@lab_order.patient.first_name}"]), class: 'select2', data: { theme: 'labs-imaging', arrow: 'none', padding: '3x', font: '1x', 'font-weight': 'bold' }
+                            span.input-group-addon.input-group-addon-search#lab_result_find_patient_btn
+                  .col-lg-7.col-md-7
+                    .row
+                      .col-lg-6.col-md-6
+                        p.title Patient ID:
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = f.input_field :patient_id, value: "#{@lab_order.patient.id if @lab_order.present?}", readonly: true, class: 'form-control form-control-green form-control-bold'
+                      .col-lg-6.col-md-6
+                        p.title Phone:
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = text_field_tag :lab_result_patient_primary_phone, "#{@lab_order.patient.primary_phone if @lab_order.present?}", disabled: true, class: 'form-control form-control-green form-control-bold input-phone-full'
+                .row
+                  .col-lg-6.col-md-6
+                    .row
+                      .col-lg-6.col-md-6
+                        p.title Date of birth:
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = text_field_tag :lab_result_patient_date_of_birth, "#{@lab_order.patient.birth_date if @lab_order.present?}", disabled: true, class: 'form-control form-control-green form-control-bold date-picker'
+                      .col-lg-3.col-md-3
+                        p.title Sex:
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = text_field_tag :lab_result_patient_sex, "#{@lab_order.patient.gender if @lab_order.present?}", disabled: true, class: 'form-control form-control-green form-control-bold'
+                      .col-lg-3.col-md-3
+                        p.title Age:
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = text_field_tag :lab_result_patient_age, "#{@lab_order.patient.age if @lab_order.present?}", disabled: true, class: 'form-control form-control-green form-control-bold'
+                  .col-lg-6.col-md-6
+                    p.title Fasting:
+                    .row
+                      .col-lg-12
+                        .form-group
+                          = f.input_field :fasting, class: 'form-control form-control-green'
+              .order-block
+                .row
+                  .col-lg-5.col-md-5
+                    p.title Specimen #:
+                    .row
+                      .col-lg-12
+                        .form-group
+                          = f.input_field :specimen, class: 'form-control form-control-green'
+                  .col-lg-5.col-md-5
+                    p.title Specimen Type:
+                    .row
+                      .col-lg-12
+                        .form-group
+                          = f.input_field :specimen_type, class: 'form-control form-control-green'
+                  .col-lg-2.col-md-2
+                    p.title Test Report Date:
+                    .row
+                      .col-lg-12
+                        .form-group
+                          = f.input_field :test_resported_at_date, class: 'form-control form-control-green date-picker'
+                .row
+                  .col-lg-9.col-md-9
+                    .row
+                      .col-lg-7.col-md-7
+                        p.title Ordering Physician:
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = f.input_field :ordering_physician, value: "#{'Dr. ' + @lab_order.provider.first_name + ' ' + @lab_order.provider.last_name if @lab_order.present?}", readonly: (@lab_order.present? ? true : false), class: 'form-control form-control-green form-control-bold'
+                      .col-lg-5.col-md-5
+                        p.title NPI:
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = f.input_field :npi, value: "#{@lab_order.provider.npi if @lab_order.present?}", readonly: true, class: 'form-control form-control-green form-control-bold'
+                  .col-lg-3.col-md-3
+                    p.title Lab Order #:
+                    .row
+                      .col-lg-12
+                        .form-group
+                          - if @lab_order.present?
+                            = f.input :lab_order_id, as: :hidden, input_html: { value: @lab_order.id }
+                            = text_field_tag :order_num, @lab_order.order_num, readonly: true, class: 'form-control form-control-green form-control-bold lab-order-num'
+                          - else
+                            = f.input_field :lab_order_id, as: :select, collection: @lab_orders, class: 'select2 lab-order-num', data: { theme: 'labs-imaging', arrow: 'none', padding: '3x', font: '1x', 'font-weight': 'bold' }
+              .row.highlight-blocks
+                .col-lg-7.col-md-7.left-block
+                  .row.highlight-block
+                    .col-lg-12
+                      .row
+                        .col-lg-12
+                          p.title Ordering Facility Name:
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = f.input_field :order_name, class: 'form-control form-control-green'
+                      .row
+                        .col-lg-12.row-content
+                          p.title Ordering Facility Address:
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = f.input_field :order_address, class: 'form-control form-control-green'
+                  .row.highlight-block
+                    .col-lg-12
+                      .row
+                        .col-lg-12
+                          p.title Performing Facility Name:
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = f.input_field :performing_name, class: 'form-control form-control-green'
+                      .row
+                        .col-lg-12.row-content
+                          p.title Performing Facility Address:
+                          .row
+                            .col-lg-12
+                              .form-group
+                                = f.input_field :performing_address, class: 'form-control form-control-green'
+                .col-lg-5.col-md-5.right-block
+                  .row.highlight-block
+                    .col-lg-12.row-content
+                      p.title Specimen Collected:
+                      .row
+                        .col-lg-6
+                          .form-group
+                            = f.input_field :collected_at_date, class: 'form-control form-control-green date-picker'
+                        .col-lg-6
+                          .form-group
+                            = f.input_field :collected_at_time, as: :hidden, class: 'validate'
+                            .input-group.input-group-green.input-group-time
+                              = text_field_tag :lab_result_collected_at_time_12_hour, @lab_result.collected_at_time, class: 'form-control'
+                              .btn-group
+                                a.btn.btn-default#lab_result_collected_at_am_btn href="#" data-time="am" AM
+                                a.btn.btn-default#lab_result_collected_at_pm_btn href="#" data-time="pm" PM
+                  .row.highlight-block
+                    .col-lg-12.row-content
+                      p.title Specimen Received:
+                      .row
+                        .col-lg-6
+                          .form-group
+                            = f.input_field :received_at_date, class: 'form-control form-control-green date-picker'
+                        .col-lg-6
+                          .form-group
+                            = f.input_field :received_at_time, as: :hidden, class: 'validate'
+                            .input-group.input-group-green.input-group-time
+                              = text_field_tag :lab_result_received_at_time_12_hour, @lab_result.received_at_time, class: 'form-control'
+                              .btn-group
+                                a.btn.btn-default#lab_result_received_at_am_btn href="#" data-time="am" AM
+                                a.btn.btn-default#lab_result_received_at_pm_btn href="#" data-time="pm" PM
+                  .row.highlight-block
+                    .col-lg-12.row-content
+                      p.title Test Performed:
+                      .row
+                        .col-lg-6
+                          .form-group
+                            = f.input_field :tested_at_date, class: 'form-control form-control-green date-picker'
+                        .col-lg-6
+                          .form-group
+                            = f.input_field :tested_at_time, as: :hidden, class: 'validate'
+                            .input-group.input-group-green.input-group-time
+                              = text_field_tag :lab_result_tested_at_time_12_hour, @lab_result.tested_at_time, class: 'form-control'
+                              .btn-group
+                                a.btn.btn-default#lab_result_tested_at_am_btn href="#" data-time="am" AM
+                                a.btn.btn-default#lab_result_tested_at_pm_btn href="#" data-time="pm" PM
+              .row.tests-block
+                .col-lg-12
+                  .form-group
+                    .table-responsive
+                      table.table
+                        thead
+                          tr
+                            td
+                              p Tests
+                            td
+                              p Code
+                            td
+                              p Result
+                            td
+                              p Units
+                            td
+                              p Flag
+                            td
+                              p Range
+                        tbody#test-order-body
+                          - if @lab_order.present? && @lab_order.test_orders.any?
+                            - @lab_order.test_orders.each do |test_order|
+                              = f.simple_fields_for "test_orders[edit][#{test_order.id}]", test_order do |t|
+                                tr
+                                  td
+                                    p
+                                      = test_order.code
+                                  td
+                                    p
+                                      = test_order.test
+                                  td
+                                    = t.input_field :result, class: 'form-control form-control-green'
+                                  td
+                                    = t.input_field :units, class: 'form-control form-control-green'
+                                  td
+                                    = t.input_field :flag, class: 'form-control form-control-green'
+                                  td
+                                    = t.input_field :range, class: 'form-control form-control-green'
+              .row.notes-block
+                .col-lg-12
+                  p.title Notes:
+                  .row
+                    .col-lg-12
+                      .form-group
+                        = f.input_field :notes, as: :text, class: 'form-control form-control-green'
+      .modal-footer
+        .controls
+          .checkbox-custom.checkbox-custom-green.pull-left.disabled
+            = check_box_tag :lab_order_reviewed, class: 'checkbox'
+            label for="lab_order_reviewed"
+              span.checkbox-icon-container
+                span.checkbox-icon.checkbox-icon-green
+              span.checkbox-label Reviewed
+          = f.submit "#{@lab_result.persisted? ? 'Save' : 'Add'}", class: 'btn btn-default btn-padding-lg'
+          a.btn.btn-default.btn-padding-lg.disabled Sign
+          a.btn.btn-default.btn-padding-lg.disabled Print

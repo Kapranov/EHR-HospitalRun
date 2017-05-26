@@ -1,0 +1,61 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title 
+        = "#{@alert.persisted? ? 'View' : 'Add new'} alert"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @alert do |f|
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Alert Name*
+                  = f.input_field :name, class: 'form-control form-control-green'
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Description*
+                  = f.input_field :description, class: 'form-control form-control-green'
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Resolution*
+                  = f.input_field :resolution, class: 'form-control form-control-green'
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Bibliography*
+                  = f.input_field :bibliography, class: 'form-control form-control-green'
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Developer*
+                  = f.input_field :developer, class: 'form-control form-control-green'
+            .row
+              .col-lg-6
+                .form-group.form-group-horizontal
+                  .row
+                    .col-lg-4.col-md-4
+                      p.title Funding Source:
+                    .col-lg-8.col-md-8
+                      = f.input_field :funding_source, class: 'form-control form-control-green'
+              .col-lg-6
+                .form-group.form-group-horizontal
+                  .row
+                    .col-lg-4.col-md-4
+                      p.title Release Date(s)
+                    .col-lg-8.col-md-8
+                      .input-group.input-group-green
+                        = f.input_field :release_date_date, class: 'form-control form-control-green date-picker'
+                        span.input-group-addon.input-group-addon-calendar
+            .row
+              .col-lg-12
+                .form-group
+                  p.title Trigger Rule*
+                  = f.input_field :rule, as: :select, collection: @rules, class: 'select2', selected: 0, include_blank: true, data: { placeholder: '', theme: 'green-lighter', arrow: '2x', padding: '1-5x', font: '1x' }
+        .modal-footer
+          .controls
+            = f.submit 'Add New Alert', class: 'btn btn-default'

@@ -1,0 +1,15 @@
+.panel.panel-attachments
+  .panel-heading
+    p.title Attachments:
+    = link_to new_attachment_image_order_path(image_order), class: 'btn-small btn-modal', data: { target: '#modal-image-order-attachment' }, remote: true
+      i.fa.fa-plus
+  - if attachments.any?
+    .panel-body
+      ul
+        - attachments.each do |attachment|
+          li data-id="#{attachment.id}" data-order-id="#{image_order.id}"
+            p 
+              span.separator -
+              span.title
+                = attachment.basename
+              = link_to '', file_path(attachment, image_order_id: image_order.id, model: :ImageOrder), method: :delete, class: 'icon icon-sm icon-circle icon-ic-delete pull-right attachment-delete', remote: true

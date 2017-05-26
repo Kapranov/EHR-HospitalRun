@@ -1,0 +1,72 @@
+.content
+  .row
+    .col-lg-6.col-md-6
+      .left-block
+        .panel.panel-main
+          .panel-header
+            p.title Price Quote
+          .panel-body
+            .row
+              .col-lg-12
+                .row.title
+                  p We'll send you a no-obligation price quote for the product(s) you have selected. When you're ready to pay your quote, you can pay by credit card, bank transfer or check.
+          .panel-footer
+            hr
+        .controls
+          = link_to 'Continue', payments_quote_path, class: 'btn btn-default'
+    .col-lg-6.col-md-6
+      .right-block
+        .panel.panel-explanation.panel-top.disabled
+          .panel-body
+            .row
+              .col-lg-12
+                .icon.icon-xs.icon-circle.icon-ic-explanation
+                p
+                  | Ready to place your order?&nbsp;
+                  a href="#" Pay by credit card
+        .panel.panel-main.disabled
+          .panel-header
+            p.title 
+              | Additional Details&nbsp;
+              span (Optional)
+          .panel-body
+            .row
+              .col-lg-12
+                .form-group
+                  .checkbox-custom
+                    = check_box_tag :add_po_number, checked: true
+                    label for="add_po_number"
+                      span.checkbox-icon-container
+                        span.checkbox-icon
+                      span.checkbox-label Add a PO number
+            .row
+              .col-lg-12
+                .form-group
+                  input.form-control type="text"
+            .row
+              .col-lg-12
+                .form-group
+                  .checkbox-custom
+                    = check_box_tag :add_notes, checked: true
+                    label for="add_notes"
+                      span.checkbox-icon-container
+                        span.checkbox-icon
+                      span.checkbox-label Add notes to your order
+            .row
+              .col-lg-12
+                .form-group
+                  = text_area_tag :notes, nil, class: 'form-control'
+        .panel.panel-explanation.panel-bottom.disabled
+          .panel-body
+            .row
+              .col-lg-12
+                .icon.icon-xs.icon-circle.icon-ic-explanation
+                p
+                  | Any notes you provide here will not appear on your quote/invoice and will be used purely for administrative purposes to assist with processing your order. Your notes will not override any terms of the&nbsp;
+                  a href="#" Customer Agreement.
+                  br
+                  br
+                  | Please be aware that by checking this box, your order will be manually reviewed by a customer advocate and processed within the next 1 to 3 business days.
+                  br
+                  br
+                  | Purchase orders are not accepted as a form of payment and we cannot accept any conflicting terms and conditions associated with the purchase order.

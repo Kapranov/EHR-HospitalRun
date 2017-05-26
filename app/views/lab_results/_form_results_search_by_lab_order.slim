@@ -1,0 +1,41 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title
+        = "Search by Lab Order Number - #{@lab_order.try(:order_num)}"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    .modal-body
+      .scrollable-container
+        .content
+          .row
+            .col-lg-12
+              .table-responsive
+                table.table
+                  thead
+                    tr
+                      td
+                        p Test
+                      td
+                        p Patient
+                      td
+                        p Provider
+                      td
+                        p Status
+                      td
+                  tbody
+                    - if @lab_order.present?
+                      td
+                        p
+                          = "#{@lab_order.test_orders.present? && @lab_order.test_orders.any? ? @lab_order.test_orders.first.test : 'Test Codes Not Found'}"
+                      td
+                        p
+                          = "#{@lab_order.patient.last_name}, #{@lab_order.patient.first_name}"
+                      td
+                        p
+                          = "Dr. #{@lab_order.provider.first_name[0]}. #{@lab_order.provider.last_name}"
+                      td
+                        p
+                          = @lab_order.status
+                      td.controls
+                        = link_to 'Use', new_lab_result_path(order_id: @lab_order.id), class: 'btn btn-default btn-padding-md btn-modal', data: { target: '#modal-lab-results' }, remote: true

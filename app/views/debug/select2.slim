@@ -1,0 +1,71 @@
+- selected_theme_index = 0
+.debug-wrapper#debug-wrapper-select2
+  .container-fluid
+    .panel-group.panel-group-themes#themes-container
+      .btn-group
+        - @themes.each_with_index do |theme, i|
+          a.btn.btn-default class="#{i == selected_theme_index ? 'active' : ''}" data-toggle="collapse" data-parent="#themes-container" aria-expanded="#{i == selected_theme_index ? 'true' : 'false'}" href="#theme-#{theme}"
+            = "#{theme.gsub('-', ' ').split.map(&:capitalize).join(' ')} Theme"
+      - @themes.each_with_index do |theme, i|
+        .panel.panel-default.panel-theme
+          .panel-heading
+            a data-toggle="collapse" data-parent="#themes-container" aria-expanded="false" href="#theme-#{theme}"
+              h4
+                = "#{theme.gsub('-', ' ').split.map(&:capitalize).join(' ')} Theme"
+          .panel-collapse.collapse class="#{i == selected_theme_index ? 'in' : ''}" id="theme-#{theme}"
+            .panel-body
+              .row
+                .col-lg-3
+                  .form-group
+                    h3 Padding Types:
+                    - @padding_types.each do |padding|
+                      .form-group
+                        = select_tag "select_padding_#{padding.gsub('-', '_')}", options_for_select(@option_data), selected: 0, include_blank: true, class: 'select2', data: { placeholder: padding.gsub('-', '.'), theme: theme, arrow: '3x', padding: padding, font: '1x' }
+                .col-lg-3
+                  .form-group
+                    h3 Arrow Types:
+                    - @arrow_types.each do |arrow|
+                      .form-group
+                        = select_tag "select_arrow_#{arrow.gsub('-', '_')}", options_for_select(@option_data), selected: 0, include_blank: true, class: 'select2', data: { placeholder: arrow.gsub('-', '.'), theme: theme, arrow: arrow, padding: '1x', font: '1x' }
+                .col-lg-3
+                  .form-group
+                    h3 Font Types:
+                    - @font_types.each do |font|
+                      .form-group
+                        = select_tag "select_font_#{font.gsub('-', '_')}", options_for_select(@option_data), selected: 0, include_blank: true, class: 'select2', data: { placeholder: font.gsub('-', '.'), theme:theme, arrow: '1x', padding: '1x', font: font }
+                .col-lg-3
+                  .form-group
+                    h3 Font Weight Types:
+                    - @font_weight_types.each do |font_weight|
+                      .form-group
+                        = select_tag "select_font_weight_#{font_weight.gsub('-', '_')}", options_for_select(@option_data), selected: 0, include_blank: true, class: 'select2', data: { placeholder: font_weight.gsub('-', '.'), theme: theme, arrow: '1x', padding: '1x', font: '1x', font_weight: font_weight }
+              .row
+                .col-lg-3
+                  .form-group
+                    h3 Arrow Padding Types:
+                    - @arrow_types[1..@arrow_types.length].each do |arrow|
+                      - @arrow_padding_types.each do |arrow_padding|
+                        .form-group
+                          = select_tag "select_arrow_padding_#{arrow_padding.gsub('-', '_')}", options_for_select(@option_data), selected: 0, include_blank: true, class: 'select2', data: { placeholder: "#{arrow_padding.gsub('-', '.')}, Arrow: #{arrow.gsub('-', '.')}", theme: theme, arrow: arrow, 'arrow-padding': arrow_padding, padding: '1x', font: '1x' }
+                .col-lg-3
+                  h3 Text Align Types:
+                  - @text_align_types.each do |text_align|
+                    .form-group
+                      = select_tag "select_text_align_type_#{text_align}", options_for_select(@option_data), selected: 0, include_blank: true, class: 'select2', data: { placeholder: text_align.capitalize, theme: theme, arrow: '1x', padding: '1x', font: '1x', 'text-align': text_align }
+                .col-lg-3
+                  .form-group
+                    h3 Validation Types:
+                    - @validation_types.each do |validation_type|
+                      .form-group
+                        = select_tag "select_validation_type_#{validation_type}", options_for_select(@option_data), selected: 0, include_blank: true, class: "select2 #{validation_type}", data: { placeholder: validation_type.capitalize, theme: theme, arrow: '1x', padding: '1x', font: '1x' }
+                .col-lg-3
+                  .form-group
+                    h3 Search:
+                    .form-group
+                      = select_tag "select_search", options_for_select(@option_data), selected: 0, include_blank: true, class: 'select2 search', data: { placeholder: "Search", theme: theme, arrow: '1x', padding: '1x', font: '1x' }
+                  .form-group
+                    h3 State Types:
+                    .form-group
+                      = select_tag "select_readonly", options_for_select(@option_data), selected: 0, include_blank: true, readonly: true, class: 'select2', data: { placeholder: 'Read Only', theme: theme, arrow: '1x', padding: '1x', font: '1x' }
+                    .form-group
+                      = select_tag "select_disabled", options_for_select(@option_data), selected: 0, include_blank: true, disabled: true, class: 'select2', data: { placeholder: 'Disabled', theme: theme, arrow: '1x', padding: '1x', font: '1x' }

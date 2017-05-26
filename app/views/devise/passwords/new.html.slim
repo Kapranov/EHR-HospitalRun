@@ -1,0 +1,14 @@
+= simple_form_for resource, as: resource_name, url: password_path(resource_name), html: { method: :post, role: 'form', autocomplete: :off } do |f|
+  .modal-passwords-wrapper
+    #modal-forgot-password-enable.modal-passwords.modal.animated.fadeIn[data-backdrop='static' data-keyboard='false']
+      .modal-dialog
+        .modal-content
+          .modal-header
+            p Send Security Verification Code
+          .modal-body
+            = devise_error_messages_password!
+            p If you do not remember your old password, a security verification will be sent to the following email address:
+            = f.input_field :email, as: :email, class: 'form-control'
+          .modal-footer
+            .buttons
+              = f.submit 'Okay - Send it!', class: 'btn btn-default'

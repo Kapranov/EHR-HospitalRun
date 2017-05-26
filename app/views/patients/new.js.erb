@@ -1,0 +1,69 @@
+$('#modal-add-patient').html('<%= escape_javascript(render 'form') %>');
+
+initPickers('#modal-add-patient');
+initSelect2('#modal-add-patient');
+initModalFadeInOut('#modal-add-patient');
+placeholdersHideOnClick('form.new_user');
+
+$('#modal-add-patient').modal('show');
+
+var emailCheckingController = new EmailCheckingController();
+emailCheckingController.initialize('#patient_email', '#patient_doesnt_have_email');
+
+//var validationController = new ValidationController();
+//validationController.initialize(
+//  'form.new_user',
+//  {
+//    'user[patient][first_name]': {
+//      required: {
+//        required: true
+//      }
+//    },
+//    'user[patient][middle_name]': {
+//      required: {
+//        required: true
+//      }
+//    },
+//    'user[patient][last_name]': {
+//      required: {
+//        required: true
+//      }
+//    },
+//    'user[patient][birth_date]': {
+//      required: {
+//        required: true
+//      }
+//    },
+//    'user[patient][gender]': {
+//      required: {
+//        required: true
+//      }
+//    },
+//    'user[patient][mobile_phone_code]': {
+//      required: {
+//        required: true
+//      }
+//    },
+//    'user[patient][mobile_phone_tel]': {
+//      required: {
+//        required: true
+//      }
+//    },
+//    'user[patient][primary_phone_code]': {
+//      required: {
+//        required: false
+//      }
+//    },
+//    'user[patient][primary_phone_tel]': {
+//      notEqualTo: '#user_patient_mobile_phone_tel',
+//      required: {
+//        required: false
+//      }
+//    },
+//    'user[email]': {
+//      required: {
+//        required: true
+//      }
+//    }
+//  }
+//);

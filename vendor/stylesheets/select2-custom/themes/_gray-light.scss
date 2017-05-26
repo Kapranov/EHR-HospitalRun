@@ -1,0 +1,82 @@
+@import "select2-custom/themes/theme";
+
+$height: 45px;
+$height-search: 35px;
+
+$text-color: #41b6a6;
+$text-open-color: #41b6a6;
+$text-decoration: none;
+$text-open-decoration: none;
+$text-dropdown-color: #41b6a6;
+$text-dropdown-focus-color: #fff;
+$text-dropdown-focus-decoration: none;
+
+$background-color: #f5f5f5;
+$background-open-color: #f5f5f5;
+$background-dropdown-color: #f5f5f5;
+$background-arrow-color: transparent;
+$background-focus-color: #41b6a6;
+
+$border: 1px;
+$border-dropdown: 1px;
+$border-radius: 3px;
+$border-color: #dedede;
+$border-dropdown-color: #41b6a6;
+$border-dropdown-separator: 0;
+$border-focus-color: #41b6a6;
+$border-focus-search: #41b6a6;
+
+$arrow-icon: '\f107';
+$arrow-icon-open: '\f106';
+$arrow-icon-color: #41b6a6;
+$arrow-icon-open-color: #74757e;
+$arrow-icon-border-separator: 0;
+
+$box-shadow: none;
+$box-shadow-open: none;
+$box-shadow-dropdown: none;
+
+$padding-dropdown: 10px;
+$padding-focus-size: 10px;
+
+$font-family-regular: 'SF UI Text Regular';
+$font-family-medium: 'SF UI Text Medium';
+$font-family-light: 'SF UI Text Light';
+$font-family-bold: 'SF UI Text Bold';
+$font-family-heavy: 'SF UI Text Heavy';
+
+$font-0-5x: 12px;
+$font-1x: 15px;
+$font-2x: 16px;
+$font-3x: 17px;
+$font-4x: 18px;
+
+$text-align-left: left;
+$text-align-center: center;
+$text-align-right: right;
+
+$padding-1x: 5px;
+$padding-1-5x: 10px;
+$padding-2x: 12px;
+$padding-2-5x: 15px;
+$padding-3x: 20px;
+
+$arrow-1x: 25px;
+$arrow-2x: 28px;
+$arrow-3x: 30px;
+$arrow-4x: 33px;
+
+$arrow-font-size-1x: 18px;
+$arrow-font-size-2x: 22px;
+$arrow-font-size-3x: 26px;
+$arrow-font-size-4x: 30px;
+
+$arrow-padding-0-5x: 10px;
+
+$validation-image-size: 24px;
+$validation-valid-image: image_url('field-valid-icon.svg');
+$validation-unvalid-image: image_url('field-unvalid-icon.svg');
+
+.select2-container--gray-light {
+  @import 'theme_init';
+}

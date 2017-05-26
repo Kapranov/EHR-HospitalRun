@@ -1,0 +1,43 @@
+.main-content-container {
+  .main-content {
+    .categories-container {
+      height: 30px;
+      margin: 5px 0 10px 0;
+      .categories {
+        padding-left: 0;
+        li {
+          display: inline-block;
+          a {
+            color: #333;
+            font-size: 13px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+            &, span, i {
+              display: inline-block;
+            }
+            i {
+              position: relative;
+              top: 4px;
+              margin-right: 10px;
+            }
+            span {
+              line-height: 26px;
+            }
+            &.active {
+              pointer-events: none;
+              cursor: default;
+            }
+            &:hover,
+            &:focus,
+            &:active {
+              opacity: 0.75;
+            }
+          }
+          .category-arrow {
+            margin: 0 17px 0 23px;
+          }
+        }
+      }
+    }
+  }
+}

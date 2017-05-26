@@ -1,0 +1,32 @@
+.scrollable-container
+  .content
+    .bordered-container
+      .controls
+        = link_to new_amendment_path(patient_id: @patient.id), class: 'btn btn-default btn-plus btn-modal', data: { target: '#modal-ammendment' }, remote: true
+          span.glyphicon.glyphicon-plus
+      .table-responsive
+        table.table
+          thead
+            tr
+              td
+                p Date Requested
+              td
+                p Status
+              td
+                p Description/Location
+              td
+                p Scanned
+          tbody
+            - if @amendments.any?
+              - @amendments.each do |amendment|
+                tr
+                  td
+                    = link_to amendment.requested_at.try(:strftime, Date::DATE_FORMATS[:dosespot]) || '', edit_amendment_path(amendment, patient_id: @patient.id), class: 'btn-modal', data: { target: '#modal-ammendment' }, remote: true
+                  td
+                    p
+                      = amendment.status
+                  td
+                    p
+                      = amendment.description
+                  td
+                    .icon class="#{if amendment.scanned ? 'icon-scanned' : 'icon-unscanned'}"

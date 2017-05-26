@@ -1,0 +1,77 @@
+.row-container
+  .bordered-container
+    .category-header
+      p.title Audit Log
+      = select_tag :audit_export, options_for_select([[''], ['CSV', 0], ['Print', 1]]), class: 'select2 pull-right', data: { placeholder: 'Export', theme: 'green-light', arrow: '2x', padding: '1-5x', font: '1x', width: '120px', height: '35px' }
+    .audit-content
+      .row.top-block.controls
+        .col-lg-3.col-md-3
+          .form-group
+            .input-group.input-group-audit-date-from.input-group-green
+              = text_field_tag :audit_filter_date_from, nil, class: 'form-control form-control-green date-picker', placeholder: 'From'
+              span.input-group-addon.input-group-addon-calendar
+        .col-lg-3.col-md-3
+          .form-group
+            .input-group.input-group-green
+              = text_field_tag :audit_filter_date_to, nil, class: 'form-control form-control-green date-picker', placeholder: 'To'
+              .input-group-addon.input-group-addon-calendar
+        .col-lg-3.col-md-3
+          .form-group
+            = select_tag :audit_filter_user, options_for_select(current_user.provider.providers_collection), class: 'select2', data: { placeholder: 'User', theme: 'green-light', arrow: '2x', padding: '1-5x', font: '1x' }, include_blank: true
+        .col-lg-3.col-md-3
+          .form-group
+            .input-group.input-group-green
+              = text_field_tag :audit_find_patient, '', class: 'form-control'
+              span.input-group-addon.input-group-addon-search#audit_search_btn
+      - if @audit_logs.any?
+        .row
+          .col-lg-12
+            .table-responsive
+              table.table.table-audit
+                thead
+                  tr
+                    td.filter
+                      = select_tag :audit_filter_column_date, '', class: 'select2', data: { placeholder: 'Date', theme: 'audit-log', arrow: '3x', padding: '1-5x', font: '2x', height: '50px' }, readonly: true, include_blank: true
+                    td.filter
+                      = select_tag :audit_filter_column_time, '', class: 'select2', data: { placeholder: 'Time', theme: 'audit-log', arrow: '3x', padding: '1-5x', font: '2x', height: '50px' }, readonly: true, include_blank: true
+                    td.filter
+                      = select_tag :audit_filter_column_patient, '', class: 'select2', data: { placeholder: 'Patient', theme: 'audit-log', arrow: '3x', padding: '1-5x', font: '2x', height: '50px' }, readonly: true, include_blank: true
+                    td.filter
+                      = select_tag :audit_filter_column_user, '', class: 'select2', data: { placeholder: 'User', theme: 'audit-log', arrow: '3x', padding: '1-5x', font: '2x', height: '50px' }, readonly: true, include_blank: true
+                    td.filter
+                      = select_tag :audit_filter_column_data_type, options_for_select(AuditLog.data_types), class: 'select2', data: { placeholder: 'Data Type', theme: 'audit-log', arrow: '3x', padding: '1-5x', font: '2x', height: '50px' }, readonly: true, include_blank: true
+                    td.filter
+                      = select_tag :audit_filter_column_action, options_for_select(AuditLog.actions), class: 'select2', data: { placeholder: 'Action', theme: 'audit-log', arrow: '3x', padding: '1-5x', font: '2x', height: '50px' }, readonly: true, include_blank: true
+                    td
+                      p Details
+                tbody
+                  - @audit_logs.each do |log|
+                    tr
+                      td
+                        p
+                          = log.created_at_date
+                      td
+                        p
+                          = log.created_at_time
+                      td
+                        p
+                          = log.patient.try(:first_name)
+                      td
+                        p
+                          = "#{log.provider.try(:first_name).first}. #{log.provider.try(:last_name)}"
+                      td
+                        p
+                          = log.action
+                      td
+                        p
+                          = log.data_type
+                      td
+                        p
+                          = log.detail
+      - else
+        p.title-empty Audit Logs Not Found
+  - if will_paginate
+    .row.bottom-block
+      .col-lg-12
+        .controls
+          = will_paginate @audit_logs, renderer: BootstrapPagination::Rails, previous_label: I18n.t('previous_label'), next_label: I18n.t('next_label')

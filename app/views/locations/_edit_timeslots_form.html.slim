@@ -1,0 +1,18 @@
+- if location.timeslots.any?
+  .row-container
+    - location.timeslots.each_with_index do |timeslot, index|
+      = l.simple_fields_for "timeslots[#{index}]", timeslot do |t|
+        .row
+          = t.input_field :id, as: :hidden, value: timeslot.id
+          .col-lg-2.col-md-2.col-sm-2
+            p
+              = timeslot.weekday
+          .col-lg-3.col-md-3.col-sm-3
+            .form-group
+              = t.time_select :from, { combined: true, ampm: true, time_separator: "", prompt: '' }, { class: 'select2', data: { placeholder: 'From', theme: 'gray-light', arrow: '3x', padding: '1x', 'arrow-padding': '05x', font: '2x' } }
+          .col-lg-3.col-md-3.col-sm-3
+            .form-group
+              = t.time_select :to, { combined: true, ampm: true, time_separator: "", prompt: '' }, { class: 'select2', data: { placeholder: 'To', theme: 'gray-light', arrow: '3x', padding: '1x', 'arrow-padding': '05x', font: '2x' } }
+          .col-lg-4.col-md-4.col-sm-4
+            .form-group
+              = t.input_field :specific_hour, as: :select, collection: Timeslot.specific_hours.to_a, selected: timeslot.specific_hour, class: 'select2 select-new-user-specific-hours', data: { placeholder: 'Specific Hours', theme: 'gray-light', arrow: '3x', padding: '1x', 'arrow-padding': '05x', font: '2x' }

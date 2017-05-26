@@ -1,0 +1,7 @@
+$('#modal-patient-diagnoses-reconciliation').html('<%= escape_javascript(render 'form_reconciliation') %>')
+
+initPickers('#modal-patient-diagnoses-reconciliation');
+initSelect2('#modal-patient-diagnoses-reconciliation');
+initModalFadeInOut('#modal-patient-diagnoses-reconciliation');
+
+$('#modal-patient-diagnoses-reconciliation').modal('show');

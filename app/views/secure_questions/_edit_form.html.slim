@@ -1,0 +1,57 @@
+.modal-dialog
+  .modal-content
+    = simple_form_for @secure_question do |f|
+      .modal-header.modal-header-md
+        p.title CHANGE SECURITY QUESTION
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-12
+                .form-group
+                  p
+                    | Answer your existing security question in order to create a new one. Please choose a question you can remember! You will get locked out of your portal if you are unable to answer correctly.&nbsp;
+                    a href="#" What’s this?
+            .row
+              .col-lg-12
+                .form-group
+                  p.title EXISTING QUESTION:
+                  p
+                    = @secure_question.question
+            .row
+              .col-lg-12
+                .form-group
+                  p.title ANSWER
+                  = text_field_tag :answer, nil, class: 'form-control'
+            .row
+              .col-lg-12
+                p.title NEW QUESTION
+                = f.input :question, as: :select, collection: @questions, input_html: { class: 'select2', data: { theme: 'gray-lighter-highlight', arrow: '3x', padding: '2x', font: '1x' } }
+            .row
+              .col-lg-12
+                hr
+            .row
+              .col-lg-12
+                .form-group
+                  p.title ANSWER
+                  = f.input :answer, input_html: { value: '', class: 'form-control' }
+            .row
+              .col-lg-12
+                .form-group
+                  p.title IMPORTANT
+                  .checkbox-custom
+                    = check_box_tag :access_locked_if_unverify, '', true, class: 'checkbox'
+                    label[for="access_locked_if_unverify"]
+                      span.checkbox-icon-container
+                        span.checkbox-icon.checkbox-icon-green
+                      span.checkbox-label I understand my access to patients portal will be locked if I am unable to answer this question
+                  .checkbox-custom
+                    = check_box_tag :remember_this_computer, '', false, class: 'checkbox'
+                    label[for="remember_this_computer"]
+                      span.checkbox-icon-container
+                        span.checkbox-icon.checkbox-icon-green
+                      span.checkbox-label Remember this computer
+      .modal-footer
+        .controls
+          = f.submit 'Change', class: 'btn btn-default btn-padding-md'
+          a.btn.btn-padding-sm href="#" data-dismiss="modal" Cancel

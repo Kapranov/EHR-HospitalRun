@@ -1,0 +1,158 @@
+.reports-wrapper {
+  .content {
+    min-height: calc(100vh - 158px) !important;
+    padding-bottom: 28px;
+  }
+  .top-block.controls {
+    padding: 14px 20px;
+    margin-top: 28px;
+    background-color: $green;
+    border-radius: 3px 3px 0 0;
+    .row-controls {
+      margin-bottom: -15px;
+      .title {
+        margin: 0;
+        padding: 12px 0;
+        font-size: 16px;
+        color: white;
+      }
+      .btn {
+        &:hover,
+        &:focus,
+        &:active {
+          border-color: white;
+        }
+      }
+    }
+  }
+  .center-block {
+    padding: 14px 20px;
+    background-color: $greenlighter;
+    border-left: 1px solid $green;
+    border-right: 1px solid $green;
+    &.recent-block,
+    &.filter-block {
+      .row-main {
+        margin-bottom: -15px;
+      }
+    }
+    .title {
+      margin: 0;
+      padding: 10px 0;
+      font-size: 18px;
+      color: $green;
+      font-family: 'SF UI Text Bold';
+    }
+  }
+  .content-block {
+    min-height: 624px;
+    border: 1px solid $green;
+    border-top: 0;
+    border-radius: 0 0 3px 3px;
+    .table-responsive {
+      .table {
+        margin-bottom: 0;
+        thead {
+          tr {
+            td {
+              background-color: $green;
+              padding: 15px 20px;
+              color: white;
+              font-size: 16px;
+              text-align: center;
+              vertical-align: middle;
+              &.controls {
+                width: 60px;
+              }
+            }
+          }
+        }
+        tbody {
+          tr {
+            transition: background-color .2s;
+            &:hover,
+            &:focus,
+            &:active {
+              &:not(.title-empty) {
+                background-color: $greenlighter;
+              }
+            }
+            td {
+              padding: 16px 20px;
+              border-top: 0;
+              text-align: center;
+              font-size: 16px;
+              color: $graytextdark;
+              vertical-align: middle;
+              &.controls {
+                width: 60px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                .btn {
+                  height: 35px;
+                  line-height: 35px;
+                  font-size: 15px;
+                }
+              }
+              .checkbox-custom {
+                label {
+                  height: 25px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .controls.bottom-block {
+    padding: 7px 20px;
+    .left-block {
+      p {
+        padding: 8px 0;
+        font-size: 15px;
+        margin: 0;
+      }
+    }
+    .right-block {
+      text-align: right;
+      .pagination {
+        position: relative;
+      }
+    }
+  }
+
+  .center-block.filter-block {
+    .form-control {
+      padding: 0 15px;
+      color: $graytextdark !important;
+      &::-webkit-input-placeholder {
+        color: $graytextdark !important;
+      }
+      &::-moz-placeholder {
+        color: $graytextdark !important;
+      }
+      &:-moz-placeholder {
+        color: $graytextdark !important;
+      }
+      &:-ms-input-placeholder {
+        color: $graytextdark !important;
+      }
+    }
+    .divider {
+      width: 17px;
+      line-height: 45px;
+      position: absolute;
+      top: 0;
+      right: -10px;
+      text-align: center;
+      font-size: 36px;
+      color: $graytextdark;
+    }
+    @media(max-width: 991px) {
+      .divider {
+        display: none;
+      }
+    }
+  }
+}

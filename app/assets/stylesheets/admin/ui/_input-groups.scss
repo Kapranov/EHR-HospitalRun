@@ -1,0 +1,26 @@
+.input-group {
+  .input-group-addon {
+    font-size: 13px;
+    padding: 0 5px;
+    background-color: #eee;
+    border-color: #000;
+    border-radius: 0;
+    line-height: 22px;
+  }
+  &.input-group-phone {
+    width: 100%;
+    .select2-container,
+    .input-group-addon,
+    .form-control {
+      margin-top: 0 !important;
+    }
+    .select2-container {
+      display: table-cell;
+      & {
+        .select2-selection {
+          border-right-color: transparent !important;
+        }
+      }
+    }
+  }
+}

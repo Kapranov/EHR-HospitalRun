@@ -1,0 +1,107 @@
+#modal-alert,
+#modal-trigger {
+  .modal-dialog,
+  .modal-dialog, .modal-content {
+    max-width: 760px;
+  }
+  .modal-dialog {
+    .modal-content {
+      .modal-header {
+        .title {
+          padding-left: 15px;
+        }
+        .close-btn {
+          right: 12px;
+        }
+      }
+    }
+  }
+}
+
+#modal-alert,
+#modal-trigger {
+  .modal-dialog {
+    .modal-content {
+      .modal-body {
+        padding: 10px 0 0 0;
+        .content {
+          padding: 0 20px !important;
+        }
+        .slimScrollDiv .content {
+          padding-right: 30px !important;
+        }
+        .form-group {
+          margin-bottom: 15px;
+        }
+        .form-group-horizontal {
+          .title {
+            margin: 14px 0 5px 0;
+          }
+        }
+        .title {
+          color: $graytextdark;
+          font-size: 12px;
+          margin: 0;
+        }
+        .form-control {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+        textarea.form-control {
+          min-height: 60px;
+          max-height: 150px;
+          padding-right: 15px;
+        }
+      }
+      .modal-footer {
+        padding: 15px 20px 30px 20px;
+      }
+    }
+  }
+}
+
+#modal-trigger {
+  .modal-dialog {
+    .modal-content {
+      .modal-body {
+        .form-control {
+          font-size: 12px;
+        }
+        #panel-triggers {
+          margin-left: -20px;
+          margin-right: -20px;
+          border: 0;
+          box-shadow: none;
+          .panel-body {
+            padding: 0 15px;
+            background-color: rgba(65, 182, 166, .10);
+            table {
+              margin: 0;
+              tbody {
+                tr {
+                  td {
+                    border-top: 0;
+                    padding: 13px 5px;
+                    vertical-align: middle;
+                    p {
+                      font-family: 'SF UI Text Bold';
+                      font-size: 12px;
+                      color: $graytextdark;
+                      margin: 0;
+                    }
+                    &:first-child {
+                      width: 100px;
+                    }
+                    &:last-child {
+                      width: 24px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

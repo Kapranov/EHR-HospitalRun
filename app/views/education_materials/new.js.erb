@@ -1,0 +1,45 @@
+$('#modal-education-material').html('<%= escape_javascript(render 'form') %>');
+
+initPickers('#modal-education-material');
+initModalFadeInOut('#modal-education-material');
+initSelect2('#modal-education-material');
+
+$('#modal-education-material').modal('show');
+
+var findCodesController = new FindCodesController();
+findCodesController.initialize();
+
+var educationMaterialsValidationController = new ValidationController();
+educationMaterialsValidationController.initialize(
+  'form.new_education_material',
+  {
+    'education_material[name]': {
+      required: {
+        required: true
+      }
+    },
+    'education_material[code_system]': {
+      required: {
+        required: true
+      }
+    },
+    'education_material[code_select]': {
+      required: {
+        required: true
+      }
+    },
+    'education_material[note]': {
+      required: {
+        required: true
+      }
+    }
+  }
+);
+
+var attachmentsController = new AttachmentsController();
+attachmentsController.initialize(
+  '#modal-education-material',
+  '#modal-education-material #attachment_container',
+  '#add_attachment',
+  'education_material[attachments][file_name_NUMBER_]'
+);

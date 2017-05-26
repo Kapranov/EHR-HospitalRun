@@ -1,0 +1,58 @@
+= simple_form_for resource, as: resource_name, url: users_second_step_path do |f|
+  #signin-wrapper.authorization-signin-wrapper
+    .authorization-top
+      .string
+        .string-top
+          .image-center
+            = image_tag('ehr.svg', width: 232, height: 88, alt: "EHR1 Logo")
+        .container
+          .string-top-container
+            = link_to root_path, class: 'string-top-home-link'
+              = image_tag('num-top.svg', width: 146, height: 248, alt: "EHR1 One Num Logo")
+    .authorization-content
+      .content-top
+        .container
+          .main-title
+            h1 PLEASE SIGN IN TO VIEW YOUR ACCOUNT
+            - if devise_mapping.registerable?
+              p
+                'Don't have an account yet?
+                |
+                = link_to 'Sign up here', new_registration_path(resource_name)
+      .content
+        .container
+          .row
+            .col-lg-5.controls class="#{ notice || alert ? 'controls-with-messages' : ''}"
+              .form-group
+                - if notice
+                  p.notice-message
+                    = notice
+                - if alert
+                  p.alert-message
+                    = alert
+                = f.input_field :email, as: :email, class: 'form-control', placeholder: "Your Email"
+              .form-group
+                = f.input_field :password, as: :password, class: 'form-control input-password-heavy', placeholder: "Password"
+                - if devise_mapping.recoverable?
+                  = link_to 'Forgot your password?', new_password_path(resource_name), class: 'link-forgot'
+              .form-group
+                - if devise_mapping.rememberable?
+                  .checkbox-custom
+                    = f.check_box :remember_me, checked: true, id: 'user[remember_me]', class: 'checkbox'
+                    label for="user[remember_me]"
+                      span.checkbox-icon-container
+                        span.checkbox-icon
+                      span.checkbox-label Remember me
+              .form-group
+                = f.submit 'Sign in', class: 'btn btn-default'
+            .col-lg-2
+            .col-lg-5.links
+              p
+                | To make our EHR even  
+                span more
+                | &nbsp;secure for you, please download our two-factor authentication application
+              .services
+                a.google-play href="#{Rails.application.secrets.qrcode_google_play}"
+                  = raw @qr_google_play.as_html
+                a.app-store href="#{Rails.application.secrets.qrcode_app_store}"
+                  = raw @qr_app_store.as_html

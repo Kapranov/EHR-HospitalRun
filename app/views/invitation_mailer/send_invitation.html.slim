@@ -1,0 +1,34 @@
+= render 'styles', file: __FILE__
+table.mailer-wrapper.mailer-send-invitation
+  = render 'devise/mailer/mailer_header'
+  tbody
+    tr
+      td
+        p 
+          = "Dear, #{@name.to_s}"
+    tr
+      td
+        p You have been invited to access your health records in your EHR 1 Patient Portal.
+    tr
+      td
+        p View upcoming appointment, care notes from your recent appointment(s), send a secure message to the practice or your provider, and more!
+    tr
+      td
+        p To setup your account, first make sure to contact your practice for a Security Access Code:
+    tr
+      td
+        p.code
+          = @code
+    tr
+      td
+        p Then, go to the link below and follow the instructions on the page to complete setting up your Patient Portal account.
+    tr
+      td
+        = link_to new_user_session_url, new_user_session_url
+    tr
+      td
+        p Sincerely,
+    tr
+      td
+        p EHR1 Team
+    = render 'devise/mailer/mailer_footer'

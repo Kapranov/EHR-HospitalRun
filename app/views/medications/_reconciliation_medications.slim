@@ -1,0 +1,58 @@
+= link_to 'Sync with dosespot', dosespot_sync_medications_path(patient_id: @patient.id)
+- if @exist_medication.present?
+  table
+    tr
+      th Referral
+      th Description
+      th SIG
+      th Code
+      th Modified Date
+      th Code Type
+    tr
+      td
+        = @exist_medication.referral
+      td
+        = @exist_medication.shorthand
+      td
+        = @exist_medication.signature
+      td
+        = @exist_medication.portion.try(:dose)
+      td
+        = @exist_medication.updated_at.strftime(Date::DATE_FORMATS[:dosespot])
+      td
+    - if @referral_medications.any?
+      - @referral_medications.each do |medication|
+        tr
+          td
+            = medication.referral
+          td
+            = medication.shorthand
+          td
+            = medication.signature
+          td
+            = medication.portion.try(:dose)
+          td
+            = medication.updated_at.strftime(Date::DATE_FORMATS[:dosespot])
+          td
+
+  = link_to 'Previous', '#', id: 'previous-reconcilitation-medication'
+  = link_to 'Confirm',  '#', id: 'confirm-reconcilitation-medication'
+
+  javascript:
+    $('#previous-reconcilitation-medication').click(function () {
+      $.ajax({
+        type: 'POST',
+        url: '#{previous_reconciliation_medication_path(@exist_medication)}'
+      }).done(function (partial) {
+        $('#medications-container').html(partial);
+      });
+    });
+
+    $('#confirm-reconcilitation-medication').click(function () {
+      $.ajax({
+        type: 'POST',
+        url: '#{confirm_reconciliation_medication_path(@exist_medication)}'
+      }).done(function (partial) {
+        $('#medications-container').html(partial);
+      });
+    });

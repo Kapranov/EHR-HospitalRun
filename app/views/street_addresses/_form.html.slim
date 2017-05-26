@@ -1,0 +1,26 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title
+        = "#{@address_data.any? ? 'Success' : 'Verification Failed'}"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    .modal-body
+      .scrollable-container
+        .content
+          - if @address_data.any?
+            .row
+              .col-lg-12
+                .form-group
+                  p.main-title We’ve found closest match(s):
+            - @address_data.each do |address|
+              .row
+                .col-lg-12
+                  .form-group
+                    .street-input
+                      = text_field_tag :street_line, address[:full_address], class: 'form-control form-control-bold', readonly: true
+                      a.underline href="#" data-address="#{address[:full_address]}" data-street="#{address[:street_line]}" data-city="#{address[:city]}" data-state="#{address[:state]}" data-zip="#{address[:zip]}#{address[:plus4_code].present? ? '-'+address[:plus4_code] : ''}" Use this
+          - else
+            .row
+              .col-lg-12
+                .form-group
+                  p.main-title Address not verified, please try again!

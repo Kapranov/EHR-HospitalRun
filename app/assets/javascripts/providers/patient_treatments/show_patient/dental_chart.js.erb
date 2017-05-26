@@ -1,0 +1,340 @@
+DentalChartController = function() {
+  this.initialize = function() {
+    var diagnosisCodeSearchController = new DiagnosisCodeSearchController();
+    diagnosisCodeSearchController.initialize(
+      'input#search_diagnosis_code',
+      'span#diagnosis_code_button',
+      'ul#diagnosis_code_list',
+      diagnosis_codes_path
+    );
+
+    var providerSearchController = new DentalChartSearchController();
+    providerSearchController.initialize(
+      'input#search_procedure_code',
+      'span#search-procedure-code-button',
+      'ul#search-procedure-code-list',
+      procedures_path,
+      policy_procedure_update
+    );
+
+    var encounterSearchController = new DentalChartEncounterSearchController();
+    encounterSearchController.initialize(
+      'input#find-dental_encountment_proc-input',
+      'ul#encounter-bottom-main-list',
+      encounters_path
+    );
+
+    var bmiController = new BMIController();
+    bmiController.initialize(
+      '#modal-patient-main input#encounter_vital_height_major',
+      '#modal-patient-main input#encounter_vital_height_minor',
+      '#modal-patient-main select#height_major_unit_system',
+      '#modal-patient-main select#height_minor_unit_system',
+      '#modal-patient-main select#weight_unit_system',
+      '#modal-patient-main input#encounter_vital_weight',
+      '#modal-patient-main input#encounter_vital_bmi'
+    );
+  }
+}
+
+var DiagnosisCodeSearchController = function() {
+  var search_input;
+  var search_button;
+  var search_list;
+
+  var url;
+
+  this.initialize = function(input, button, list, path) {
+    search_input = $(input);
+    search_button = $(button);
+    search_list = $(list);
+    url = path;
+    findAll();
+    initSearchOnInput();
+  };
+
+  var listFill = function(elements) {
+    if(elements.length>0)
+      search_list.css('display', 'block');
+    else
+      search_list.css('display', 'none');
+    search_list.empty();
+    for(var i in elements) {
+      var li = $('<li/>');
+      var link = $('<a  href="#">' + elements[i]['full_name'].trim() + '</a>');
+      li.append(link);
+      search_list.append(li);
+    }
+    initModalFadeInOut('#'+search_list.attr('id'));
+  };
+
+  var findAll = function() {
+    search_button.on('click', function() {
+      $.ajax({
+        url: url
+      }).done(function(elements){
+        listFill(elements);
+      });
+    });
+  };
+
+  var initSearchOnInput = function() {
+    search_input.on('keyup', function(){
+      var search_part = $(this).val();
+      $.ajax({
+        url: url,
+        data: {
+          part: search_part
+        }
+      }).done(function(elements){
+        listFill(elements);
+      });
+    });
+  };
+};
+
+var DentalChartSearchController = function() {
+  var search_input;
+  var search_button;
+  var search_list;
+
+  var policy_update;
+
+  var url;
+
+  this.initialize = function(input, button, list, path, _policy_update) {
+    search_input = $(input);
+    search_button = $(button);
+    search_list = $(list);
+    url = path;
+    policy_update = _policy_update;
+    findAll();
+    initSearchOnInput();
+  };
+
+  var listFill = function(elements) {
+    if(elements.length>0)
+      search_list.css('display', 'block');
+    else
+      search_list.css('display', 'none');
+    search_list.empty();
+    for(var i in elements) {
+      var li = $('<li/>');
+      var link;
+      if(policy_update) {
+        var path = '<%= Rails.application.routes.url_helpers.procedures_path %>/' + elements[i]['id'] + '/edit?patient_id=' + patient_id;
+        link = $('<a class="btn-modal" data-target="#modal-patient-show-procedure" data-remote="true" href="' + path + '">' + elements[i]['full_name'].trim() + '</a>');
+      }
+      else
+        link = $('<a  href="#">' + elements[i]['full_name'].trim() + '</a>');
+      li.append(link);
+      search_list.append(li);
+    }
+    initModalFadeInOut('#'+search_list.attr('id'));
+  };
+
+  var findAll = function() {
+    search_button.on('click', function() {
+      $.ajax({
+        url: url
+      }).done(function(elements){
+        listFill(elements);
+      });
+    });
+  };
+
+  var initSearchOnInput = function() {
+    search_input.on('keyup', function(){
+      var search_part = $(this).val();
+      $.ajax({
+        url: url,
+        data: {
+          part: search_part
+        }
+      }).done(function(elements){
+        listFill(elements);
+      });
+    });
+  };
+};
+
+var DentalChartEncounterSearchController = function() {
+  var search_input;
+  var search_list;
+
+  var url;
+
+  this.initialize = function(input, list, path) {
+    search_input = $(input);
+    search_list = $(list);
+    url = path;
+
+    initSearchOnInput();
+    initSearchOnClick();
+  };
+
+  var listFill = function(elements) {
+    if(elements.length > 0)
+      search_list.css('display', 'block');
+    else
+      search_list.css('display', 'none');
+    search_list.empty();
+    for(var i in elements) {
+      var li = $('<li/>');
+      var link = $('<a href="#">' + elements[i]['created_at'] + '</a>').data('id', elements[i]['id']);
+      li.append(link);
+      search_list.append(li);
+    }
+    initSearchOnClick();
+  };
+
+  var searchPartHandler = function(e) {
+    var search_part = $(this).val();
+    $.ajax({
+      url: url,
+      data: {
+        created_at: search_part,
+        id: patient_id,
+        patient_id: patient_id
+      }
+    }).done(function(elements){
+      listFill(elements);
+    });
+  }
+
+  var listClickHandler = function() {
+    $.ajax({
+      url: '<%= Rails.application.routes.url_helpers.encounter_full_info_encounters_path %>',
+      data: {
+        id: $(this).data('id'),
+        patient_id: patient_id
+      }
+    }).done(function(partial) {
+      $('#full-encounter-info').html(partial);
+      var bmiController = new BMIController();
+      bmiController.initialize('input#encounter_vital_height_major', 'input#encounter_vital_height_minor',
+        'input#encounter_vital_weight', 'select#encounter_vital_units_system',
+        'input#encounter_vital_bmi');
+      initSelect2('#modal-patient-main #patientDentalChartTab');
+    });
+  }
+
+  var initSearchOnInput = function() {
+    search_input.on('keyup', searchPartHandler);
+    search_input.datepicker().on('changeDate', searchPartHandler);
+  };
+
+  var initSearchOnClick = function() {
+    search_list.find('li a').click(listClickHandler);
+  }
+};
+
+BMIController = function() {
+  var height_major;
+  var height_minor;
+  var height_major_unit_system;
+  var height_minor_unit_system;
+  var weight_unit_system;
+  var weight;
+  var unit_system;
+  var bmi;
+
+  this.initialize = function(major_height, minor_height, major_unit_system_height, minor_unit_system_height, unit_system_weight, weig, b) {
+    height_major = $(major_height);
+    height_minor = $(minor_height);
+    height_major_unit_system = $(major_unit_system_height);
+    height_minor_unit_system = $(minor_unit_system_height);
+    weight_unit_system = $(unit_system_weight);
+    weight       = $(weig);
+    bmi          = $(b);
+    bmi.data('system', 'us');
+    SetOnChange();
+    CountBMI();
+  };
+
+  var SetOnChange = function() {
+    height_major.keyup(CountBMI);
+    height_minor.keyup(CountBMI);
+    weight.keyup(CountBMI);
+    height_major_unit_system.change(UnitSystemChange);
+    height_minor_unit_system.change(UnitSystemChange);
+    weight_unit_system.change(UnitSystemChange);
+  };
+
+  var UnitSystemChange = function(e) {
+    var control = $(e.currentTarget);
+    var id = control.attr('id');
+    switch(id) {
+      case 'height_major_unit_system':
+        if(height_minor_unit_system.val() != control.val() && weight_unit_system.val() != control.val()) {
+          height_minor_unit_system.val(control.val()).change();
+          weight_unit_system.val(control.val()).change();
+        }
+      break;
+      case 'height_minor_unit_system':
+        if(height_major_unit_system.val() != control.val() && weight_unit_system.val() != control.val()) {
+          height_major_unit_system.val(control.val()).change();
+          weight_unit_system.val(control.val()).change();
+        }
+      break;
+      case 'weight_unit_system':
+        if(height_minor_unit_system.val() != control.val() && height_major_unit_system.val() != control.val()) {
+          height_minor_unit_system.val(control.val()).change();
+          height_major_unit_system.val(control.val()).change();
+        }
+      break;
+    }
+    switch(control.val()) {
+      case 0:
+        bmi.data('system', 'us');
+      break;
+      case 1:
+        bmi.data('system', 'euro');
+      break;
+    }
+    RecountValues();
+  };
+
+  var RecountValues = function() {
+    var total;
+    var major;
+    var minor;
+    var height_major_val = parseFloat(height_major.val());
+    var height_minor_val = parseFloat(height_minor.val());
+    var weight_val;
+
+    if(bmi.data('system') == 'us') {
+      total = RoundFour((height_major_val * 12 + height_minor_val) * 2.54);
+      major = Math.floor(total / 100.0);
+      minor = total - major * 100;
+      weight_val = weight.val() * 0.453592;
+      bmi.data('system', 'euro');
+    } else {
+      total = RoundFour((height_major_val * 100 + height_minor_val) * 0.393701);
+      major = Math.floor(total / 12.0);
+      minor = total - major * 12;
+      weight_val = weight.val() * 2.20462;
+      bmi.data('system', 'us');
+    }
+    height_major.val(RoundFour(parseInt(major)));
+    height_minor.val(minor);
+    weight.val(RoundFour(weight_val));
+    CountBMI();
+  };
+
+  var RoundFour = function(num) {
+    return Math.round(num * 10000) / 10000
+  };
+
+  var CountBMI = function() {
+    var h = parseInt(height_major.val());
+    if(bmi.data('system') == 'euro')
+      h = h * 100 + h;
+    else
+      h = h * 12 + h;
+    var w = parseInt(weight.val());
+    if(w && h) {
+      bmi.val(((w * 703) / Math.pow(h, 2)).toFixed(2));
+    }
+  };
+};

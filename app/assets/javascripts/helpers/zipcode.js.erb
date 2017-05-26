@@ -1,0 +1,153 @@
+ZipcodeController = function() {
+  var practice_group = false;
+
+  var street, city, state, zip;
+  var practice_street, practice_city, practice_state, practice_zip;
+  var checkbox_same_as_practice;
+  var placeholder;
+  
+  var street_address_url = "<%= "#{ Rails.application.secrets.zipcode_api_street_address_url }?auth-id=#{ Rails.application.secrets.zipcode_api_id }&auth-token=#{ Rails.application.secrets.zipcode_api_token }" %>";
+
+  this.initialize = function (
+      _street, _city, _state, _zip,
+      _practice_group,
+      _practice_street, _practice_city, _practice_state, _practice_zip,
+      _checkbox_same_as_practice,
+      _placeholder
+    ) {
+    street = $(_street);
+    city = $(_city);
+    state = $(_state);
+    zip = $(_zip);
+    placeholder = _placeholder;
+    if(_practice_group) {
+      practice_street = $(_practice_street);
+      practice_city = $(_practice_city);
+      practice_state = $(_practice_state);
+      practice_zip = $(_practice_zip);
+      practice_group = $(_practice_group);
+      checkbox_same_as_practice = $(_checkbox_same_as_practice);
+    }
+    varInitialize();
+  };
+
+  var varInitialize = function() {
+    addInputOnStreet();
+    if(practice_group) {
+      addInputOnPracticeStreet();
+    }
+  };
+
+  var processResults = function(data, params) {
+    for(var i = 0; i < data.length; i++) {
+      data[i] = {
+        id: data[i].delivery_line_1+', '+data[i].components.city_name+', '+data[i].components.state_abbreviation,
+        delivery_line_1: data[i].delivery_line_1,
+        city_name: data[i].components.city_name,
+        state_abbreviation: data[i].components.state_abbreviation,
+        zipcode: data[i].components.zipcode,
+        plus4_code: data[i].components.plus4_code,
+        text: data[i].delivery_line_1+', '+data[i].components.city_name+', '+data[i].components.state_abbreviation
+      }
+    }
+    return {
+      results: data
+    };
+  }
+
+  var templateResult = function(address) {
+    if (address.loading) return address.text;
+    return '<span>'+address.text+'</span>';
+  }
+
+  var templateSelection = function(address, isPractice) {
+    if(address.delivery_line_1 && address.city_name && address.state_abbreviation) {
+      var zipcode = address.zipcode;
+      if(address.plus4_code)
+        zipcode = zipcode + '-' + address.plus4_code;
+      fillFields(address.text, address.city_name, address.state_abbreviation, zipcode, isPractice);
+    }
+    return address.text;
+  }
+
+  var addInputOnStreet = function() {
+    street.select2({
+      width: '100%',
+      placeholder: typeof placeholder != 'undefined' ? placeholder : 'Street Address',
+      ajax: {
+        url: street_address_url,
+        processResults: processResults,
+        data: function (params) {
+          return {
+            street: params.term,
+            candidates: 10
+          };
+        },
+        cache: true
+      },
+      escapeMarkup: function (markup) { return markup; },
+      minimumInputLength: 1,
+      templateResult: templateResult,
+      templateSelection: function(data) { return templateSelection(data, false) }
+    });
+  }
+
+  var addInputOnPracticeStreet = function () {
+    practice_street.select2({
+      width: '100%',
+      placeholder: typeof placeholder != 'undefined' ? placeholder : 'Street Address',
+      ajax: {
+        url: street_address_url,
+        processResults: processResults,
+        data: function (params) {
+          return {
+            street: params.term,
+            candidates: 10
+          };
+        },
+        cache: true
+      },
+      escapeMarkup: function (markup) { return markup; },
+      minimumInputLength: 1,
+      templateResult: templateResult,
+      templateSelection: function(data) { return templateSelection(data, true) }
+    });
+  };
+
+  var fillFields = function(_street, _city, _state, _zip, isPractice) {
+    if(isPractice) {
+      practice_street.html('<option></option><option value="'+_street+'">'+_street+'</option>');
+      practice_street.val(_street).trigger('change');
+      practice_city.val(_city).trigger('change');
+      practice_state.val(_state).trigger('change');
+      practice_zip.val(_zip).trigger('change');
+    }
+    else {
+      street.html('<option></option><option value="'+_street+'">'+_street+'</option>');
+      street.val(_street).trigger('change');
+      city.val(_city).trigger('change');
+      state.val(_state).trigger('change');
+      zip.val(_zip).trigger('change');
+    }
+  }
+
+  var clearFields = function(isPractice) {
+    if(isPractice) {
+      practice_street.html('<option></option>').trigger('change');
+      practice_street.val(null).trigger('change');
+      practice_city.val('').trigger('change');
+      practice_state.val('').trigger('change');
+      practice_zip.val('').trigger('change');
+      if(checkbox_same_as_practice.is(':checked')) {
+        street.html('<option></option>').trigger('change');
+        street.val(null).trigger('change');
+      }
+    } else {
+      street.html('<option></option>').trigger('change');
+      street.val(null).trigger('change');
+      city.val('').trigger('change');
+      state.val('').trigger('change');
+      zip.val('').trigger('change');
+    }
+  }
+}

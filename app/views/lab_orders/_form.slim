@@ -1,0 +1,253 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title 
+        = "#{@lab_order.persisted? ? 'Edit' : 'Add'} Lab Order"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @lab_order do |f|
+      = f.input_field :patient_id, as: :hidden, class: 'validate'
+      .modal-body
+        .scrollable-container
+          .content
+            .lab-orders-content
+              .patient-block
+                .row
+                  .col-lg-6.col-md-6
+                    p.title
+                      | Patient Name:
+                      sup *
+                    .row
+                      .col-lg-12
+                        .form-group
+                          .input-group.input-group-green
+                            - unless @lab_order.persisted?
+                              = select_tag :lab_order_find_patient, nil, class: 'select2', data: { theme: 'labs-imaging', arrow: 'none', padding: '2-5x', font: '1x', 'font-weight': 'bold' }
+                            - else
+                              = select_tag :lab_order_find_patient, options_for_select([@lab_order.patient.full_name]), class: 'select2', data: { theme: 'labs-imaging', arrow: 'none', padding: '2-5x', font: '1x', 'font-weight': 'bold' }
+                            span.input-group-addon.input-group-addon-search.lab-order-find-patient-btn
+                  .col-lg-6.col-md-6
+                    .row
+                      .col-lg-3.col-md-3
+                        p.title
+                          | Sex:
+                          sup *
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = text_field_tag :lab_order_patient_sex, "#{@lab_order.patient.gender if @lab_order.persisted?}", disabled: true, class: 'form-control form-control-green form-control-bold'
+                      .col-lg-3.col-md-3
+                        p.title
+                          | Age:
+                          sup *
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = text_field_tag :lab_order_patient_age, "#{@lab_order.patient.age if @lab_order.persisted?}", disabled: true, class: 'form-control form-control-green form-control-bold'
+                      .col-lg-6.col-md-6
+                        p.title
+                          | Date of birth:
+                          sup *
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = text_field_tag :lab_order_patient_date_of_birth, "#{@lab_order.patient.birth_date if @lab_order.persisted?}", disabled: true, class: 'form-control form-control-green date-picker form-control-bold'
+                .row.row-lab-order
+                  .collapse.fade#primary_phone_container class="#{@lab_order.persisted? ? 'col-lg-6 col-md-6' : 'col-lg-12'}" class="#{'in' if @lab_order.persisted?}"
+                    .row
+                      .col-lg-6.col-md-6
+                        .form-group
+                          = text_field_tag :lab_order_patient_primary_phone, "#{@lab_order.patient.primary_phone if @lab_order.persisted?}", disabled: true, class: 'input-phone-full'
+                  - if @lab_order.persisted?
+                    .col-lg-6.col-md-6
+                      .row
+                        .col-lg-6.col-md-6
+                          p.title Lab Order #:
+                        .col-lg-6.col-md-6
+                          .form-group
+                            = f.input_field :order_num, readonly: true, class: 'form-control form-control-green'
+              .order-block
+                .row
+                  .col-lg-8.col-md-8
+                    .row
+                      .col-lg-4.col-md-4
+                        p.title
+                          | Order Type:
+                          sup *
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = f.input_field :order_type, as: :select, collection: @order_types, selected: @lab_order.persisted? ? @lab_order.order_type : 0, class: 'select2', data: { placeholder: 'Please Select', theme: 'labs-imaging', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: true
+                      .col-lg-4.col-md-4
+                        p.title
+                          | Lab Name:
+                          sup *
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = f.input_field :lab_name, as: :select, collection: @lab_order_names, selected: @lab_order.persisted? ? @lab_order.lab_name : 0, class: 'select2', data: { placeholder: 'Please Select', theme: 'labs-imaging', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: true
+                      .col-lg-4.col-md-4
+                        p.title
+                          | Status:
+                          sup *
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = f.input_field :status, as: :select, collection: @statuses, selected: @lab_order.persisted? ? @lab_order.status : 0, class: 'select2', data: { placeholder: 'Please Select', theme: 'labs-imaging', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: true
+                  - if @lab_order.persisted?
+                    .col-lg-4.col-md-4
+                      p.title Created:
+                      .row
+                        .col-lg-12
+                          .form-group
+                            = f.input_field :created_at, value: @lab_order.created_at.to_date.to_s(:frontend_date), disabled: true, class: 'form-control form-control-green'
+                  - else
+                    .col-lg-4.col-md-4
+                      p.title
+                        | Schedule Date:
+                        sup *
+                      .row
+                        .col-lg-12
+                          .form-group
+                            .input-group.input-group-green
+                              = f.input_field :schedule_at_date, class: 'form-control date-picker'
+                              span.input-group-addon.input-group-addon-calendar
+                .row
+                  .col-lg-8.col-md-8
+                    .row
+                      .col-lg-4.col-md-4
+                        p.title
+                          | Ordering Physician:
+                          sup *
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = f.input_field :ordering_physician, collection: @ordering_physicians, selected: @lab_order.persisted? ? @lab_order.ordering_physician : 0, class: 'select2', data: { placeholder: 'Please Select', theme: 'labs-imaging', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: true
+                      .col-lg-4.col-md-4
+                        p.title
+                          | Ordering Facility:
+                          sup *
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = f.input_field :ordering_facility, collection: @ordering_facilities, selected: @lab_order.persisted? ? @lab_order.ordering_facility : 0, class: 'select2', data: { placeholder: 'Please Select', theme: 'labs-imaging', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: true
+                      .col-lg-4.col-md-4
+                        p.title 
+                          | Lab Status:
+                          sup *
+                        .row
+                          .col-lg-12
+                            .form-group
+                              = f.input_field :lab_status, collection: @lab_order_statuses, selected: @lab_order.persisted? ? @lab_order.lab_status : 0, class: 'select2', data: { placeholder: 'Please Select', theme: 'labs-imaging', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: true
+                  - if @lab_order.persisted?
+                    .col-lg-4.col-md-4
+                      p.title
+                        | Schedule Date:
+                        sup *
+                      .row
+                        .col-lg-12
+                          .form-group
+                            .input-group.input-group-green
+                              = f.input_field :schedule_at_date, class: 'form-control date-picker'
+                              span.input-group-addon.input-group-addon-calendar
+                  - else
+                    .col-lg-4.col-md-4
+                      p.title Received Date:
+                      .row
+                        .col-lg-12
+                          .form-group
+                            .input-group.input-group-green
+                              = f.input_field :received_at_date, class: 'form-control date-picker'
+                              span.input-group-addon.input-group-addon-calendar
+                - if @lab_order.persisted?
+                  .row
+                    .col-lg-4.col-md-4
+                      p.title Received Date:
+                      .row
+                        .col-lg-12
+                          .form-group
+                            .input-group.input-group-green
+                              = f.input_field :received_at_date, class: 'form-control date-picker'
+                              span.input-group-addon.input-group-addon-calendar
+              .tests-block
+                .row
+                  .col-lg-12
+                    .form-group
+                      .panel.panel-tests
+                        .panel-heading
+                          p.title
+                            | Tests Ordered (mimimum one test order is required)
+                          .controls
+                            = link_to '', '#', class: 'icon icon-circle icon-sm icon-ic-plus', id: 'tests_add'
+                            = link_to '', '#', class: 'icon icon-circle icon-sm icon-ic-minus', id: 'tests_remove'
+                        .panel-body
+                          .table-responsive
+                            table.table
+                              thead
+                                tr
+                                  td
+                                    p Code
+                                  td colspan="2"
+                                    p Test
+                              tbody#tests_container data-count="#{@test_orders.present? && @test_orders.any? ? @test_orders.length : 1}"
+                                - if @test_orders.present? && @test_orders.any?
+                                  - @test_orders.each_with_index do |test_order, i|
+                                    = f.simple_fields_for "test_orders[edit][#{test_order.id}]", test_order do |t|
+                                      tr data-destroy-url="#{destroy_test_order_lab_order_path(@lab_order, test_order_id: test_order.id)}" data-number="#{i+1}"
+                                        = t.input_field :id, as: :hidden
+                                        td
+                                          = t.input_field :code, class: 'form-control form-control-green test-order-code'
+                                        td
+                                          = t.input_field :test, class: 'form-control form-control-green test-order-test'
+                                - else
+                                  tr
+                                    td
+                                      = text_field_tag :test_order_code_1, '', id: 'lab_test_orders_new_1__code', name: 'lab_order[test_orders[new][1]][code]', class: 'form-control form-control-green test-order-code'
+                                    td
+                                      = text_field_tag :test_order_test_1, '', id: 'lab_test_orders_new_1__test', name: 'lab_order[test_orders[new][1]][test]', class: 'form-control form-control-green test-order-test'
+              - if @lab_order.persisted? && @lab_order.lab_result.present?
+                .row.results-block.collapse.fade.in
+                  .col-lg-2.col-md-2
+                    .form-group
+                      p.title Results:
+                  .col-lg-10.col-md-10
+                    .form-group
+                      = link_to 'Click to View', edit_lab_result_path(@lab_order.lab_result), id: 'patient_show_images', class: 'btn-modal', data: { target: '#modal-lab-results' }, remote: true
+              - else
+                - if @lab_results.present?
+                  .row
+                    .col-lg-12
+                      .form-group
+                        = select_tag :lab_result_id, options_for_select(@lab_results), { class: 'select2', data: { placeholder: 'Lab result', theme: 'green-dark', arrow: '1x', padding: '3x', font: '2x' } }
+              .row
+                .col-lg-12
+                  p.title Notes:
+                  .row
+                    .col-lg-12
+                      .form-group
+                        = f.input_field :notes, as: :text, class: 'form-control form-control-green'
+            .row
+              .col-lg-12
+                .form-group
+                  .panel.panel-attachments#attachment_container
+                    = f.simple_fields_for 'attachments' do |a|
+                      = a.file_field :file_name, multipart: true, style: 'display: none'
+                    .panel-heading
+                      p.title Attachments:
+                      = link_to '#', id: 'add_attachment', class: 'btn-small', data: { num: "#{(@lab_order.persisted? && @lab_order.all_attachments.any?) ? @lab_order.all_attachments.length : 0}" }
+                        i.fa.fa-plus
+                    .panel-body.collapse.fade class="#{'in' if @lab_order.persisted? && @lab_order.all_attachments.any?}"
+                      ul
+                        - if @lab_order.persisted? && @lab_order.all_attachments.any?
+                          - @lab_order.all_attachments.each_with_index do |attachment, index|
+                            li
+                              p.attachment
+                                span.separator -
+                                span.title href="#"
+                                  = attachment.basename
+                                = link_to '', file_path(attachment, lab_order_id: @lab_order.id, model: :LabOrder), method: :delete, class: 'icon icon-sm icon-circle icon-ic-delete pull-right attachment-delete', remote: true
+      .modal-footer
+        .controls
+          = f.submit "#{@lab_order.persisted? ? 'Save' : 'Add'}", class: 'btn btn-default btn-padding-lg'
+          a.btn.btn-default.btn-padding-lg.disabled Sign
+          a.btn.btn-default.btn-padding-lg.disabled Print

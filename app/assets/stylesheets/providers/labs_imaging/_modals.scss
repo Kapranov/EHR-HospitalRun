@@ -1,0 +1,655 @@
+#modal-lab-order,
+#modal-image-order {
+  .modal-dialog,
+  .modal-dialog, .modal-content {
+    max-width: 870px;
+  }
+  .modal-dialog {
+    .modal-content {
+      .modal-body {
+        padding: 0 0 10px 0;
+        .content {
+          padding: 0 15px;
+        }
+        .slimScrollDiv {
+          padding-right: 30px;
+        }
+        .form-group {
+          margin-bottom: 15px;
+        }
+        .lab-orders-content,
+        .image-orders-content {
+          .input-group {
+            .input-group-addon {
+              &.input-group-addon-search {
+                width: 45px;
+              }
+              &.input-group-addon-calendar {
+                width: 57px;
+              }
+            }
+          }
+          .title {
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: $graytextdark;
+          }
+          .form-control {
+            padding-left: 15px;
+            padding-right: 15px;
+          }
+          textarea.form-control {
+            height: 150px;
+            resize: none;
+          }
+          .patient-block {
+            background-color: $greenlighter;
+            margin: 0 -15px 15px -15px;
+            padding: 15px 15px 0 15px;
+            .row-lab-order,
+            .row-image-order {
+              .input-phone-full {
+                margin: 10px 0;
+                color: $graytextdark;
+                background: transparent;
+                border: 0;
+                font-size: 18px;
+                font-family: 'SF UI Text Bold';
+              }
+              .title {
+                margin-bottom: 0;
+                padding: 10px 0;
+                font-size: 18px;
+                font-family: 'SF UI Text Bold';
+              }
+            }
+          }
+          .tests-block {
+            .panel-tests {
+              margin: 0 -15px;
+              border: 1px solid $green;
+              border-radius: 3px 3px 0 0;
+              .panel-heading {
+                padding: 14px 100px 14px 20px;
+                background-color: $green;
+                border-radius: 0;
+                .title {
+                  color: white;
+                  font-size: 15px;
+                  margin: 0;
+                }
+                .controls {
+                  margin: -5px;
+                  position: absolute;
+                  right: 20px;
+                  top: 13px;
+                  .icon {
+                    display: inline-block;
+                    margin: 5px;
+                    border: 0;
+                    &:hover,
+                    &:focus,
+                    &:active,
+                    &.active {
+                      border: 1px solid white;
+                    }
+                  }
+                }
+              }
+              .panel-body {
+                min-height: 90px;
+                padding: 0;
+                .table {
+                  margin-bottom: 0;
+                  thead {
+                    tr {
+                      td {
+                        vertical-align: middle;
+                        border-bottom: 1px solid $green;
+                        background-color: $greenlighter;
+                        &:not(:last-child) {
+                          border-right: 1px solid $green;
+                        }
+                        p {
+                          margin-bottom: 0;
+                          font-size: 15px;
+                          font-family: 'SF UI Text Bold';
+                        }
+                        &:nth-child(1) {
+                          width: 120px;
+                          padding: 13px 40px;
+                          text-align: center;
+                        }
+                        &:nth-child(2) {
+                          padding: 13px 70px;
+                        }
+                      }
+                    }
+                  }
+                  tbody {
+                    border-top: 0;
+                    tr {
+                      &:not(:first-child) {
+                        td {
+                          border-top: 1px solid $green;
+                        }
+                      }
+                      td {
+                        border-top: 0;
+                        vertical-align: middle;
+                        &.delete {
+                          width: 40px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          .results-block {
+            p, a {
+              width: auto;
+              font-size: 18px;
+              font-family: 'SF UI Text Bold';
+            }
+            p {
+              margin-bottom: 0;
+            }
+            a {
+              display: block;
+              color: $green;
+              text-decoration: underline !important;
+              transition: opacity .2s;
+              &:hover,
+              &:focus,
+              &:active {
+                opacity: .75;
+              }
+            }
+          }
+        }
+        .panel-attachments {
+          margin: 10px -15px 0 -15px;
+        }
+      }
+      .modal-footer {
+        padding: 10px 16px 24px 16px;
+        .controls {
+          margin: -7px;
+          .btn {
+            margin: 7px;
+          }
+        }
+      }
+    }
+  }
+}
+
+#modal-lab-results {
+  .modal-dialog,
+  .modal-dialog, .modal-content {
+    max-width: 870px;
+  }
+  .modal-dialog {
+    .modal-content {
+      .modal-body {
+        padding: 0 0 10px 0;
+        .content {
+          padding: 0 15px;
+        }
+        .slimScrollDiv {
+          padding-right: 30px;
+        }
+        .select2-container:not(.select2-container--open):not(.select2-container--focus):not(:hover) {
+          .select2-selection__rendered {
+            color: $graytextdark;
+          }
+        }
+        .form-group {
+          margin-bottom: 15px;
+        }
+        .row {
+          margin-left: -7px;
+          margin-right: -7px;
+          div[class*='col-'] {
+            padding-left: 7px;
+            padding-right: 7px;
+          }
+        }
+        .lab-results-content {
+          .input-group {
+            .input-group-addon {
+              &.input-group-addon-search {
+                width: 52px;
+              }
+            }
+          }
+          .title {
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: $graytextdark;
+          }
+          .form-control {
+            padding-left: 20px;
+            padding-right: 20px;
+            color: $graytextdark;
+          }
+          textarea.form-control {
+            height: 90px;
+            resize: none;
+          }
+          .patient-block {
+            background-color: $greenlighter;
+            margin: 0 -15px 15px -15px;
+            padding: 15px 15px 0 15px;
+          }
+          .highlight-blocks {
+            margin-left: -21px;
+            margin-right: -21px;
+            .highlight-block {
+              background-color: $greenlighter;
+              margin: 5px -2px;
+              padding: 5px 9px;
+              .row-content {
+                margin-bottom: -15px;
+              }
+              .input-group-time {
+                .btn-group {
+                  display: table-cell;
+                  width: 45px;
+                  border: 1px solid $green;
+                  border-left: 0;
+                  border-radius: 0 3px 3px 0;
+                  .btn {
+                    width: 45px;
+                    height: 21.5px;
+                    line-height: 22.5px;
+                    margin-left: 0;
+                    font-size: 12px;
+                    border: 0;
+                    border-radius: 0;
+                    background-color: #FAFAFA;
+                    font-family: 'SF UI Text Heavy';
+                    &:hover,
+                    &:focus,
+                    &:active,
+                    &.active {
+                      background-color: $green;
+                      color: white;
+                    }
+                  }
+                }
+              }
+            }
+            @media(min-width: 992px) {
+              .left-block {
+                .highlight-block {
+                  padding-right: 0;
+                }
+              }
+              .right-block {
+                .highlight-block {
+                  padding-left: 0;
+                }
+              }
+            }
+          }
+          .tests-block {
+            margin-top: 10px;
+            .table-responsive {
+              border-radius: 3px 3px 0 0;
+              .table {
+                margin-bottom: 0;
+                border: 1px solid $green;
+                border-radius: 3px 3px 0 0;
+                thead {
+                  tr {
+                    td {
+                      padding: 13px 28px 14px 28px;
+                      background-color: $green;
+                      vertical-align: middle;
+                      &:not(:last-child) {
+                        border-right: 1px solid white;
+                      }
+                      p {
+                        margin-bottom: 0;
+                        font-size: 16px;
+                        color: white;
+                        text-align: center;
+                      }
+                    }
+                  }
+                }
+                tbody {
+                  tr {
+                    td {
+                      padding: 13px 5px 14px 5px;
+                      border-top: 0;
+                      vertical-align: middle;
+                      &:not(:last-child) {
+                        border-right: 1px solid $green;
+                      }
+                      p {
+                        margin-bottom: 0;
+                        font-size: 16px;
+                        color: $graytextdark;
+                        text-align: center;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .modal-footer {
+        padding: 10px 16px 27px 16px;
+        .controls {
+          margin: -7px;
+          .checkbox-custom {
+            position: relative;
+            top: 10px;
+            margin: 7px;
+            label {
+              height: 26px;
+              .checkbox-label {
+                color: $green;
+                padding-left: 15px;
+                text-transform: none;
+              }
+            }
+          }
+          .btn {
+            margin: 7px;
+          }
+        }
+      }
+    }
+  }
+}
+
+#modal-lab-result-search-by-lab-order,
+#modal-image-result-search-by-image-order {
+  .modal-dialog,
+  .modal-dialog, .modal-content {
+    max-width: 460px;
+  }
+  .modal-dialog {
+    .modal-content {
+      .modal-body {
+        padding: 0;
+        padding-top: 15px;
+        .content {
+          padding-left: 15px;
+          padding-right: 15px;
+        }
+        .slimScrollDiv {
+          .content {
+            padding-right: 30px;
+          }
+        }
+        .input-group {
+          .input-group-addon {
+            .input-group-addon-search {
+              width: 50px;
+            }
+          }
+        }
+        .title {
+          margin-bottom: 5px;
+          font-size: 12px;
+          color: $graytextdark;
+        }
+        .form-control {
+          padding-left: 20px;
+          padding-right: 20px;
+          color: $graytextdark;
+        }
+      }
+      .modal-footer {
+        padding: 3px 15px 20px 15px;
+        .controls {
+          margin: -7px;
+          text-align: center;
+          .btn {
+            display: block;
+            margin: 7px;
+          }
+        }
+      }
+    }
+  }
+}
+
+#modal-lab-result-results-search-by-lab-order,
+#modal-image-result-results-search-by-image-order {
+  .modal-dialog,
+  .modal-dialog, .modal-content {
+    max-width: 750px;
+  }
+  .modal-dialog {
+    .modal-content {
+      .modal-body {
+        padding: 0;
+        .content {
+          padding: 0;
+        }
+        .slimScrollDiv .content {
+          padding-right: 30px;
+        }
+        table {
+          margin-bottom: 0;
+          thead {
+            tr {
+              td {
+                padding: 15px;
+                border-top: 1px solid white;
+                background-color: $greenlighter2;
+                text-align: center;
+                p {
+                  color: $green;
+                  font-size: 16px;
+                  margin-bottom: 0;
+                }
+              }
+            }
+          }
+          tbody {
+            tr {
+              td {
+                border-top: 0;
+                padding: 15px;
+                text-align: center;
+                &.controls {
+                  padding-top: 5px;
+                  padding-bottom: 5px;
+                  .btn {
+                    height: 40px;
+                    line-height: 40px;
+                  }
+                }
+                p {
+                  color: $graytextdark;
+                  font-size: 15px;
+                  margin-bottom: 0;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#modal-image-results {
+  .modal-dialog,
+  .modal-dialog, .modal-content {
+    max-width: 945px;
+  }
+  .modal-dialog {
+    .modal-content {
+      .modal-body {
+        padding: 0;
+        .content {
+          padding: 0 15px;
+        }
+        .slimScrollDiv .content {
+          padding-right: 30px;
+          @media(max-width: 992px) {
+            .left-block {
+              .top-block {
+                margin-right: 0;
+              }
+            }
+          }
+        }
+        form {
+          height: 100%;
+        }
+        .form-group {
+          margin-bottom: 15px;
+        }
+        .form-control {
+          padding-left: 15px;
+          padding-right: 15px;
+        }
+        .title {
+          margin-bottom: 5px;
+          font-size: 12px;
+          color: $graytextdark;
+        }
+        .image {
+          background-size: cover;
+          background-repeat: no-repeat;
+        }
+        .block-container {
+          @media(min-width: 992px) {
+            display: flex;
+          }
+          .left-block {
+            .top-block {
+              margin-left: -15px;
+              margin-right: -15px;
+              background-color: $greenlighter;
+              border-bottom: 1px solid $green;
+              .image-thumb {
+                width: auto;
+                max-width: 480px;
+                height: 350px;
+                margin: 0 auto -1px auto;
+                .icon-ic-image-fullscreen {
+                  position: absolute;
+                  top: 324px;
+                  right: 2px;
+                  z-index: 3;
+                }
+              }
+            }
+            .content-block {
+              height: calc(100% - 87px);
+              padding-top: 10px;
+              .schedule-container {
+                margin-left: -5px;
+                margin-right: -5px;
+                div[class*='col-'] {
+                  padding-left: 5px;
+                  padding-right: 5px;
+                }
+              }
+            }
+            .top-block.in + .content-block {
+              height: calc(100% - 437px);
+            }
+            .controls-block {
+              .controls {
+                padding-top: 10px;
+                padding-bottom: 25px;
+                margin: 0 -7px -7px -7px;
+                text-align: right;
+                .checkbox-custom {
+                  position: relative;
+                  top: 10px;
+                  left: 5px;
+                  label {
+                    height: 25px;
+                    .checkbox-label {
+                      font-size: 16px;
+                      padding-left: 15px;
+                      text-transform: none;
+                      color: $green;
+                    }
+                  }
+                }
+                .checkbox-custom,
+                .btn,
+                .select2-container {
+                  display: inline-block;
+                  margin: 7px;
+                }
+              }
+            }
+          }
+          .right-block {
+            padding: 15px 0;
+            background-color: $greenlighter;
+            @media(min-width: 992px) {
+              border-left: 1px solid $green;
+            }
+            @media(max-width: 992px) {
+              border-top: 1px solid $green;
+              margin-top: 20px;
+            }
+            .btn {
+              margin: 0 auto;
+            }
+            .image {
+              display: block;
+              width: auto;
+              max-width: 234px;
+              height: 150px;
+              margin: 0 auto 20px auto;
+              transition: opacity .2s;
+              &.btn {
+                line-height: 150px;
+                &.btn-default {
+                  .title {
+                    font-size: 16px;
+                    color: $green;
+                  }
+                  &:hover,
+                  &:focus,
+                  &:active,
+                  &.active {
+                    .title {
+                      color: white;
+                    }
+                  }
+                }
+                .icon-ic-delete {
+                  margin-top: -140px;
+                }
+              }
+              .icon-ic-delete {
+                position: absolute;
+                margin-left: 198px;
+                margin-top: 10px;
+              }
+              &:last-child {
+                margin-bottom: 0;
+              }
+              &:hover,
+              &:focus,
+              &:active,
+              &.active {
+                opacity: .75;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

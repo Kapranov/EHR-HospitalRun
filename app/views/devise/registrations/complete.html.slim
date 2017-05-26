@@ -1,0 +1,93 @@
+#signup-wrapper
+  #signup-index.fade.in
+    .authorization-signup-wrapper
+      .authorization-top
+        .string
+          .string-top
+            .image-center
+              = image_tag 'ehr.svg', width: 232, height: 88, alt: 'EHR1 Logo'
+          .container
+            .string-top-container
+              = link_to root_path, class: 'string-top-home-link'
+                = image_tag 'num-top.svg', width: 146, height: 248, alt: 'EHR1 One Num Logo'
+      .authorization-content.authorization-steps
+        .content
+          .container
+            .row
+              #collapse-parent
+                #signup-complete.col-lg-12.left-block.collapse.fade.in arix-expanded="true" data-target="#complete"
+                  .row
+                    .col-lg-8.col-md-8.col-sm-8.col-lg-offset-2.col-md-offset-2.col-sm-offset-2
+                      p THANK YOU FOR REGISTERING!
+                      p
+                        | Your account has been created! Please check your mail for an activation link.
+                        br
+                        | We will contact you shortly to manually confirm information you’ve entered. 
+                        br
+                        br
+                        | While waiting for our call, please scan the QR code below to install our two-factor authentication application!
+                  .row
+                    .col-lg-12
+                      .services
+                        a.google-play href="#{Rails.application.secrets.qrcode_google_play}"
+                          = raw @qr_google_play.as_html
+                        a.app-store href="#{Rails.application.secrets.qrcode_app_store}"
+                          = raw @qr_app_store.as_html
+              .col-lg-2.md-hidden.sm-hidden.xs-hidden.right-block
+                .category-buttons.hidden-md.hidden-sm.hidden-xs
+                  #personalinfo.button-cat
+                    .item-1.performed
+                      .dots-container
+                        span.dots
+                          span
+                          span
+                          span
+                      .performed-container
+                        span.performed-icon
+                      span.title
+                        p 
+                          | PERSONAL
+                          br
+                          | INFO
+                  #contactinfo.button-cat
+                    .item-2.performed
+                      .dots-container
+                        span.dots
+                          span
+                          span
+                          span
+                      .performed-container
+                        span.performed-icon
+                      span.title
+                        p 
+                          | CONTACT
+                          br
+                          | INFO
+                  #additionalinfo.button-cat
+                    .item-3.performed
+                      .dots-container
+                        span.dots
+                          span
+                          span
+                          span
+                      .performed-container
+                        span.performed-icon
+                      span.title
+                        p 
+                          | ADDITIONAL
+                          br
+                          | INFO
+                  #complete.button-cat
+                    .item-4.performed
+                      .dots-container
+                        span.dots
+                          span
+                          span
+                          span
+                      .performed-container
+                        span.performed-icon
+                      span.title
+                        p 
+                          | SIGN UP
+                          br
+                          | COMPLETE

@@ -1,0 +1,93 @@
+.reports-content
+  .content
+    .container-fluid.content-container
+      .controls.top-block
+        .row.row-controls
+          .col-lg-4.col-md-5
+            .row
+              .col-lg-3.col-md-3
+                .form-group
+                  p.title Category:
+              .col-lg-9.col-md-9
+                .form-group
+                  = select_tag :category, '', class: 'select2', readonly: true, data: { placeholder: 'Select One', theme: 'labs-imaging', arrow: '2x', padding: '1-5x', font: '1x' }, include_blank: true
+          .col-lg-3.col-md-3
+            .row
+              .col-lg-3.col-md-3
+                .form-group
+                  p.title Report:
+              .col-lg-9.col-md-9
+                .form-group
+                  = select_tag :report, '', class: 'select2', readonly: true, data: { placeholder: '', theme: 'labs-imaging', arrow: '2x', padding: '1-5x', font: '1x' }, include_blank: true
+          .col-lg-5.col-md-4
+            .row
+              .col-lg-9.col-md-6
+                .form-group.pull-right
+                  = link_to 'New Report', criteria_reports_path, class: 'btn btn-default btn-padding-lg'
+              .col-lg-3.col-md-6
+                .form-group
+                  = select_tag :print, options_for_select([['Export to CSV', 0], ['Print', 1], ['Clear Criteria', 2]]), class: 'select2', readonly: true, data: { placeholder: 'Actions', theme: 'labs-imaging', arrow: '2x', padding: '1-5x', font: '1x' }, include_blank: true
+      .center-block.recent-block
+        .row-main
+          .row
+            .col-lg-12
+              .form-group
+                p.title Recent Reports
+      .content-block
+        .row
+          .col-lg-12
+            .table-responsive
+              table.table
+                thead
+                  tr
+                    td Select
+                    td Category
+                    td Report
+                    td Created
+                    td Created By
+                    td.controls
+                tbody
+                  - if @reports.present? && @reports.any?
+                    - @reports.each_with_index do |report, i|
+                      tr
+                        td
+                          .checkbox-custom.checkbox-custom-green
+                            = check_box_tag "report_select_#{i}", '', false, class: 'checkbox' 
+                            label for="report_select_#{i}"
+                              span.checkbox-icon-container
+                                span.checkbox-icon.checkbox-icon-green
+                        td
+                          = report.category
+                        td
+                          = report.list
+                        td
+                          = "#{report.created_at_date} #{report.created_at_time}"
+                        td
+                          = report.provider.try(:full_name)
+                        td.controls
+                          = link_to 'Edit', edit_report_path(report), class: 'btn btn-default btn-padding-md'
+                  - else
+                    tr.title-empty
+                      td colspan="6" No Reports Found
+      - if @reports.present? && @reports.any? && @reports.paginate
+        .controls.bottom-block
+          .row
+            .col-lg-6.col-md-6.col-sm-6.col-xs-4.left-block
+              p Showing #{ params[:page].to_i == 0 || params[:page].to_i == 1 ? @reports.count : @reports.count + ((params[:page].to_i - 1) * @reports.per_page) } of #{@reports.total_entries}
+            .col-lg-6.col-md-6.col-sm-6.col-xs-8.right-block
+              = will_paginate @reports, renderer: BootstrapPagination::Rails, previous_label: I18n.t('previous_label'), next_label: I18n.t('next_label')
+/ = link_to 'New report', criteria_reports_path
+/ - if @reports.any?
+/   table
+/     - @reports.each do |report|
+/       tr
+/         td
+/           = report.category
+/         td
+/           = report.list
+/         td
+/           = report.created_at
+/         td
+/           = report.provider.try(:full_name)
+/         td
+/           = link_to 'Edit', edit_report_path(report)

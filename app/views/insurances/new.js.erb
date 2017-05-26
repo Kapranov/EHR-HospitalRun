@@ -1,0 +1,132 @@
+$("#modal-patient-add-insurance").html("<%= escape_javascript(render 'new') %>")
+$("#modal-patient-add-insurance").modal("show");
+$("#modal-patient-add-payer").modal("hide");
+
+initModalFadeInOut('#modal-patient-add-insurance');
+initPickers('#modal-patient-add-insurance');
+initSelect2('#modal-patient-add-insurance');
+
+$('#patients_insurance_copay_type').change(function(e) {
+  $('#patients_insurance_copay_amount').attr('placeholder', $('#patients_insurance_copay_type option:selected').first().text().trim())
+});
+
+$('#patients_add_insurance_same_as_guarantor').change(function(){
+  var is_as_guarantor = $(this).is(':checked');
+  var FillSubscriberForm = function(guarantor) {
+    for(var prop in guarantor) {
+      var elem = $('#insurance_subscriber_attributes_' + prop);
+      if(elem.length)
+        elem.val(guarantor[prop])
+    }
+  };
+
+  if(is_as_guarantor) {
+    $.ajax({
+      url: '<%= Rails.application.routes.url_helpers.guarantor_guarantors_path %>',
+      data: { patient_id: '<%= @patient.id %>' }
+    }).done(function(guarantor) {
+      FillSubscriberForm(guarantor);
+    });
+  }
+});
+
+FindPayersController = function() {
+  var input, input_id, button, link;
+
+  this.initialize = function(_input, _input_id, _button, _link) {
+    input = $(_input)
+    input_id = $(_input_id);
+    button = $(_button);
+    link = _link;
+    
+    input.select2({
+      width: '100%',
+      placeholder: 'Payer Name',
+      ajax: {
+        url: link,
+        processResults: processResults,
+        data: function (params) {
+          return {
+            part: params.term,
+            patient_id: '<%= @patient.id %>'
+          };
+        },
+        cache: true
+      },
+      escapeMarkup: function (markup) { return markup; },
+      minimumInputLength: 1,
+      templateResult: templateResult,
+      templateSelection: templateSelection
+    });
+
+    button.click(function(e) {
+      input.select2('open');
+    });
+  }
+
+  function processResults(data, params) {
+    console.log(data);
+    return {
+      results: data
+    };
+  }
+
+  function templateResult(payer) {
+    if (payer.empty) {
+      input.html('<option></option>');
+      return '<p id="add_new_payer_container" style="margin: 0;"><p style="margin: 0; font-family: SF UI Text Bold;">Not Found </p><p style="margin: 0;">Click this Message to Add New Payer</span></p>'
+    }
+    if (payer.loading) return payer.text;
+    return '<span>'+payer.full_name+'</span>';
+  }
+
+  function templateSelection(payer) {
+    if(payer.full_name) {
+      input_id.val(payer['id']).trigger('change');
+      return payer.full_name;
+    }
+    else {
+      if(payer.empty) {
+        $('#modal-patient-add-payer').on('show.bs.modal', function() {
+          modalBackward('#modal-patient-add-insurance');
+          modalForward('#modal-patient-add-payer');
+        });
+        $('#modal-patient-add-payer').on('hidden.bs.modal', function() {
+          modalForward('#modal-patient-add-insurance');
+        });
+        $.ajax({
+          url: '<%= Rails.application.routes.url_helpers.new_payer_path %>',
+          data: { patient_id: '<%= @patient.id %>' }
+        });
+        payer.text = 'Payer Name';
+      }
+      return payer.text;
+    }
+  }
+};
+
+var findPayersController = new FindPayersController();
+findPayersController.initialize(
+  '#find_payers',
+  '#insurance_payer_id',
+  '#find_payers_button',
+  '<%= Rails.application.routes.url_helpers.payers_payers_path %>'
+);
+
+var zipcodeEmployerController = new ZipcodeController();
+zipcodeEmployerController.initialize(
+  '#insurance_employer_street_address',
+  '#insurance_employer_city',
+  '#insurance_employer_state',
+  '#insurance_employer_zip',
+  false
+);
+
+var zipcodeSubscriberController = new ZipcodeController();
+zipcodeSubscriberController.initialize(
+  '#insurance_subscriber_street_address',
+  '#insurance_subscriber_city',
+  '#insurance_subscriber_state',
+  '#insurance_subscriber_zip',
+  false
+);

@@ -1,0 +1,67 @@
+.row-main
+  = simple_form_for @report do |r|
+    = r.simple_fields_for :query, nil do |f|
+      .row
+        .col-lg-2.col-md-3
+          .form-group
+            = r.input_field :criteria, as: :select, collection: @criterias, id: 'criteria', class: 'select2', data: { placeholder: 'Select Criteria', theme: 'green-lighter', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: true
+        .col-lg-5.col-md-6
+          .row
+            .col-lg-5.col-md-5
+              .form-group
+                = select_tag :contains, options_for_select([['Contains', 0]]), selected: 0, class: 'select2', data: { theme: 'green-lighter', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: false
+            .col-lg-7.col-md-7
+              .form-group
+                = f.input_field '', placeholder: 'Enter Rx code or keyword', value: @report.query[0], class: 'form-control form-control-green'
+      .row
+        .col-lg-4
+          .row
+            .col-lg-6.col-md-6
+              .form-group
+                .input-group.input-group-green
+                  = f.input_field '', placeholder: 'Start Date', value: @report.query[1], class: 'form-control date-picker'
+                  span.input-group-addon.input-group-addon-calendar
+                span.divider
+                  | -
+            .col-lg-6.col-md-6
+              .form-group
+                .input-group.input-group-green
+                  = f.input_field '', placeholder: 'Stop Date', value: @report.query[2], class: 'form-control date-picker'
+                  span.input-group-addon.input-group-addon-calendar
+        .col-lg-4
+          .row
+            .col-lg-6.col-md-6
+              .form-group
+                = f.input_field '', as: :select, collection: Patient.diagnosis_criterias.values, selected: @report.query[3], class: 'select2', data: { placeholder: 'Select Criteria', theme: 'green-lighter', arrow: '2x', padding: '2-5x', font: '1x' }, include_blank: true
+                span.divider
+                  | :
+            .col-lg-6.col-md-6
+              .form-group
+                .input-group.input-group-green
+                  = f.input_field '', value: @report.query[4], placeholder: 'mm/dd/yyyy', class: 'form-control date-picker'
+                  span.input-group-addon.input-group-addon-calendar
+        - if @report.query[3] == Patient.diagnosis_criterias[:between]
+          .col-lg-2
+            .form-group
+              .input-group.input-group-green
+              = f.input_field '', value: @report.query[5], placeholder: 'mm/dd/yyyy', class: 'form-control date-picker'
+              span.input-group-addon.input-group-addon-calendar
+        .col-lg-2.col-md-12 class="#{'col-lg-offset-2' unless @report.query[3] == Patient.diagnosis_criterias[:between] }"
+          .form-group.pull-right
+            = r.submit 'Filter', class: 'btn btn-default btn-padding-md'
+/ = simple_form_for @report do |r|
+/   = r.input :criteria, as: :select, collection: @criterias, include_blank: false, input_html: { id: 'criteria' }
+/   label Contains
+/   = r.simple_fields_for :query, nil do |f|
+/     = f.input '', input_html: { placeholder: 'Enter Rx code or keyword', value: @report.query[0] }
+/     br
+/     = f.input '', input_html: { placeholder: 'Start Date', value: @report.query[1] }
+/     = f.input '', input_html: { placeholder: 'Stop Date',  value: @report.query[2] }
+/     br
+/     = f.input '', as: :select, collection: Patient.diagnosis_criterias.values, selected: @report.query[3], include_blank: false
+/     = f.input '', input_html: { placeholder: 'mm/dd/yyyy', value: @report.query[4] }
+/     - if @report.query[3] == Patient.diagnosis_criterias[:between]
+/       = f.input '', input_html: { placeholder: 'mm/dd/yyyy', value: @report.query[5] }
+/     br
+/     = r.submit 'Filter'
+/     = r.submit 'Import CSV', name: 'import'

@@ -1,0 +1,18 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13.68 12.37">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #201600;
+        stroke-linecap: round;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <title>Untitled-2</title>
+  <g id="Checkbox">
+    <line class="cls-1" x1="1" y1="8.29" x2="4" y2="11.37"/>
+    <line class="cls-1" x1="12.68" y1="1" x2="4" y2="11.37"/>
+  </g>
+</svg>

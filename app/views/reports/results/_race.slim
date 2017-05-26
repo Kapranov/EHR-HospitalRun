@@ -1,0 +1,37 @@
+- if @patients.present? && @patients.any?
+  .row
+    .col-lg-12
+      .table-responsive
+        table.table
+          thead
+            tr
+              th First
+              th Last
+              th Pt ID
+              th DOB
+              th Age
+              th Sex
+              th Preferred Contact
+              th Race
+              th Added
+          tbody
+            - @patients.each do |patient|
+              tr
+                td
+                  = patient.first_name
+                td
+                  = patient.last_name
+                td
+                  = patient.id
+                td
+                  = patient.birth.try(:strftime, Date::DATE_FORMATS[:dosespot])
+                td
+                  = patient.age
+                td
+                  = patient.gender
+                td
+                  = patient.preferred_contact_value
+                td
+                  = patient.race
+                td
+                  = patient.created_at.strftime(Date::DATE_FORMATS[:dosespot])

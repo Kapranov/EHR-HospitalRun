@@ -1,0 +1,37 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title Confirm Reschedule?
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @calendar, html: { autocomplete: 'off' }, url: reschedule_calendars_path do |c|
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-12
+                .form-group
+                  .input-group
+                    span.input-group-addon Old appointment date and time:
+                    = text_field_tag :old_show_start_time, @calendar.start_time.strftime('%B %d, %Y - %I:%M %P'), class: 'form-control', readonly: true
+            .row
+              .col-lg-12
+                .form-group
+                  = hidden_field_tag :id, @calendar.id
+                  = hidden_field_tag :days, @days
+                  .input-group
+                    span.input-group-addon New appointment date and time:
+                    = text_field_tag :new_show_start_time, @start_time.strftime('%B %d, %Y - %I:%M %P'), class: 'form-control', readonly: true
+            .row
+              .col-lg-12
+                .form-group
+                  .checkbox-custom
+                    = check_box_tag :reschedule, '', true, class: 'checkbox'
+                    label for="reschedule"
+                      span.checkbox-icon-container
+                        span.checkbox-icon
+                      span.checkbox-label Send SMS notification to patient with new date and time?
+      .modal-footer
+        .controls
+          = c.submit 'Reschedule', class: 'btn btn-default'
+          a.btn.btn-default.btn-padding-sm data-dismiss="modal" Cancel

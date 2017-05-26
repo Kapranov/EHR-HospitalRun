@@ -1,0 +1,81 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header.modal-header-md
+      .row
+        .col-xs-4
+          p.title Frequently Used Rx
+        .col-xs-8
+          .row
+            p.title
+              | Record Medication (Rx)
+    = render_messages
+    = simple_form_for @medication, html: { autocomplete: 'off' }, remote: true do |f|
+      .modal-body
+        .scrollable-container
+          = f.input_field :patient_id,    as: :hidden, value: @patient.id
+          = f.input_field :diagnosis_id,  as: :hidden, value: @diagnosis.id
+          .content
+            .row
+              .col-xs-4.left-block
+              .col-xs-8.right-block
+                .row
+                  .col-xs-12
+                    .form-group
+                      .input-group.input-group-search
+                        input.form-control type="text" placeholder="Search Medications" id="search-medications-input"
+                        span.input-group-addon.input-group-addon-search id="search-medications-button"
+                        .scrollable-padding-container.collapse
+                .row
+                  .col-xs-2.col-sig
+                    .form-group
+                      .container-sig
+                        p.title SIG
+                  .col-xs-10
+                    .row
+                      .col-xs-12
+                        .form-group
+                          = f.input_field :shorthand, class: 'form-control', placeholder: 'Enter shorthand'
+                    .row
+                      .col-xs-12
+                        = f.input_field :signature, as: :text, class: 'form-control', rows: 3, placeholder: 'Enter a SIG for this medication'
+                .row
+                  .col-xs-12
+                    .form-group
+                      = f.input_field :portion_id, as: :hidden
+                      .input-group.input-group-search
+                        input.form-control type="text" placeholder="Associated Dx" id="search-portion-input"
+                        span.input-group-addon.input-group-addon-search#search-portions-button
+                        ul#search-portions-list
+                .row
+                  .col-xs-8
+                    .form-group
+                      .input-group
+                        = f.input_field :start_date_date, class: 'form-control date-picker', placeholder: 'Start Date'
+                        span.input-group-addon.input-group-addon-calendar
+                  .col-xs-4
+                    .form-group
+                      a.btn.btn-default.btn-today href="#" Today
+                .row
+                  .col-xs-8
+                    .form-group
+                      .input-group
+                        = f.input_field :stop_date_date, class: 'form-control date-picker', placeholder: 'Stop Date'
+                        span.input-group-addon.input-group-addon-calendar
+                  .col-xs-4
+                    .form-group
+                      a.btn.btn-default.btn-today href="#" Today
+                .row
+                  .col-xs-8
+                    .form-group
+                      a.btn.btn-default.disabled href="#" Discontinued
+                .row
+                  .col-xs-12
+                    .form-group
+                      = f.input_field :note, as: :text, class: 'form-control', rows: 3, placeholder: 'Medication Notes'
+        .modal-footer
+          .row
+            .col-xs-4.left-block
+            .col-xs-8.right-block
+              .controls
+                = f.submit 'Save', class: 'btn btn-default btn-padding-md'
+                a.btn.btn-default.btn-padding-md href="#" data-dismiss="modal" Cancel

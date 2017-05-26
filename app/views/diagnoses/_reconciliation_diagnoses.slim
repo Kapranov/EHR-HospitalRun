@@ -1,0 +1,33 @@
+- if @exist_diagnosis.present?
+  .table-responsive
+    table.table
+      thead
+        tr
+          td Description
+          td Code
+          td Status
+          td Modified Date
+          td Code Type
+      tbody
+        tr
+          td.description
+            = @exist_diagnosis.snomed.defaultTerm
+          td
+            = @exist_diagnosis.snomed.conceptId
+          td
+            = @exist_diagnosis.snomed.active
+          td
+            = @exist_diagnosis.updated_at.strftime(Date::DATE_FORMATS[:dosespot])
+          td Snomed
+        - if @referral_diagnoses.any?
+          - @referral_diagnoses.each do |diagnosis|
+            tr
+              td.description
+                = diagnosis.snomed.defaultTerm
+              td
+                = diagnosis.snomed.conceptId
+              td
+                = diagnosis.snomed.active
+              td
+                = diagnosis.updated_at.strftime(Date::DATE_FORMATS[:dosespot])
+              td SNOMED

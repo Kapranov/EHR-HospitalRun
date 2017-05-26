@@ -1,0 +1,49 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-sm
+      p.title Add New Referral Contact
+    = render_messages
+    = simple_form_for @referral, html: { autocomplete: 'off' }, remote: true do |r|
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-4.col-md-4.col-sm-4
+                .form-group
+                  = r.input_field :normal, class: 'form-control placeholder-hide', placeholder: 'First Name'
+              .col-lg-2.col-md-2.col-sm-2
+                .form-group
+                  = r.input_field :middle_name, class: 'form-control placeholder-hide', placeholder: 'M.I.'
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  = r.input_field :last_name, class: 'form-control placeholder-hide', placeholder: 'Last Name'
+            .row
+              .col-lg-4.col-md-4.col-sm-4
+                .form-group
+                  = r.input_field :individual_npi, class: 'form-control', placeholder: 'Individual NPI'
+              .col-lg-8.col-md-8.col-sm-8
+                .form-group
+                  = r.input_field :speciality, as: :select, collection: Referral.specialities.map {|speciality| [speciality, speciality]}, selected: '', include_blank: true, class: 'select2', data: { placeholder: 'Speciality', theme: 'gray-lighter', arrow: '2x', padding: '3x', font: '1x' }
+            .row
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  .input-group.input-group-phone
+                    = r.input_field :phone_code, as: :select, collection: [], class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                    = r.input_field :phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Phone #'
+              .col-lg-6.col-md-6.col-sm-6
+                .form-group
+                  .input-group.input-group-phone
+                    = r.input_field :fax_code, as: :select, collection: [], class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                    = r.input_field :fax_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Fax #'
+            .row
+              .col-lg-12.col-md-12.col-sm-12
+                .form-group
+                  = r.input_field :email, as: :email, class: 'form-control input-email', placeholder: 'Email Address'
+            .row
+              .col-lg-12.col-md-12.col-sm-12
+                .form-group
+                  = mail_to '', 'Direct Address', class: 'btn btn-default', id: 'direct-address-button'
+      .modal-footer
+        .controls
+          = r.button :submit, 'Save Changes', class: 'btn btn-default', id: 'modal-add-referral-button'
+          a.btn.btn-default.btn-padding-sm data-dismiss="modal" Cancel

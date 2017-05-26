@@ -1,0 +1,70 @@
+- content_for :title
+  | EHR1 | Electronic Health Records - Users
+.row#users-wrapper.users-wrapper
+  .categories-container
+    ul.categories
+      li
+        = link_to admin_index_path
+          i.fa.fa-2x.fa-home
+          span Home
+      li
+        span >
+      li
+        a.active href="#" Users
+  .content
+    .panel.panel-default
+      .panel-header
+        .row
+          .col-lg-6.col-md-6.col-sm-6
+            p.title Users
+          .col-lg-6.col-md-6.col-sm-6
+            .controls
+              = link_to 'Add New User', new_admin_user_path, class: 'btn btn-default', remote: true
+      .panel-body
+        .panel.panel-default
+          .panel-header
+            p.title Pending Activation
+          .panel-body
+            .table-responsive
+              table.table.table-users
+                - if @pending.any?
+                  - @pending.each do |provider|
+                    = render 'user_li', provider: provider, main_provider_id: provider.id, main: true, paid: :paid
+                - else
+                  tbody
+                    tr
+                      td.message
+                        p Users Pending Activation Not Found
+          .panel-header
+            p.title Activated Users
+          .panel-body
+            .table-responsive
+              table.table.table-users
+                - if @active.any?
+                  - @active.each do |provider|
+                    = render 'user_li', provider: provider, main_provider_id: provider.id, main: true, paid: :paid
+                - else
+                  tbody
+                    tr
+                      td.message
+                        p Activated Users Not Found
+          .panel-header
+            p.title Paid Users
+          .panel-body
+            .table-responsive
+              table.table.table-users.table-paid-users
+                - if @paid.any?
+                  - @paid.each do |provider|
+                    = render 'user_li', provider: provider, main_provider_id: provider.id, main: true, paid: nil
+                - else
+                  tbody
+                    tr
+                      td.message
+                        p Paid Users Not Found
+#modal-admin-add-user.modal.modal-admin.animated.fadeIn
+#modal-admin-delete-user.modal.modal-admin.animated.fadeIn
+#modal-admin-deleted-user.modal.modal-admin.animated.fadeIn
+#modal-admin-activate-user.modal.modal-admin.animated.fadeIn
+#modal-admin-activated-user.modal.modal-admin.animated.fadeIn
+javascript:
+  $('.side-nav-container nav.left-nav .nav-users').addClass('active');

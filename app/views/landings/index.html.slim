@@ -1,0 +1,56 @@
+= content_for :title
+  | EHR1 | Electronic Health Records
+.landing-wrapper
+  .landing-top
+    .string
+      .string-top
+        .image-center
+          = image_tag 'ehr.svg', width: 232, height: 88, alt: 'EHR1 Logo'
+      .container
+        .string-top-container
+          = link_to root_path, class: 'string-top-home-link'
+            = image_tag 'num-top.svg', width: 146, height: 248, alt: 'EHR1 One Num Logo'
+        .main-title#main_title
+          h1 Your New EHR is just a few clicks away.
+          p Want an EHR that is easy to use, affordable, and still has all of the practice management functions you need for your busy practice? 
+          p Then you've come to the right place. With an outstanding support team ready to help get you setup, you'll be charting before you know it.
+        .select-type
+          span.select Please select the account type
+          .accounts#portal_types
+            span.provider-acc.active#provider_btn provider
+            span.patient-acc#patient_btn patient
+  .landing-content
+    .container
+      .registration
+        .col-lg-4.col-md-4.col-sm-4.block#register_container
+          .content
+            h4.title Not an EHR1 Provider yet?
+            h5.sub-title Register today!
+          = link_to 'Register now', new_user_registration_path, class: 'button-landing change-button'
+        .col-lg-4.col-md-4.col-sm-4.col-lg-offset-4.col-md-offset-4.col-sm-offset-4.block#sign_in_container
+          .content
+            h4.title Already registered?
+            h5.sub-title Sign in now
+          - if Rails.env.development?
+            = link_to 'Sign in as Admin', sign_in_admin_index_path, class: 'button-landing'
+          = link_to 'Sign in', new_user_session_path, class: 'button-landing'
+  .landing-bottom
+    .container
+      .two-factor-container
+        = image_tag 'two-factor-icon.svg', alt: 'Two Factor Authentification Icon', class: 'two-factor-icon'
+        .info
+          p For added security, we use two-factor authentication powered by Duo Technologies. You may complete the two-factor authentication through their App, available from the Google Play or App Store. If you prefer to receive a security code in a phone call or by SMS text (additional charges may apply), this can be setup during your account registration.
+        .services
+          a.google-play href="#{Rails.application.secrets.qrcode_google_play}"
+            = raw @qr_google_play.as_html
+          a.app-store href="#{Rails.application.secrets.qrcode_app_store}"
+            = raw @qr_app_store.as_html
+  .landing-footer
+    .container
+      span.app-version
+        | &#169;
+        | &nbsp;
+        = "#{Date.today.year} #{Rails.application.secrets.company_name}"
+        | &nbsp;&nbsp;
+        = "version: #{AppSetting.first.try(:version)}"
+  = any_login_here

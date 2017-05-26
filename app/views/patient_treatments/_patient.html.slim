@@ -1,0 +1,107 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header
+      .row
+        .col-lg-2.col-md-2.col-sm-2.col-xs-4
+          - if gravatar?(@patient.user)
+            = gravatar_for(@patient.user, { class: 'avatar', alt: 'avatar' })
+          - else
+            - if @patient.profile_image.present?
+              img src="#{@patient.profile_image.url}" class='avatar' alt='avatar'
+            - else
+              = image_tag 'avatar-empty.svg', size: "100", class: "avatar avatar-empty", alt: 'avatar-patient'
+        .col-lg-5.col-md-5.col-sm-5.col-xs-8
+          ul.patient-info.patient-info-main
+            li 
+              p 
+                = "#{@patient.full_name} - #{@patient.gender}"
+            - if @patient.birth.present?
+              li 
+                p
+                  = local_time(@patient.birth, '%B %e, %Y')
+                  | &nbsp;
+                  - if Time.now.year - @patient.birth.year > 0
+                    = "(#{Time.now.year - @patient.birth.year})"
+        .col-lg-5.col-md-5.col-sm-5.pull-right.hidden-xs
+          - if @patient.mobile_phone.present? || @patient.primary_phone.present?
+            ul.patient-info.patient-info-phones
+              - if @patient.mobile_phone.present?
+                li 
+                  span
+                    .phone-icon
+                      i.fa.fa-mobile.fa-lg
+                    span.input-phone-header
+                      = @patient.mobile_phone[2..-1]
+              - if @patient.primary_phone.present?
+                li 
+                  span
+                    .phone-icon
+                      i.fa.fa-phone
+                    span.input-phone-header
+                      = @patient.primary_phone[2..-1]
+    .modal-body
+      div role="tabpanel"
+        .controls-container
+          .controls data-target="#patientChartTab"
+            = link_to 'Print', '#', class: 'btn btn-default btn-print disabled'
+            = render 'nav_actions', title: 'Patient Actions'
+          .controls data-target="#patientDentalChartTab"
+            = link_to 'Print', '#', class: 'btn btn-default btn-print disabled'
+            = render 'nav_actions', title: 'Patient Actions'
+          .controls data-target="#patientPerioChartTab"
+            = link_to 'Print', '#', class: 'btn btn-default btn-print disabled'
+            = render 'nav_actions', title: 'Patient Actions'
+          .controls data-target="#patientProfileTab"
+            - if policy(Patient).update?
+              = link_to 'Authorized Rep.', representatives_path(patient_id: @patient.id), remote: true, class: 'btn btn-danger button-auth-rep btn-modal', data: { target: '#modal-patient-all-authorized-representatives' }
+              = link_to 'Save', '#', class: 'btn btn-default btn-save'
+              = link_to 'Print', '#', class: 'btn btn-default btn-print disabled'
+            = render 'nav_actions', title: 'Patient Actions'
+          .controls data-target="#patientInsuranceTab"
+            = link_to 'Save', '#', class: 'btn btn-default btn-save'
+            = link_to 'Print', '#', class: 'btn btn-default btn-print disabled'
+            = render 'nav_actions', title: 'Patient Actions'
+          .controls data-target="#patientErxTab"
+            - if policy(Patient).update?
+              = link_to 'Authorized Rep.', representatives_path(patient_id: @patient.id), remote: true, class: 'btn btn-danger button-auth-rep btn-modal', data: { target: '#modal-patient-all-authorized-representatives' }
+              = link_to 'Print', '#', class: 'btn btn-default btn-print disabled'
+          .controls data-target="#patientAmmendmentsTab"
+            - if policy(Patient).update?
+              = link_to 'Authorized Rep.', representatives_path(patient_id: @patient.id), remote: true, class: 'btn btn-danger button-auth-rep btn-modal', data: { target: '#modal-patient-all-authorized-representatives' }
+              = link_to 'Print', '#', class: 'btn btn-default btn-print disabled'
+            = render 'nav_actions', title: 'Patient Actions'
+        ul.nav.nav-tabs.nav-tabs-main.styled role="tablist"
+          - if policy(:chart).main_show?
+            li role="presentation"
+              a.tab-control aria-controls="chart" href="#patientChartTab" data-link="#{show_patient_chart_patient_treatments_path}" role="tab" Chart
+          - if policy(:chart).dental_show?
+            li role="presentation"
+              a.tab-control aria-controls="dentalchart" href="#patientDentalChartTab" data-link="#{show_patient_dental_chart_patient_treatments_path}" role="tab" Dental Chart
+          - if policy(:chart).perio_show?
+            li role="presentation"
+              a.tab-control aria-controls="periochart" href="#patientPerioChartTab" data-link="#{show_patient_perio_chart_patient_treatments_path}" role="tab" Perio Chart
+          - if policy(:chart).profile_show?
+            li role="presentation"
+              a.tab-control aria-controls="profile" href="#patientProfileTab" data-link="#{show_patient_profile_patient_treatments_path}" role="tab" Profile
+          - if policy(:chart).insurance_show?
+            li role="presentation"
+              a.tab-control aria-controls="insurance" href="#patientInsuranceTab" data-link="#{show_patient_insurance_patient_treatments_path}" role="tab" Insurance
+          li role="presentation"
+            a.tab-control aria-controls="erx" href="#patientErxTab" data-link="#{show_patient_erx_patient_treatments_path}" role="tab" eRx
+          li role="presentation"
+            a.tab-control aria-controls="ammendments" href="#patientAmmendmentsTab" data-link="#{show_patient_amendments_patient_treatments_path}" role="tab" Ammendments
+        .tab-content
+          = render_messages
+          - if policy(:chart).main_show?
+            #patientChartTab.tab-pane role="tabpanel"
+          - if policy(:chart).dental_show?
+            #patientDentalChartTab.tab-pane role="tabpanel"
+          - if policy(:chart).perio_show?
+            #patientPerioChartTab.tab-pane role="tabpanel"
+          - if policy(:chart).profile_show?
+            #patientProfileTab.tab-pane role="tabpanel"
+          - if policy(:chart).insurance_show?
+            #patientInsuranceTab.tab-pane role="tabpanel"
+          #patientErxTab.tab-pane role="tabpanel"
+          #patientAmmendmentsTab.tab-pane role="tabpanel"
+    .modal-footer

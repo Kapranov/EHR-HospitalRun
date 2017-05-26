@@ -1,0 +1,119 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title
+        = "#{@image_result.persisted? ? 'Edit' : 'Add'} Imaging Result"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    .modal-body
+      .scrollable-container
+        .content
+          = simple_form_for @image_result do |f|
+            .row.block-container
+              .col-lg-8.col-md-8.left-block
+                = f.input_field :patient_id, as: :hidden, class: 'validate'
+                .top-block.collapse.fade#top_block
+                .content-block
+                  .row
+                    .col-lg-5.col-md-5
+                      p.title Patient Name:
+                      .row
+                        .col-lg-12
+                          .form-group
+                            .input-group.input-group-green
+                              - unless @image_result.present?
+                                = select_tag :image_result_find_patient, nil, class: 'select2', data: { theme: 'labs-imaging', arrow: 'none', padding: '3x', font: '1x', 'font-weight': 'bold' }
+                              - else
+                                = select_tag :image_result_find_patient, options_for_select(["#{@image_result.patient.last_name}, #{@image_result.patient.first_name}"]), class: 'select2', data: { theme: 'labs-imaging', arrow: 'none', padding: '2-5x', font: '1x' }
+                              span.input-group-addon.input-group-addon-search#lab_result_find_patient_btn
+                    .col-lg-7.col-md-7
+                      p.title Schedule Date
+                      .row.schedule-container
+                        .col-lg-7.col-md-7
+                          .form-group
+                            .input-group.input-group-green
+                              = f.input_field :schedule_at_date, class: 'date-picker form-control'
+                              span.input-group-addon.input-group-addon-calendar
+                        .col-lg-5.col-md-5
+                          .form-group
+                            = link_to 'Today', '#', class: 'btn btn-default btn-padding-md btn-today'
+                  .row
+                    .col-lg-5.col-md-5
+                      p.title Exam:
+                      .row
+                        .col-lg-12
+                          .form-group
+                            = f.input_field :exam, class: 'form-control form-control-green'
+                    .col-lg-7.col-md-7
+                      p.title Requested By:
+                      .row
+                        .col-lg-12
+                          .form-group
+                            = f.input_field :requested_by, class: 'form-control form-control-green'
+                  .row
+                    .col-lg-12
+                      p.title History:
+                      .row
+                        .col-lg-12
+                          .form-group
+                            = f.input_field :history, class: 'form-control form-control-green'
+                  .row
+                    .col-lg-12
+                      p.title Radiopharmaceutical:
+                      .row
+                        .col-lg-12
+                          .form-group
+                            = f.input_field :radiophamaceutical, class: 'form-control form-control-green'
+                  .row
+                    .col-lg-12
+                      p.title Technique:
+                      .row
+                        .col-lg-12
+                          .form-group
+                            = f.input_field :technique, as: :text, class: 'form-control form-control-green textarea-resize-vertical'
+                  .row
+                    .col-lg-12
+                      p.title Comparison (if applicable):
+                      .row
+                        .col-lg-12
+                          .form-group
+                            = f.input_field :comparison, as: :text, class: 'form-control form-control-green textarea-resize-vertical'
+                  .row
+                    .col-lg-12
+                      p.title Findings:
+                      .row
+                        .col-lg-12
+                          .form-group
+                            = f.input_field :findings, as: :text, class: 'form-control form-control-green textarea-resize-vertical'
+                  .row
+                    .col-lg-12
+                      p.title Impression:
+                      .row
+                        .col-lg-12
+                          .form-group
+                            = f.input_field :impression, as: :text, class: 'form-control form-control-green textarea-resize-vertical'
+                .controls-block
+                  .row
+                    .col-lg-12
+                      .controls
+                        .checkbox-custom.checkbox-custom-green.pull-left.disabled
+                          = check_box_tag :image_order_reviewed, class: 'checkbox'
+                          label for="image_order_reviewed"
+                            span.checkbox-icon-container
+                              span.checkbox-icon.checkbox-icon-green
+                            span.checkbox-label Reviewed
+                        = f.submit "#{@image_result.persisted? ? 'Save' : 'Add'}", class: 'btn btn-default btn-padding-lg'
+                        = link_to 'Sign', '#', class: 'btn btn-default btn-padding-md disabled'
+                        = select_tag :image_results_export, options_for_select([]), class: 'select2', readonly: true, data: { placeholder: 'Export', theme: 'green-dark', arrow: '2x', padding: '1-5x', font: '2x',  width: 'auto' }, include_blank: true
+              .col-lg-4.col-md-4.right-block
+                #images_container
+                  .form-group
+                    = f.simple_fields_for 'images' do |a|
+                      = a.file_field :file_name, multipart: true, style: 'display: none'
+                      = link_to 'Upload Image', '#', id: 'add_attachment', data: { num: "#{(@image_result.persisted? && @image_result.all_images.any?) ? @image_result.all_images.length : 0}" }, class: 'btn btn-default btn-attachment'
+                  #images_container_list.collapse.fade class="#{'in' if @image_result.persisted? && @image_result.all_images.any?}"
+                    - if @image_result.persisted? && @image_result.all_images.any?
+                      - @image_result.all_images.each_with_index do |image, index|
+                        .form-group data-number="#{index}"
+                          = link_to '#', class: 'image btn-image', style: "background-image: url('#{image.image.url}')", data: { loaded: true, image: "#{image.image.url}" }
+                            .icon.icon-sm.icon-circle.icon-ic-delete.pull-right.disabled data-url="#{file_path(image, image_result_id: @image_result.id, model: :ImageResult)}"

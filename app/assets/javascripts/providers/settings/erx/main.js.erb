@@ -1,0 +1,33 @@
+$(document).ready(function() {
+  ErxPasswordController = function() {
+      var password, btn_show;
+
+      this.initialize = function() {
+        password = $('#clinic-key');
+        password.data('hidden', true);
+        btn_show = $('#show-key');
+        initAll();
+      }
+
+      var initAll = function() {
+        btn_show.click(function(e) {
+          e.preventDefault();
+          if(password.data('hidden')) {
+            password.attr('type', 'text');
+            password.data('hidden', false);
+            btn_show.text('Hide Key');
+          }
+          else {
+            password.attr('type', 'password');
+            password.data('hidden', true);
+            btn_show.text('Show Key');
+          }
+          btn_show.toggleClass('active');
+          password.toggleClass('input-password');
+        })
+      }
+    };
+
+    var erxPasswordController = new ErxPasswordController();
+    erxPasswordController.initialize();
+})

@@ -1,0 +1,9 @@
+- content_for :back_link do
+  = link_to 'Select your membership options', payments_shop_path, class: 'active'
+.content.membership-wrapper class="membership-#{name}-wrapper"
+  .container-fluid.content-container
+    .row-container
+      .bordered-container
+        = render 'header', name: name
+        .main-container
+          = render content

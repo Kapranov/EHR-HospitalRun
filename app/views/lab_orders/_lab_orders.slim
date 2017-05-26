@@ -1,0 +1,73 @@
+#labsImagingLabsTab.tab-pane.fade.in.active role="tabpanel"
+  .labs-content
+    .controls.top-block
+      .row
+        .col-lg-7
+          .row
+            .col-lg-4
+              .form-group
+                = select_tag :labs_filter_provider, options_for_select(@providers), class: 'select2', data: { placeholder: 'Filter By Provider', theme: 'labs-imaging', arrow: '2x', padding: '1-5x', font: '1x' }, include_blank: true
+            .col-lg-4
+              .form-group
+                = select_tag :labs_filter_type, options_for_select(@order_types), class: 'select2', data: { placeholder: 'Filter By Type', theme: 'labs-imaging', arrow: '2x', padding: '1-5x', font: '1x' }, include_blank: true
+            .col-lg-4
+              .form-group
+                = select_tag :labs_filter_status, options_for_select(@statuses), class: 'select2', data: { placeholder: 'Filter By Status', theme: 'labs-imaging', arrow: '2x', padding: '1-5x', font: '1x' }, include_blank: true
+        .col-lg-5
+          .row
+            .col-lg-9.col-md-9.col-sm-9.col-xs-7
+              .form-group
+                .input-group.input-group-green
+                  = text_field_tag :labs_filter_search, nil, class: 'form-control', placeholder: 'Search'
+                  span.input-group-addon.input-group-addon-search#labs_filter_search_btn
+            .col-lg-3.col-md-3.col-sm-3.col-xs-5.add-container
+              .form-group
+                = select_tag :labs_new_orders, options_for_select([['Order', 0], ['Results', 1]]), class: 'select2', data: { placeholder: '&#xf067', theme: 'labs-imaging', arrow: '2x', padding: '1-5x', font: '1x', 'text-align': 'center', width: '100%' }, include_blank: true
+    .bottom-block
+      .table-responsive
+        table.table
+          thead
+            tr
+              td
+                p Order #
+              td
+                p Test
+              td
+                p Patient
+              td
+                p Provider
+              td
+                p Status
+              td
+                p Lab Status
+              td
+                p Created
+          tbody
+            - if @lab_orders.present? && @lab_orders.any?
+              - @lab_orders.each do |lab|
+                tr
+                  td
+                    p
+                      = link_to lab.order_num, edit_lab_order_path(lab), class: 'btn-modal', data: { target: '#modal-lab-order' }, remote: true
+                  td
+                    p
+                      = link_to "#{lab.test_orders.present? && lab.test_orders.any? ? lab.test_orders.first.test : 'Test Codes Not Found'}", edit_lab_order_path(lab), class: 'btn-modal', data: { target: '#modal-lab-order' }, remote: true
+                  td
+                    p
+                      = "#{lab.patient.last_name}, #{lab.patient.first_name}"
+                  td
+                    p
+                      = "Dr. #{lab.provider.first_name[0]}. #{lab.provider.last_name}"
+                  td
+                    p
+                      = lab.status
+                  td
+                    p
+                      = lab.lab_status
+                  td
+                    p
+                      = lab.created_at.to_date.to_s(:frontend_date)
+            - else
+              tr
+                td colspan="7"
+                  p No labs

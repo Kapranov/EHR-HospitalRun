@@ -1,0 +1,188 @@
+$(document).ready(function() {
+  var labsImaging_ImagingOrdersController = new LabsImagingOrdersController();
+  labsImaging_ImagingOrdersController.initialize(
+    '#imaging_filter_provider',
+    '#imaging_filter_type',
+    '#imaging_filter_status',
+    '#imaging_filter_search',
+    '#imaging_filter_search_btn',
+    '#imaging_new_orders',
+    '#all_tabs_container',
+    '<%= Rails.application.routes.url_helpers.search_image_orders_path %>',
+    '<%= Rails.application.routes.url_helpers.new_image_order_path %>',
+    '<%= Rails.application.routes.url_helpers.search_by_image_order_image_results_path %>'
+  );
+
+  LabsImaging_ImagingAttachmentsController = function() {
+    var image_top_container, image_container, image_list_container, image_add_btn;
+    var modal, field_name;
+
+    this.initialize = function() {
+      modal =                 $('#modal-image-results');
+      image_top_container =   modal.find('#top_block');
+      image_container =       modal.find('#images_container');
+      image_list_container =  image_container.find('#images_container_list');
+      image_add_btn         = image_container.find('#add_attachment');
+      field_name =            'image_result[images][image_NUMBER_]';
+
+      initAll();
+      initExistingAttachments();
+    }
+
+    var initAll = function() {
+      image_add_btn.click(function() {
+        if(!image_list_container.hasClass('in'))
+          image_list_container.addClass('in');
+        var num = $(this).data('num');
+        image_list_container.append('\
+          <div class="form-group" data-number="' + num + '">\
+            <div class="attachment-container">\
+              <input type="file" name="'+field_name.replace('_NUMBER_', num)+'" id="' + field_name.replace('_NUMBER_', num).replace(/[]/g,'_') + '" multipart="true">\
+              <a href="#" class="image btn btn-default btn-image" data-loaded="false">\
+                <p class="title">Click to Choose File</p>\
+                <div class="icon icon-sm icon-circle icon-ic-delete pull-right"></div>\
+              </a>\
+            </div>\
+          </div>\
+        ');
+        initAttachmentHandlers(num);
+        $(this).data('num', num + 1);
+
+        if(typeof modal != 'undefined')
+          repositionModal(modal, false);
+      });
+    }
+
+    var removeHandler = function(e) {
+      var image = $(this);
+
+      var remove = function() {
+        image.closest('.form-group').remove();
+        image_add_btn.data('num', image_add_btn.data('num')-1);
+        if(image_list_container.find('.form-group').length == 0) {
+          image_add_btn.data('num', 0);
+          image_list_container.removeClass('in');
+        }
+        if(typeof modal != 'undefined')
+          repositionModal(modal, false);
+      }
+
+      if(image.data('url')) {
+        $.ajax({
+          url: image.data('url'),
+          type: 'delete',
+          success: function() {
+            remove();
+          }
+        })
+      }
+      else
+        remove();
+    }
+
+    var imageButtonHandler = function() {
+      if(
+        $(this).data('loaded') &&
+        $(this).data('image') &&
+        image_top_container.find('.image-thumb img').attr('src') != $(this).data('image')
+      ) {
+          image_top_container.html('');
+          image_top_container.append('\
+            <div class="image-thumb" mag-thumb="inner">\
+              <img src="' + $(this).data('image') + '" />\
+              <a href="#" class="icon icon-sm icon-ic-image-fullscreen" data-enabled="false"/>\
+            </div>\
+            <div class="image-zoom" mag-zoom="inner">\
+              <img src="' + $(this).data('image') + '" />\
+            </div>\
+          ');
+
+          var image_zoom_btn = image_top_container.find('.image-thumb .icon-ic-image-fullscreen');
+
+          var zoom_click_handler = function() {
+            var image_thumb = image_top_container.find('.image-thumb');
+            var zoom_state = image_zoom_btn.data('enabled');
+
+            if(!zoom_state) {
+              top_block_html = image_top_container.html();
+              image_thumb.mag();
+              image_zoom_btn.click(zoom_click_handler);
+              image_zoom_btn.data('enabled', true);
+              image_zoom_btn.addClass('active');
+            }
+            else {
+              if(top_block_html)
+                image_top_container.html(top_block_html);
+              image_zoom_btn = image_top_container.find('.image-thumb .icon-ic-image-fullscreen');
+              image_zoom_btn.click(zoom_click_handler);
+              image_zoom_btn.data('enabled', false);
+              image_zoom_btn.removeClass('active');
+            }
+          }
+          image_zoom_btn.click(zoom_click_handler);
+          switchTopContainerState(true);
+      }
+      else {
+        if(image_top_container.find('.image-thumb img').attr('src') != $(this).data('image') && !$(this).data('image'))
+          switchTopContainerState(false);
+        if(image_top_container.find('.image-thumb img').attr('src') == $(this).data('image'))
+          switchTopContainerState(true);
+      }
+    }
+
+    var initExistingAttachments = function() {
+      image_list_container.find('.icon-ic-delete').click(removeHandler);
+      image_list_container.find('.btn-image').hover(imageButtonHandler);
+    }
+
+    var switchTopContainerState = function(enabled) {
+      if(enabled)
+        image_top_container.addClass('in');
+      else
+        image_top_container.removeClass('in');
+      repositionModal(modal, false);
+    }
+
+    var initAttachmentHandlers = function(num) {
+      var item = image_list_container.find('.form-group[data-number="' + num + '"]');
+      var image_title = item.find('.title');
+      var image_button = item.find('.btn-image');
+      var image_input = item.find('input[type="file"]');
+      var image_remove_button = item.find('.icon-ic-delete');
+
+      var top_block_html;
+
+      image_button.click(function(e) {
+        e.preventDefault();
+        if(image_input)
+          image_input.trigger('click');
+      });
+
+      image_button.hover(imageButtonHandler);
+
+      if(image_input) {
+        image_input.change(function(e) {
+          if(image_input[0].files[0]) {
+            image_button.data('loaded', true);
+            if(image_title.length > 0)
+              image_title.remove();
+            image_button.removeClass('btn').removeClass('btn-default');
+
+            var fileReader = new FileReader();
+            fileReader.readAsDataURL(image_input[0].files[0]);
+            fileReader.onloadend = function(event) {
+              image_button.data('image', event.target.result);
+              image_button.css({
+                'background-image': 'url(' + image_button.data('image') + ')'
+              });
+            }
+          }
+          else
+            image_button.data('loaded', false);
+        });
+      }
+
+      image_remove_button.click(removeHandler);
+    }
+  }
+});

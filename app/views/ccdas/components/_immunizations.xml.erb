@@ -1,0 +1,49 @@
+<component>
+  <section>
+    <templateId root="2.16.840.1.113883.10.20.22.2.2.1"/>
+    <code code="11369-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="History of Immunizations"/>
+    <title>Immunizations</title>
+    <text>
+      <table border="1" width="95%">
+        <thead>
+          <tr>
+            <th>Vaccine</th>
+            <th>Date</th>
+            <th>Delivery Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% immunizations.each_with_index do |immunization, i| %>
+            <tr ID="immun<%= i + 1 %>">
+              <td><%= immunization.name.try(:to_s) %></td>
+              <td><%= ccda_time(immunization.administered_at) %></td>
+              <td><%= immunization.funding_source %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </text>
+    <% immunizations.each_with_index do |immunization, i| %>
+      <entry>
+        <substanceAdministration classCode="SBADM" moodCode="EVN" negationInd="true">
+          <templateId root="2.16.840.1.113883.10.20.22.4.52"/>
+          <id nullFlavor="NA"/>
+          <text>
+            <reference value="#immun<%= i + 1 %>"/>
+          </text>
+          <statusCode code="completed"/>
+          <effectiveTime <%= value_or_null_flavor(immunization.administered_at) %>/>
+          <doseQuantity value="0"/>
+          <consumable>
+            <manufacturedProduct classCode="MANU">
+              <templateId root="2.16.840.1.113883.10.20.22.4.54"/>
+              <manufacturedMaterial>
+                <code nullFlavor="NA"/>
+              </manufacturedMaterial>
+            </manufacturedProduct>
+          </consumable>
+        </substanceAdministration>
+      </entry>
+    <% end %>
+  </section>
+</component>

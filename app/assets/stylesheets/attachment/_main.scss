@@ -1,0 +1,66 @@
+@import 'modals';
+
+.panel.panel-attachments {
+  margin: 10px -20px 0 -20px;
+  border: 1px solid $green;
+  border-radius: 0;
+  background-color: rgba(65, 182, 166, .10);
+  .panel-heading {
+    min-height: 40px;
+    .title {
+      color: black;
+      font-size: 15px;
+      font-family: 'SF UI Text Bold';
+      margin: 0;
+    }
+    .btn-small {
+      width: 80px;
+      height: 30px;
+      float: right;
+      display: inline-block;
+      position: relative;
+      right: 0;
+      top: 6px;
+      margin-bottom: 12px;
+      top: -25px;
+      border-color: $green;
+      .fa {
+        font-size: 24px;
+      }
+    }
+  }
+  .panel-body {
+    padding: 20px 20px 20px 100px;
+    border-top: 1px solid $green;
+    ul {
+      list-style-type: none;
+      li {
+        min-height: 24px;
+        &:not(:last-child) {
+          margin-bottom: 5px;
+        }
+        .attachment {
+          width: 100%;
+          margin: 0;
+          p, a, .attachment-container {
+            display: inline-block;
+          }
+          span, a:not(.icon) {
+            font-size: 15px !important;
+            color: $graytextdark !important;
+          }
+          .separator {
+            margin-right: 20px;
+          }
+          .title {
+            padding: 2px 0;
+          }
+          .icon {
+            position: absolute;
+            right: 20px;
+          }
+        }
+      }
+    }
+  }
+}

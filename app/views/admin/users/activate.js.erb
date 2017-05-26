@@ -1,0 +1,7 @@
+$('#modal-admin-activate-user').html('<%= escape_javascript(render 'activate') %>');
+repositionModal($('#modal-admin-activate-user'), false);
+initModalFadeInOut('#modal-admin-activate-user');
+$('#modal-admin-activate-user').modal('show');
+
+var controlCheckingController = new ControlCheckingController();
+controlCheckingController.initialize('#modal-admin-activate-user #activate-user-checkbox', '#modal-admin-activate-user #activate-user-btn');

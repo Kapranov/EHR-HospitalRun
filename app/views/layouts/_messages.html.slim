@@ -1,0 +1,46 @@
+.modal-provider.modal.animated.fadeIn class="modal-#{type.sub('_', '-')} #{type_template == 1 ? 'modal-flash-more' : 'modal-flash' }" id="#{type_template == 1 ? 'modal-flash-more' : 'modal-flash'}"
+  .modal-dialog
+    .modal-content
+      - if type_template == 1
+        .modal-header.modal-header-md
+          p.title
+            = message
+      - if type_template != 1
+        .modal-body
+          .scrollable-container
+            .content
+              .flash-title
+                p 
+                  = message
+      .modal-footer
+        a class="btn #{type.include?('error') ? 'btn-danger' : 'btn-default'}" data-dismiss="modal" Close
+javascript:
+  $(document).ready(function() {
+    setTimeout(function() {
+      var modalId = "#{type_template == 1 ? '#modal-flash-more' : '#modal-flash'}";
+
+      var flashModal = $(modalId);
+      var parentModals = $('body .modal.in');
+      $('body main').append(flashModal);
+
+      flashModal.on('show.bs.modal', function(e) {
+        if(parentModals.length > 0) {
+          parentModals.each(function() {
+            modalBackward('#'+$(this).attr('id'));
+          });
+        }
+      });
+      flashModal.on('hidden.bs.modal', function(e) {
+        if(parentModals.length > 0) {
+          parentModals.each(function() {
+            modalForward('#'+$(this).attr('id'));
+          });
+        }
+        flashModal.remove();
+      });
+
+      repositionModal(flashModal, false);
+
+      flashModal.modal('show');
+      }, 1000);
+  });

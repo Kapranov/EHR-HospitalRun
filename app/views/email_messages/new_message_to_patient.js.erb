@@ -1,0 +1,70 @@
+$("#modal-messages-new-message-to-patient").html("<%= escape_javascript(render 'new_message_to_patient_form') %>")
+
+initSelect2('#modal-messages-new-message-to-patient');
+
+$("#modal-messages-new-message-to-patient").modal("show")
+
+var smc = new SubjectMenuController();
+smc.initialize('#modal-messages-new-message-to-patient');
+
+FindPatientsController = function() {
+  var input, input_id, button, link;
+
+  this.initialize = function(_input, _input_id, _button, _link) {
+    input = $(_input)
+    input_id = $(_input_id);
+    button = $(_button);
+    link = _link;
+    
+    input.select2({
+      width: '100%',
+      placeholder: 'Search Patients',
+      ajax: {
+        url: link,
+        processResults: processResults,
+        data: function (params) {
+          return {
+            part: params.term
+          };
+        },
+        cache: true
+      },
+      escapeMarkup: function (markup) { return markup; },
+      minimumInputLength: 1,
+      templateResult: templateResult,
+      templateSelection: templateSelection
+    });
+
+    button.click(function(e) {
+      input.select2('open');
+    });
+  }
+
+  function processResults(data, params) {
+    return {
+      results: data
+    };
+  }
+
+  function templateResult(patient) {
+    if (patient.loading) return patient.text;
+    return '<span>'+patient.full_name+'</span>';
+  }
+
+  function templateSelection(patient) {
+    if(patient.full_name) {
+      input_id.val(patient['id']).trigger('change');
+      return patient.full_name;
+    }
+    else
+      return patient.text;
+  }
+};
+
+var findPatientsController = new FindPatientsController();
+findPatientsController.initialize(
+  '#modal-messages-new-message-to-patient #find_message_patients',
+  '#modal-messages-new-message-to-patient #email_message_patient_id',
+  '#modal-messages-new-message-to-patient #find_message_patients_button',
+  '<%= Rails.application.routes.url_helpers.patients_email_messages_path %>'
+);

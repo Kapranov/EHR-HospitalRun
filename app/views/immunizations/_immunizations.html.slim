@@ -1,0 +1,41 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header.modal-header-md
+      p.title Immunizations Summary for Amanda Smith, July 9, 1980 (35)
+      a.close-btn.close-btn-default data-dismiss="modal"
+    .modal-body
+      .scrollable-container
+        .content
+          .controls
+            .row
+              .col-lg-12
+                = select_tag :print_immunization, options_for_select([ [], ['Print as PDF', 0], ['Export to CSV', 1] ]), { class: 'select2', data: { width: '165px', placeholder: 'Print', theme: 'green-dark', arrow: '1x', padding: '3x', font: '1x' } }
+                - if policy(Immunization).create?
+                  = link_to 'Add Vaccine', new_immunization_path(immunization: { patient_id: @patient.id }), remote: true, class: 'btn btn-default btn-modal', data: { target: '#modal-patient-immunization-vaccine' }
+          .row
+            .col-lg-12
+              .table-responsive
+                table.table
+                  thead
+                    tr
+                      th
+                        a href="#" Vaccine
+                      th
+                        a href="#" Type
+                      th
+                        a href="#" Admin. Date
+                      th
+                        a href="#" Administered by
+                  tbody
+                    - @immunizations.each do |immunization|
+                      tr
+                        - path = policy(Immunization).update? ? edit_immunization_path(immunization, immunization: { patient_id: @patient.id }, type_general: immunization.name) : '#'
+                        td
+                          = link_to immunization.vaccine.try(:name) || '', path, remote: true, class: 'btn-modal', data: { target: '#modal-patient-immunization-vaccine' }
+                        td
+                          = link_to immunization.name || '', path, remote: true, class: 'btn-modal', data: { target: '#modal-patient-immunization-vaccine' }
+                        td
+                          = link_to immunization.administered_at.try(:strftime, Date::DATE_FORMATS[:dosespot]) || '', path, remote: true, class: 'btn-modal', data: { target: '#modal-patient-immunization-vaccine' }
+                        td
+                          = link_to immunization.administered_by.try(:to_label) || '', path, remote: true, class: 'btn-modal', data: { target: '#modal-patient-immunization-vaccine' }
+    .modal-footer

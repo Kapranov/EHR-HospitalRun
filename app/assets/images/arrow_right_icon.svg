@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="23px" height="51px" viewBox="0 0 23 51" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.1 (29687) - http://www.bohemiancoding.com/sketch -->
+    <title>Line</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+        <g id="Doctor---Subscription---Membership-Options" transform="translate(-1206.000000, -278.000000)" stroke-width="3" stroke="#50BEAF">
+            <g id="EHR-Subscribtion" transform="translate(179.000000, 230.000000)">
+                <polyline id="Line" transform="translate(1038.869573, 73.500000) rotate(-270.000000) translate(-1038.869573, -73.500000) " points="1016.36957 82.369573 1038.86957 64.630427 1061.36957 82.369573"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>

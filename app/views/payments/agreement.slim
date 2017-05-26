@@ -1,0 +1,108 @@
+- content_for :back_link do
+  = link_to 'Agreement to provide access to cloud-based electronic health records system', payments_agreement_path, class: 'active'
+.content.agreement-wrapper
+  .container-fluid.content-container
+    = simple_form_for @payment_agreement_sign, url: payments_proceed_payment_path do |f|
+      .row-container
+        .bordered-container
+          .category-header
+            p.title AGREEMENT TO PROVIDE ACCESS TO CLOUD-BASED ELECTRONIC HEALTH RECORDS SYSTEM
+          .main-container
+            .row
+              .col-lg-12
+                .form-group
+                  p
+                    | This letter agreement (“Agreement”) is made and entered into the date entered below and shall provide the terms under which EHR One, LLC. (“Software Service Provider”) shall provide access to The EHR One Cloud-Based Electronic Health Records System as defined herein to above listed Practice or Eligible Professional (“Practitioner”).
+            .row
+              .col-lg-12
+                .form-group
+                  p
+                    | 1.
+                    span
+                      |  Software Services Delivery (Cloud-Based).
+                    |  Software Service Provider shall perform for Practitioner, as an independent contractor, the following services associated with Cloud-Based Electronic Health Records System Service Delivery. Software Service Provider: provide secure access to The EHR One Cloud-Based Electronic Health Records System, provide Practitioner with necessary Electronic Health Record system support as it relates to ongoing use of the Electronic Health Records system, (collectively, the “Cloud-Based Electronic Health Records System Service Delivery Services”). The Cloud-Based Electronic Health Records System Service Delivery Services shall be performed in compliance with all state and federal laws. Additional licensing information can be found at www.ehr-one.com/licensing.
+            .row
+              .col-lg-12
+                .form-group
+                  p
+                    | 2.
+                    span
+                      |  Confidential Information.
+                    |  Software Service Provider shall keep all proprietary information regarding Practitioner's business operations confidential and shall not use or disclose any such information to any individual or organization without Practitioner's prior written consent, except as required by legal proceeding, in which case Software Service Provider may notify Practitioner after disclosure of such confidential information. A HIPAA Business Associate Agreement is kept on file and available upon request.
+            .row
+              .col-lg-12
+                .form-group
+                  p
+                    | 3.
+                    span
+                      |  Term.
+                    |  This Agreement shall be in full force and effect commencing on the date hereof and continuing for a period of 12 consecutive months (the “Term Period”). The Term Period shall renew automatically at the end of each Term Period unless either party is notified in writing at least 30 days prior to the end of the Term Period.
+            .row
+              .col-lg-12
+                .form-group
+                  p
+                    | 4.
+                    span
+                      |  Indemnification and Limitations of Liability.
+                    |  Practitioner shall indemnify and hold harmless Software Service Provider and its employees and agents for any and all liabilities related to or arising from performance under this Agreement. The maximum liability of Software Service Provider related to or arising from the performance of Software Service Provider under this Agreement shall be the amount paid to Software Service Provider hereunder.
+
+            .row
+              .col-lg-12
+                .form-group
+                  p
+                    | 5.
+                    span
+                      |  Governing Law/Arbitration.
+                    |  This Agreement shall be governed by the laws of the State of California without regard to principles of conflicts of laws. Any controversy arising out of or related to this Agreement shall be settled before a panel of three arbitrators of the American Arbitration Association in Orange County, California.
+            .row
+              .col-lg-12
+                .form-group
+                  p
+                    | 6.
+                    span
+                      |  Entire Agreement, Severability.
+                    | This agreement contains the entire understanding of the parties and supersedes all prior agreements between them. If any provision hereof is held to be illegal, invalid or unenforceable, such provision shall be fully severable and the remaining provisions shall remain in full force and effect.
+            .row
+              .col-lg-12
+                .form-group
+                  .bordered-container
+                    p
+                      span
+                        | Compensation.
+                      |  Practitioner shall pay a one-time, non-refundable setup fee of $199.00, plus a one-time data transfer fee of $0.00, plus the first month's subscription fee of $299.00 per month to commence services. The subscription fee of $299.00 will be automatically charged each month per each eligible professional according to the payment information provided on the Payment Authorization Form. Practitioner may opt to pre-pay for all 12 months of the subscription fees in the sum of $2,975.00 to cover 12 months of service, effective as of the date signed below; the one-time, non-refundable initiation fee of $199.00 and one-time data transfer fee of $0.00 is not waived and is still due in addition to the 12-month pre-paid total sum at the commencement of services. All fees stated herein are due for each eligible professional. Practitioner is required to pay Software Service Provider any fees or balances in full within 10 calendar days of the payment due date. Failure to pay on time will result in a 3% monthly finance charge and possible suspension of services. Remote training and support services are provided at no additional charge as part of the ongoing monthly subscription.
+          .agreement-agree-container
+            .row
+              .col-lg-12
+                .form-group
+                  .checkbox-custom.checkbox-custom-success
+                    = f.check_box :agreement
+                    label[for="payment_agreement_sign_agreement"]
+                      span.checkbox-icon-container
+                        span.checkbox-icon
+                      span.checkbox-label Agree with above terms and conditions
+            .row
+              .col-lg-8
+                .form-group
+                  p Practitioner (Print your Full Name)
+                  = f.input :full_name, input_html: { class: 'form-control form-control-green', id: 'agreement_full_name' }
+              .col-lg-4
+                .form-group
+                  p Today’s Date:
+                  = text_field_tag :today_date, Time.now.to_date.to_s(:frontend_date), readonly: true, class: 'date-picker form-control form-control-green'
+          .controls
+            = f.submit 'Select Membership Options', class: 'btn btn-default', id: 'agreement_submit'
+            = link_to 'Cancel', :back, class: 'btn btn-cancel'
+javascript:
+  $('input.date-picker').css('pointer-events', 'none');
+
+  var validateControlsChangeHandler = function() {
+    if($('#agreement_full_name').val().length > 0 && $('#today_date').val().length > 0 && $('#payment_agreement_sign_agreement').is(':checked'))
+      enableControl('#agreement_submit');
+    else
+      disableControl('#agreement_submit');
+  };
+
+  validateControlsChangeHandler();
+
+  $('#agreement_full_name').keyup(validateControlsChangeHandler);
+  $('#agreement_agree').change(validateControlsChangeHandler);

@@ -1,0 +1,44 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title
+        = "Search by Image Order Number - #{@image_order.try(:order_num)}"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    .modal-body
+      .scrollable-container
+        .content
+          .row
+            .col-lg-12
+              .table-responsive
+                table.table
+                  thead
+                    tr
+                      td
+                        p Test
+                      td
+                        p Patient
+                      td
+                        p Provider
+                      td
+                        p Status
+                      td
+                  tbody
+                    - if @image_order.present?
+                      td
+                        p
+                          = "#{@image_order.test_orders.present? && @image_order.test_orders.any? ? @image_order.test_orders.first.test : 'Test Codes Not Found'}"
+                      td
+                        p
+                          = "#{@image_order.patient.last_name}, #{@image_order.patient.first_name}"
+                      td
+                        p
+                          = "Dr. #{@image_order.provider.first_name[0]}. #{@image_order.provider.last_name}"
+                      td
+                        p
+                          = @image_order.status
+                      td.controls
+                        = link_to 'Use', imaging_image_results_path(order_id: @image_order.id), class: 'btn btn-default btn-padding-md btn-modal', data: { target: '#modal-image-results' }, remote: true
+                    - else
+                      td colspan="5"
+                        p Image Orders Not Found

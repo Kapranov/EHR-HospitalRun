@@ -1,0 +1,194 @@
+- if @ccda.identification || @ccda.contact_information
+  label PATIENT IDENTIFICATION, DEMOGRAPHICS & CONTACT INFORMATION
+  table
+    - @patient_info_fields.each do |row|
+      tr
+        - row.each_with_index do |field, column_num|
+          - if (column_num < 3 && @ccda.identification) || (column_num > 2 && @ccda.contact_information)
+            td
+              = field.keys.first
+            td
+              = @ccda.patient.method(field.values.first).call if field.values.first
+
+br
+label TRANSITION OF CARE DETAILS
+
+- if @ccda.basic_information
+  table
+    - @basic_fields.each do |field|
+      tr
+        td
+          = field[:name]
+        td
+          = @ccda.value_of(field)
+
+- if @ccda.encounter_diagnoses
+  br
+  table
+    tr
+      td ENCOUNTER DIAGNOSIS:
+    - if @encounters.present? && @encounters.any?
+      - @encounters.each do |encounter_label|
+        tr
+          td
+            = encounter_label
+
+- if @ccda.immunizations
+  br
+  table
+    tr
+      td IMMUNIZATIONS:
+    - if @immunizations.present? && @immunizations.any?
+      - @immunizations.each do |immunization_label|
+        tr
+          td
+            = immunization_label
+
+- if @ccda.cognitive_status
+  br
+  table
+    tr
+      td COGNITIVE STATUS:
+    - if @cog_statuses.present? && @cog_statuses.any?
+      - @cog_statuses.each do |cognitive_status_label|
+        tr
+          td
+            = cognitive_status_label
+
+- if @ccda.functional_status
+  br
+  table
+    tr
+      td FUNCTIONAL STATUS:
+    - if @fun_statuses.present? && @fun_statuses.any?
+      - @fun_statuses.each do |functional_status_label|
+        tr
+          td
+            = functional_status_label
+
+- if @ccda.reason_for_referral
+  br
+  table
+    tr
+      td REASON FOR REFERRAL:
+    - if @reasons.present? && @reasons.any?
+      - @reasons.each do |reason_label|
+        tr
+          td
+            = reason_label
+
+- if @ccda.discharge_instructions
+  br
+  table
+    tr
+      td DISCHARGE INSTRUCTIONS:
+    - if @instructions.present? && @instructions.any?
+      - @instructions.each do |instruction_label|
+        tr
+          td
+            = instruction_label
+
+br
+label PATIENT CHART INFORMATION
+
+- if @ccda.smoking_status
+  br
+  table
+    tr
+      td SMOKING STATUS:
+    - if @smoking_statuses.present? && @smoking_statuses.any?
+      - @smoking_statuses.each do |status_label|
+        tr
+          td
+            = status_label
+    - else
+      tr
+        td NONE
+
+- if @ccda.problems_dx
+  br
+  table
+    tr
+      td PROBLEMS (Dx):
+    - if @problems.present? && @problems.any?
+      - @problems.each do |problem_label|
+        tr
+          td
+            = problem_label
+
+- if @ccda.medications
+  br
+  table
+    tr
+      td MEDICATIONS (Rx):
+    - if @medications.present? && @medications.any?
+      - @medications.each do |medication_label|
+        tr
+          td
+            = medication_label
+
+- if @ccda.medication_allergies
+  br
+  table
+    tr
+      td MEDICATION ALLERGIES:
+    - if @allergies.present? && @allergies.any?
+      - @allergies.each do |allergy_label|
+        tr
+          td
+            = allergy_label
+
+- if @ccda.laboratory
+  br
+  table
+    tr
+      td LAB TEST & RESULTS:
+    - if @labs.present? && @labs.any?
+      - @labs.each do |lab_label|
+        tr
+          td
+            = lab_label
+
+- if @ccda.vital
+  br
+  table
+    tr
+      td VITAL STATS:
+    - if @vitals.present? && @vitals.any?
+      - @vitals.each do |vital_label|
+        tr
+          td
+            = vital_label
+
+- if @ccda.care_plan
+    br
+    table
+      tr
+        td CARE PLAN - GOALS & INSTRUCTIONS:
+      - if @care_plans.present? && @care_plans.any?
+        - @care_plans.each do |care_plan_label|
+          tr
+            td
+              = care_plan_label
+
+- if @ccda.procedures
+  br
+  table
+    tr
+      td PROCEDURES:
+    - if @procedures.present? && @procedures.any?
+      - @procedures.each do |procedure_label|
+        tr
+          td
+            = procedure_label
+
+- if @ccda.care_team_members
+    br
+    table
+      tr
+        td CARE TEAM MEMBERS:
+      - if @care_members.present? && @care_members.any?
+        - @care_members.each do |care_member_label|
+          tr
+            td
+              = care_member_label

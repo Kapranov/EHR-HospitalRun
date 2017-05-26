@@ -1,0 +1,48 @@
+.modal-dialog.modal-md
+  = render_messages
+  = simple_form_for @representative, remote: true, html: { autocomplete: 'off', class: 'modal-content' } do |f|
+    = hidden_field_tag :patient_id, @patient.id
+    .modal-header.modal-header-md
+      p.title
+        = "#{ type } Authorized Representative"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    .modal-body
+      .scrollable-container
+        .content
+          .row
+            .col-lg-12
+              .form-group
+                = f.input_field :first_name, class: 'form-control', placeholder: 'First Name'
+          .row
+            .col-lg-12
+              .form-group
+                = f.input_field :last_name, class: 'form-control', placeholder: 'Last Name'
+          .row
+            .col-lg-12
+              .form-group
+                = f.simple_fields_for @user do |u|
+                  = u.input_field :email, as: :email, class: 'form-control', placeholder: 'Email'
+          .row
+            .col-lg-12
+              .form-group
+                .input-group.input-group-phone
+                  = f.input_field :primary_phone_code, as: :select, collection: ((@representative.persisted? && @representative.primary_phone_code.present?) ? [@representative.primary_phone_code] : []), class: 'select2 input-phone-code', data: { placeholder: '(      )', theme: 'gray-lighter', arrow: 'none', padding: '1x', font: '1x', width: '76px', 'text-align': 'center', search: true, 'search-input': true }, include_blank: false
+                  = f.input_field :primary_phone_tel, as: :tel, class: 'form-control input-phone', placeholder: 'Primary Contact Phone'
+          - if type == 'Add'
+            .row
+              .col-lg-12
+                .form-group
+                  .checkbox-custom
+                    = check_box_tag :representative_policy, false, class: 'checkbox'
+                    label for="representative_policy"
+                      span.checkbox-icon-container
+                        span.checkbox-icon
+                      span.checkbox-label
+                        | Representative has read and signed  
+                        a href="#" Authorized Representative Acceptable Use Policy
+    .modal-footer
+      .controls
+        - if type != 'View'
+          = f.submit 'Save', class: 'btn btn-default'
+        - else
+          a.btn.btn-default data-dismiss="modal" Close

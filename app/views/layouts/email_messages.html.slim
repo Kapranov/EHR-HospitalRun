@@ -1,0 +1,39 @@
+doctype html
+html
+  head
+    meta[name="viewport" content="width=device-width, initial-scale=1.0"]
+    meta[name="description" content="#{content_for?(:description) ? yield(:description) : 'Doctor Portal'}"]
+    title
+      = content_for?(:title) ? yield(:title) : "Doctor Portal"
+    - if current_user.role == :Provider
+      = stylesheet_link_tag  'providers/main', media: 'all'
+    - if current_user.patient?
+      = stylesheet_link_tag  'patients/main', media: 'all'
+    = javascript_include_tag 'email_messages/main'
+    = csrf_meta_tags
+  body
+    = render 'widgets/all_widgets'
+    = render_messages
+    main[role="main"]
+      - if current_user.provider?
+        = render 'providers/ui/navigation/header'
+      - elsif current_user.patient?
+        = render 'patients/ui/navigation/header'
+      .dashboard-wrapper.messages-wrapper.wrapper class="#{'trial-active' if current_user.role == :Provider && current_user.provider.trial.present?}"
+        - if current_user.provider?
+          = render 'providers/ui/navigation/categories', category: @category, home_link: providers_path, trial_header: true
+        = yield
+        - if current_user.provider?
+          = render 'providers/ui/navigation/footer'
+        - elsif current_user.patient?
+          = render 'patients/ui/navigation/footer'
+      javascript:
+        $('.item-messages').parent().addClass('active');
+      - if current_user.locked
+        javascript:
+          $(document).ready(function() {
+            var modalLockscreen = $('#modal-lockscreen');
+            if(!modalLockscreen.hasClass('in'))
+              modalLockscreen.modal('show');
+          })
+    = render 'layouts/debug', landing: false, authorization: false, patient: false

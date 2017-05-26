@@ -1,0 +1,7 @@
+$('#modal-admin-deleted-user').html('<%= escape_javascript(render 'destroy') %>');
+repositionModal($('#modal-admin-deleted-user'), false);
+$('#modal-admin-deleted-user').modal('show');
+
+$('#modal-admin-deleted-user').on('hidden.bs.modal', function() {
+  $('#modal-admin-delete-user').modal('hide');
+})

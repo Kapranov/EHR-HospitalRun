@@ -1,0 +1,156 @@
+//= require application
+//= require ui/main
+//= require helpers/zipcode
+
+$(document).ready(function(e) {
+  var PatientTableController = function() {
+    var container;
+    
+    this.initialize = function(_container) {
+      container = $(_container);
+      initAll();
+    }
+
+    var getHeight = function() {
+      return $(window).height() - 80 - $('body .header .categories-container').outerHeight(true) - $('.content .controls').outerHeight(true) - $('.content .nav-tabs').outerHeight(true) - $('body .footer').outerHeight(true) -$('.content').css('padding-top').replace('px', '') - $('.content').css('padding-bottom').replace('px', '');
+    }
+
+    var reInit = function() {
+      container.find('.table-patient').bootstrapTable({
+        height: getHeight()
+      });
+      if($(window).width() > 562) {
+        container.find('.fixed-table-body').slimScroll({
+          height: $('.bootstrap-table .fixed-table-container .fixed-table-body').height()
+        });
+      }
+    }
+
+    this.reInit = function() {
+      reInit();
+    }
+
+    var initAll = function() {
+      container.find($('.nav-tabs li a span')).click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+
+      reInit();
+
+      $(window).resize(function() {
+        var tableBody = container.find('.fixed-table-body');
+        container.find('.table-patient').bootstrapTable('resetView', {
+          height: getHeight()
+        });
+        if($(window).width() > 562 && $(window).height()) {
+          tableBody.slimScroll({
+            'destroy': true
+          });
+          tableBody.slimScroll({
+            height: getHeight() - 56
+          });
+          tableBody.closest('.fixed-table-container').removeClass('notSlimScrollDiv');
+        }
+        else {
+          if(tableBody.length > 0) {
+            tableBody.slimScroll({
+              'destroy': true
+            });
+            tableBody.css({
+              'overflow': 'auto',
+              'height': '100%'
+            });
+            tableBody.closest('.fixed-table-container').addClass('notSlimScrollDiv');
+          }
+        }
+      })
+    };
+  };
+
+  var patientTableController = new PatientTableController();
+  patientTableController.initialize('.billing-wrapper');
+
+  var SearchController = function() {
+    var search;
+    var list;
+    var tab_content;
+    var exp;
+
+    this.initialize = function(search_id, list_id, tab_content_id, export_id) {
+      search      = $(search_id);
+      list        = $(list_id);
+      tab_content = $(tab_content_id);
+
+      exp         = $(export_id);
+
+      InitTabSwitcher();
+      InitSearch();
+      InitExport();
+    };
+
+    var SetTab = function(patient_id) {
+      $.ajax({
+        url: '<%= Rails.application.routes.url_helpers.switch_tab_billing_index_path %>',
+        data: {
+          patient_id: patient_id
+        }
+      }).done(function(partial) {
+        tab_content.html(partial);
+        patientTableController.reInit();
+      });
+    };
+
+    var InitTabSwitcher = function() {
+      $('.tab').click(function() {
+        SetTab($(this).data('id'));
+      });
+    };
+
+    var InitSearch = function() {
+      search.on('keyup', function() {
+        $.ajax({
+          url: '<%= Rails.application.routes.url_helpers.patients_billing_index_path %>',
+          data: {
+            part: $(this).val()
+          }
+        }).done(function(patients) {
+          list.html('');
+          if(patients.length > 0) {
+            patients.forEach(function (patient, i) {
+              var class_name = '';
+              if (i == 0) {
+                SetTab(patient.id);
+                class_name = 'active';
+              }
+              var li = $('<li class="' + class_name + '" role="presentation">');
+              var a = $('<a class="tab" aria-controls="chart" data-toggle="tab" href="#billingPatientTab' + i + '" role="tab" data-id="' + patient.id + '">');
+              a.text(patient.full_name);
+              a.append('<span class="btn-close" href="#">');
+              li.append(a);
+              list.append(li);
+            });
+            InitTabSwitcher();
+          }
+          else
+            tab_content.html('');
+        });
+      });
+    };
+
+    var InitExport = function() {
+      exp.change(function() {
+        var url;
+        if($(this).val() == 0)
+          url = '<%= Rails.application.routes.url_helpers.download_csv_billing_index_path %>';
+        else {
+          url = '<%= Rails.application.routes.url_helpers.download_pdf_billing_index_path %>';
+        }
+        window.location = url + '?patient_id=' + $('li.active .tab').data('id');
+      });
+    };
+  };
+
+  var searchController = new SearchController();
+  searchController.initialize('#search-patient', '#tabList', '.tab-content', '#export-billing')
+});

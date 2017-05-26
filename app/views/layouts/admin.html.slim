@@ -1,0 +1,29 @@
+doctype html
+html.no-js
+  head
+    meta[name="viewport" content="width=device-width, initial-scale=1.0"]
+    meta[name="description" content="#{content_for?(:description) ? yield(:description) : 'Doctor Portal'}"]
+    title
+      = content_for?(:title) ? yield(:title) : "Admin Portal"
+    = stylesheet_link_tag    'admin/main', media: 'all'
+    = javascript_include_tag 'admin/main'
+    - if params[:controller] == 'admin_sessions'
+      = stylesheet_link_tag  'admin/authorization', media: 'all'
+    = csrf_meta_tags
+  body
+    = render 'widgets/all_widgets'
+    = render_messages
+    main[role="main"]
+      - if params[:controller] == 'admin_sessions'
+        = yield
+      - else
+        .header
+          .header-logo-container
+            = link_to '', admin_index_path, class: 'header-logo'
+          .header-controls-container
+            = render 'admin/ui/navigation/header'
+        .main-content-container
+          .side-nav-container
+            = render 'admin/ui/navigation/side'
+          .main-content
+            = yield

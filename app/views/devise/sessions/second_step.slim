@@ -1,0 +1,19 @@
+= javascript_include_tag 'authorization/duo'
+#two-factor-auth-wrapper
+  #modal-duo-auth.modal-provider.modal.animated.fadeIn data-backdrop="static" data-keyboard="false"
+    .modal-dialog
+      .modal-content
+        .modal-header.modal-header-md
+          p.title Two Factor Authentification
+        .modal-body
+          .scrollable-container
+            .content
+              iframe#duo_iframe frameborder="0"
+javascript:
+  Duo.init({
+    'host': '#{@host}',
+    'sig_request': '#{@sig_request}',
+    'post_action': '#{@back_url}'
+  });
+  $('#modal-duo-auth').modal('show');
+  repositionModal($('#modal-duo-auth'));

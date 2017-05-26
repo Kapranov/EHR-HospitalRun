@@ -1,0 +1,4 @@
+- if current_user.present?
+ = javascript_include_tag
+ = auto_session_timeout_js frequency: 60, remote: true
+ = hidden_field_tag :full_name, current_user.try(:to_label), id: 'current_user_provider_full_name'

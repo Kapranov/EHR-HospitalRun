@@ -1,0 +1,96 @@
+$('#modal-street-addresses-registration-addresses').html('<%= escape_javascript(render 'form') %>')
+var anyData = ('<%= @address_data.any? %>' === 'true');
+
+if(anyData) {
+  $('#modal-street-addresses-registration-addresses').addClass('modal-success');
+  $('#modal-street-addresses-registration-addresses').removeClass('modal-danger');
+}
+else {
+  $('#modal-street-addresses-registration-addresses').addClass('modal-danger');
+  $('#modal-street-addresses-registration-addresses').removeClass('modal-success');
+}
+
+$('#modal-street-addresses-registration-addresses').modal('show');
+
+RegistrationStreetAddressesController = function() {
+  var modal;
+  var links;
+  var full_address, btn_verify;
+  var practice_street, practice_city, practice_state, practice_suit_apt_number, practice_zip;
+  var street, city, suit_apt_number, state, zip;
+
+  this.initialize = function() {
+    modal = $('#modal-street-addresses-registration-addresses');
+    links = $('#modal-street-addresses-registration-addresses .street-input a');
+    full_address = $('#signup-wrapper #full_address');
+    btn_verify = $('#signup-wrapper #btn_verify');
+    practice_street = $('#signup-wrapper #user_provider_practice_street_address');
+    practice_city = $('#signup-wrapper #user_provider_practice_city');
+    practice_state = $('#signup-wrapper #user_provider_practice_state');
+    practice_suit_apt_number = $('#signup-wrapper #user_provider_practice_suit_apt_number');
+    practice_zip = $('#signup-wrapper #user_provider_practice_zip');
+    street = $('#signup-wrapper #user_provider_street_address');
+    city = $('#signup-wrapper #user_provider_city');
+    state = $('#signup-wrapper #user_provider_state');
+    suit_apt_number = $('#signup-wrapper #user_provider_suit_apt_number');
+    zip = $('#signup-wrapper #user_provider_zip');
+
+    initHandlers();
+  }
+
+  var initHandlers = function() {
+    links.click(function(e) {
+      e.preventDefault();
+      suit_apt_number.val(practice_suit_apt_number.val()).trigger('change');
+      practice_street.val($(this).data('street')).trigger('change');
+      practice_city.val($(this).data('city')).trigger('change');
+      practice_state.val($(this).data('state')).trigger('change');
+      practice_zip.val($(this).data('zip')).trigger('change');
+      street.val($(this).data('street')).trigger('change');
+      city.val($(this).data('city')).trigger('change');
+      state.val($(this).data('state')).trigger('change');
+      zip.val($(this).data('zip')).trigger('change');
+      disableControl(full_address);
+      disableControl(btn_verify);
+      disableControl(practice_suit_apt_number);
+      $('<div class="row">\
+          <div class="col-lg-12">\
+            <div class="form-group">\
+              <div class="street-input">\
+                <input class="form-control form-control-white form-control-bold" readonly="readonly" type="text" value="'+ $(this).data('address') +'">\
+                <a class="icon icon-sm icon-circle icon-ic-delete" href="#">\
+                </a>\
+              </div>\
+            </div>\
+          </div>\
+      </div>').insertAfter(full_address.closest('.row'));
+      $('#signup-wrapper .street-input a.icon.icon-ic-delete').click(street_address_remove_handler);
+      modal.modal('hide');
+    });
+
+    practice_suit_apt_number.keyup(function(e) {
+      suit_apt_number.val($(this).val());
+    });
+
+    var street_address_remove_handler = function(e) {
+      e.preventDefault();
+      enableControl(full_address);
+      enableControl(practice_suit_apt_number);
+      full_address.val('').trigger('change');
+      practice_suit_apt_number.val('').trigger('change');
+      btn_verify.attr('href', '<%= Rails.application.routes.url_helpers.registration_addresses_street_addresses_path %>');
+      practice_city.val('').trigger('change');
+      practice_state.val('').trigger('change');
+      practice_zip.val('').trigger('change');
+      street.val('').trigger('change');
+      city.val('').trigger('change');
+      state.val('').trigger('change');
+      zip.val('').trigger('change');
+      practice_street.val('').trigger('change');
+      $(this).closest('.row').remove();
+    };
+  }
+}
+
+var registrationStreetAddressesController = new RegistrationStreetAddressesController();
+registrationStreetAddressesController.initialize();

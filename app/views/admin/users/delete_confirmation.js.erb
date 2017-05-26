@@ -1,0 +1,7 @@
+$('#modal-admin-delete-user').html('<%= escape_javascript(render 'delete_confirmation') %>');
+repositionModal($('#modal-admin-delete-user'), false);
+initModalFadeInOut('#modal-admin-delete-user');
+$('#modal-admin-delete-user').modal('show');
+
+var controlCheckingController = new ControlCheckingController();
+controlCheckingController.initialize('#modal-admin-delete-user #delete-user-checkbox', '#modal-admin-delete-user #delete-user-btn');

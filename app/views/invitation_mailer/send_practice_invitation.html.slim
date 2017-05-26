@@ -1,0 +1,27 @@
+= render 'styles', file: __FILE__
+table.mailer-wrapper.mailer-send-practice-invitation
+  = render 'devise/mailer/mailer_header'
+  tbody
+    tr
+      td
+        p 
+          = "You have been added as a User for #{@full_name}"
+    tr
+      td
+        p To activate your account, login with your email address and the Practice Record ID (ask your Practice Administrator for this).
+    tr
+      td
+        = link_to 'Go To Login', practice_sessions_sign_in_url, class: "btn btn-default"
+    tr
+      td
+        p Sincerely,
+    tr
+      td
+        p EHR1 Team
+    tr
+      td
+        p If you canot see the button above, please click or copy and paste the following link into your web browser:
+    tr
+      td
+        = link_to "#{practice_sessions_sign_in_url}", practice_sessions_sign_in_url
+    = render 'devise/mailer/mailer_footer'

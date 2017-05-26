@@ -1,0 +1,23 @@
+.modal-dialog
+  .modal-content
+    .modal-header.modal-header-md
+      p.title
+        = "#{@attachment.persisted? ? 'Edit' : 'New'} Attachment"
+      a.close-btn.close-btn-default data-dismiss="modal"
+    = render_messages
+    = simple_form_for @attachment, url: files_path do |f|
+      = hidden_field_tag :model, :LabOrder
+      = hidden_field_tag :lab_order_id, @lab_order.id
+      = hidden_field_tag :back_path, lab_orders_path
+      .modal-body
+        .scrollable-container
+          .content
+            .row
+              .col-lg-12
+                .attachment-container
+                  a.btn.btn-default.btn-attachment
+                    | Add Attachment
+                  = f.file_field :file_name
+      .modal-footer
+        .controls
+          = f.submit 'Save', class: 'btn btn-default'

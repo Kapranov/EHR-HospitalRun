@@ -1,0 +1,117 @@
+$('#modal-image-order').html('<%= escape_javascript(render 'form') %>');
+
+initPickers('#modal-image-order');
+initSelect2('#modal-image-order');
+initModalFadeInOut('#modal-image-order');
+
+$('#modal-image-order').modal('show');
+
+var showViewOrdersSearchController = new ShowViewOrdersSearchController();
+showViewOrdersSearchController.initialize(
+  '#modal-image-order',
+  '#image_order_patient_id',
+  '#image_order_patient_sex',
+  '#image_order_patient_age',
+  '#image_order_patient_date_of_birth',
+  '#image_order_patient_primary_phone',
+  '#image_order_find_patient',
+  '.image-order-find-patient-btn',
+  '#primary_phone_container',
+  '#patient_show_images',
+  '.results-block',
+  '<%= Rails.application.routes.url_helpers.patient_info_image_orders_path %>'
+);
+
+var showViewOrdersTestsController = new ShowViewOrdersTestsController();
+showViewOrdersTestsController.initialize(
+  '#modal-image-order',
+  '#tests_container',
+  '#tests_add',
+  '#tests_remove',
+  'image'
+);
+
+var showViewOrdersValidationController = new ValidationController();
+showViewOrdersValidationController.initialize(
+  'form.new_image_order',
+  {
+    'image_order[patient_id]': {
+      required: {
+        required: true
+      }
+    },
+    'image_order_find_patient': {
+      required: {
+        required: true
+      }
+    },
+    'image_order_patient_sex': {
+      required: {
+        required: true
+      }
+    },
+    'image_order_patient_age': {
+      required: {
+        required: true
+      }
+    },
+    'image_order_patient_date_of_birth': {
+      required: {
+        required: true
+      }
+    },
+    'image_order[order_type]': {
+      required: {
+        required: true
+      }
+    },
+    'image_order[image_name]': {
+      required: {
+        required: true
+      }
+    },
+    'image_order[status]': {
+      required: {
+        required: true
+      }
+    },
+    'image_order[schedule_at_date]': {
+      required: {
+        required: true
+      }
+    },
+    'image_order[ordering_physician]': {
+      required: {
+        required: true
+      }
+    },
+    'image_order[ordering_facility]': {
+      required: {
+        required: true
+      }
+    },
+    'image_order[image_status]': {
+      required: {
+        required: true
+      }
+    },
+    'image_order[test_orders[new][1]][code]': {
+      required: {
+        required: true
+      }
+    },
+    'image_order[test_orders[new][1]][test]': {
+      required: {
+        required: true
+      }
+    }
+  }
+);
+
+var attachmentsController = new AttachmentsController();
+attachmentsController.initialize(
+  '#modal-image-order',
+  '#modal-image-order #attachment_container',
+  '#add_attachment',
+  'image_order[attachments][file_name_NUMBER_]'
+);

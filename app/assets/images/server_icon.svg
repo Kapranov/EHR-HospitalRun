@@ -1,0 +1,30 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 95.17 119.15">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #50bdae;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <title>Network - Server</title>
+  <g>
+    <rect class="cls-1" x="34.17" y="107.85" width="26.83" height="11.3" rx="3.5" ry="3.5"/>
+    <rect class="cls-1" y="110.02" width="95.17" height="6" rx="3" ry="3"/>
+    <rect class="cls-1" x="44.67" y="95.18" width="5.83" height="15.92"/>
+    <path class="cls-1" d="M18.5,78.9H76.67a0,0,0,0,1,0,0v9.23a9.23,9.23,0,0,1-9.23,9.23H27.73a9.23,9.23,0,0,1-9.23-9.23V78.9A0,0,0,0,1,18.5,78.9Z"/>
+    <rect class="cls-1" x="18.5" y="63.23" width="58.17" height="13.26"/>
+    <rect class="cls-2" x="63.92" y="68.62" width="6.67" height="2.31"/>
+    <rect class="cls-1" x="18.5" y="47.4" width="58.17" height="13.26"/>
+    <rect class="cls-2" x="63.92" y="52.79" width="6.67" height="2.31"/>
+    <rect class="cls-1" x="18.5" y="31.73" width="58.17" height="13.26"/>
+    <rect class="cls-2" x="63.92" y="37.12" width="6.67" height="2.31"/>
+    <rect class="cls-1" x="18.5" y="15.84" width="58.17" height="13.26"/>
+    <rect class="cls-2" x="63.92" y="21.23" width="6.67" height="2.31"/>
+    <rect class="cls-1" x="18.5" width="58.17" height="13.26"/>
+    <rect class="cls-2" x="63.92" y="5.39" width="6.67" height="2.31"/>
+  </g>
+</svg>
