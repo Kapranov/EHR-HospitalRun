@@ -1,0 +1,42 @@
+{
+  "resource": "Settings",
+  "http_method": "GET",
+  "route": "/settings/schedule",
+  "description": "Practices with role \"Provider\"",
+  "explanation": null,
+  "parameters": [
+    {
+      "scope": "data",
+      "required": true,
+      "name": "auth_token",
+      "description": "Authentication Token"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "GET",
+      "request_path": "/settings/schedule?data[auth_token]=a8993304ba4d8fc6473ef1df35a6b059",
+      "request_body": null,
+      "request_headers": {
+        "Content-Type": "application/vnd.api+json"
+      },
+      "request_query_parameters": {
+        "data": {
+          "auth_token": "a8993304ba4d8fc6473ef1df35a6b059"
+        }
+      },
+      "request_content_type": "application/vnd.api+json",
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "{\n  \"data\": [\n    {\n      \"id\": \"33lgKzeR59ArRb\",\n      \"type\": \"providers\",\n      \"attributes\": {\n        \"id\": \"33lgKzeR59ArRb\",\n        \"email\": \"kylee@murraydouglas.info\",\n        \"role\": \"Provider\",\n        \"user-id\": \"33lgKzealEKELr\",\n        \"title\": \"Mr\",\n        \"first-name\": \"Jerrell\",\n        \"middle-name\": null,\n        \"last-name\": \"Jacobson\",\n        \"degree\": \"DDS\",\n        \"speciality\": \"Endodontics\",\n        \"street-address\": \"Bret Ranch\",\n        \"suit-apt-number\": \"547\",\n        \"city\": \"West Suzanne\",\n        \"state\": \"Hawaii\",\n        \"zip\": null,\n        \"practice-street-address\": \"Blick Hills\",\n        \"practice-suit-apt-number\": \"99422\",\n        \"practice-city\": \"Manteville\",\n        \"practice-state\": \"Nevada\",\n        \"practice-zip\": null,\n        \"primary-phone\": null,\n        \"mobile-phone\": null,\n        \"alt-email\": null,\n        \"username\": null,\n        \"secondary-speciality\": null,\n        \"dental-licence\": null,\n        \"expiration-date\": null,\n        \"ein-tin\": null,\n        \"npi\": null,\n        \"dea\": null,\n        \"upin\": null,\n        \"nadean\": null,\n        \"status\": true,\n        \"biography\": null,\n        \"accepting-patient\": false,\n        \"enable-online-booking\": false,\n        \"profile-image\": {\n          \"url\": \"/uploads/provider/profile_image/33lgKzeR59ArRb/avatar2.jpg\"\n        }\n      },\n      \"links\": {\n        \"self\": \"/providers/33lgKzeR59ArRb\"\n      }\n    },\n    {\n      \"id\": \"33lgMzOG29qI7v\",\n      \"type\": \"providers\",\n      \"attributes\": {\n        \"id\": \"33lgMzOG29qI7v\",\n        \"email\": \"rocio@harrishilpert.net\",\n        \"role\": \"Provider\",\n        \"user-id\": \"33lgMzOPiEzf2B\",\n        \"title\": \"Mr\",\n        \"first-name\": \"Kaylee\",\n        \"middle-name\": null,\n        \"last-name\": \"Hilpert\",\n        \"degree\": \"DDS\",\n        \"speciality\": \"Endodontics\",\n        \"street-address\": \"Green Run\",\n        \"suit-apt-number\": \"78831\",\n        \"city\": \"Makenzieburgh\",\n        \"state\": \"Ohio\",\n        \"zip\": null,\n        \"practice-street-address\": \"Angela Knolls\",\n        \"practice-suit-apt-number\": \"89708\",\n        \"practice-city\": \"Fisherborough\",\n        \"practice-state\": \"Georgia\",\n        \"practice-zip\": null,\n        \"primary-phone\": null,\n        \"mobile-phone\": null,\n        \"alt-email\": null,\n        \"username\": null,\n        \"secondary-speciality\": null,\n        \"dental-licence\": null,\n        \"expiration-date\": null,\n        \"ein-tin\": null,\n        \"npi\": null,\n        \"dea\": null,\n        \"upin\": null,\n        \"nadean\": null,\n        \"status\": true,\n        \"biography\": null,\n        \"accepting-patient\": false,\n        \"enable-online-booking\": false,\n        \"profile-image\": {\n          \"url\": \"/uploads/provider/profile_image/33lgMzOG29qI7v/avatar4.jpg\"\n        }\n      },\n      \"links\": {\n        \"self\": \"/providers/33lgMzOG29qI7v\"\n      }\n    },\n    {\n      \"id\": \"33lgOPDoCKNeXz\",\n      \"type\": \"providers\",\n      \"attributes\": {\n        \"id\": \"33lgOPDoCKNeXz\",\n        \"email\": \"janick@dooleyhammes.name\",\n        \"role\": \"Provider\",\n        \"user-id\": \"33lgOPDxsPX1SF\",\n        \"title\": \"Mr\",\n        \"first-name\": \"Vladimir\",\n        \"middle-name\": null,\n        \"last-name\": \"Mante\",\n        \"degree\": \"DDS\",\n        \"speciality\": \"Endodontics\",\n        \"street-address\": \"Conroy Estate\",\n        \"suit-apt-number\": \"414\",\n        \"city\": \"MacGyverfurt\",\n        \"state\": \"Ohio\",\n        \"zip\": null,\n        \"practice-street-address\": \"Shanahan Rue\",\n        \"practice-suit-apt-number\": \"974\",\n        \"practice-city\": \"Boscoburgh\",\n        \"practice-state\": \"Oklahoma\",\n        \"practice-zip\": null,\n        \"primary-phone\": null,\n        \"mobile-phone\": null,\n        \"alt-email\": null,\n        \"username\": null,\n        \"secondary-speciality\": null,\n        \"dental-licence\": null,\n        \"expiration-date\": null,\n        \"ein-tin\": null,\n        \"npi\": null,\n        \"dea\": null,\n        \"upin\": null,\n        \"nadean\": null,\n        \"status\": true,\n        \"biography\": null,\n        \"accepting-patient\": false,\n        \"enable-online-booking\": false,\n        \"profile-image\": {\n          \"url\": \"/uploads/provider/profile_image/33lgOPDoCKNeXz/avatar8.jpg\"\n        }\n      },\n      \"links\": {\n        \"self\": \"/providers/33lgOPDoCKNeXz\"\n      }\n    }\n  ]\n}",
+      "response_headers": {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": null
+    }
+  ]
+}
